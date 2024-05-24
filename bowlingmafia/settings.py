@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'localflavor',
     'phonenumber_field',
     # custom apps
+    'profiles.apps.ProfilesConfig',
 ]
 
 MIDDLEWARE = [
@@ -141,7 +142,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # Media files
 
 MEDIA_URL = '/images/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'static', 'images')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

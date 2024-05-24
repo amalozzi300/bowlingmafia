@@ -34,8 +34,20 @@ class Profile(models.Model):
 
 class Message(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
-    sender = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True, blank=True)
-    recipient = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, blank=True)
+    sender = models.ForeignKey(
+        Profile,
+        on_delete=models.CASCADE,
+        related_name='sender',
+        null=True, 
+        blank=True,
+    )
+    recipient = models.ForeignKey(
+        Profile, 
+        on_delete=models.SET_NULL,
+        related_name = 'recipient',
+        null=True, 
+        blank=True,
+    )
     name = models.CharField(max_length=200, null=True, blank=True)
     email = models.EmailField(max_length=256, null=True, blank=True)
     subject = models.CharField(max_length=256, null=True, blank=True)
