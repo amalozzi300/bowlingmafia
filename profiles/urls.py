@@ -11,6 +11,7 @@ urlpatterns = [
     path('edit-account/', views.edit_account, name='edit_account'),
 
     path('inbox/', views.inbox, name='inbox'),
+    path('outbox/', views.outbox, name='outbox'),
     path('message/<str:pk>/', views.view_message, name='message'),
     path('create-message/<str:pk>/', views.create_message, name='create_message'),
 ]
