@@ -11,6 +11,9 @@ from .models import Profile, Message
 from .forms import CustomUserCreationForm, ProfileForm, MessageForm
 
 # Create your views here.
+def test(request):
+    render(request, 'profiles/temp.html')
+
 def login_user(request):
     if request.user.is_authenticated:
         return redirect('account')
