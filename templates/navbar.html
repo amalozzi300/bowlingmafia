@@ -1,13 +1,14 @@
 {% load static %}
 
 <header>
-    <nav class="navbar navbar-expand-lg bg-dark align-middle">
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
         <div class="container-fluid">
-            <a href="{% url 'temp' %}" class="navbar-brand">
-                <h1 class="header__brand">Bowling Mafia</h1>
+            <a href="{% url 'temp' %}" class="navbar-brand header__brand">
+                Bowling Mafia
             </a>
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+            <div class="collapse navbar-collapse">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
                         <a href="{% url 'temp' %}" class="nav-link text-light">
