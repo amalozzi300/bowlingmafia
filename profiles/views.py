@@ -50,7 +50,7 @@ def register_user(request):
 
         if form.is_valid():
             user = form.save(commit=False)
-            user.username = user.reg_username.lower()
+            user.username = user.username.lower()
             user.save()
 
             messages.success(request, 'User account was created!')
@@ -86,8 +86,8 @@ def edit_account(request):
             form.save()
             return redirect('account')
         
-        context = {'form': form}
-        return render(request, 'profiles/profile_form.html', context=context)
+    context = {'form': form}
+    return render(request, 'profiles/profile_form.html', context=context)
     
 @login_required(login_url='login')
 def inbox(request):

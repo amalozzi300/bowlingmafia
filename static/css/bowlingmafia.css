@@ -42,7 +42,7 @@ nav {
     background-color: whitesmoke;
     border-radius: 15px;
     box-shadow: 13px 13px 20px rgb(211, 211, 211), -13px -13px 20px black;
-    max-width: 400px;
+    max-width: 500px;
     min-height: 500px;
     padding: 40px 30px 30px 30px;
     margin: 80px auto;
@@ -88,10 +88,8 @@ img.auth__logo {
     background-color: black;
     color: rgb(211, 211, 211);
     font-size: 120%;
-    letter-spacing: 1.3px;
     border-radius: 25px;
     box-shadow: none;
-    width: 40%;
     height: 40px;
 }
 
@@ -99,7 +97,11 @@ img.auth__logo {
     background-color: rgb(10, 10, 10);
 }
 
-.auth__register p, .auth__register a {
+.auth__link p {
+    color: black;
+}
+
+.auth__link p, .auth__link a {
     font-size: 110%;
 }
 
