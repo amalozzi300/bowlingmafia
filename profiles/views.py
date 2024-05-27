@@ -11,8 +11,8 @@ from .models import Profile, Message
 from .forms import CustomUserCreationForm, ProfileForm, MessageForm
 
 # Create your views here.
-def test(request):
-    render(request, 'profiles/temp.html')
+def temp(request):
+    return render(request, 'profiles/temp.html')
 
 def login_user(request):
     if request.user.is_authenticated:
@@ -40,7 +40,7 @@ def login_user(request):
 def logout_user(request):
     logout(request)
     messages.info(request, 'User was logged out.')
-    return redirect('login')
+    return redirect('temp')
 
 def register_user(request):
     form = CustomUserCreationForm()

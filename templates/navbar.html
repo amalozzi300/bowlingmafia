@@ -1,0 +1,56 @@
+{% load static %}
+
+<header>
+    <nav class="navbar navbar-expand-lg bg-dark">
+        <div class="container-fluid">
+            <a href="{% url 'temp' %}" class="navbar-brand">
+                <img src="{% static 'images/bm_logo.png' %}" class="header__logo" alt="Bowling Mafia Logo" />
+            </a>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a href="{% url 'temp' %}" class="nav-link text-light">
+                            Leagues
+                        </a>
+                    </li>
+                    {% if request.user.is_authenticated %}
+                        <li class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle text-light" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                {{ request.user.username }}
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                   <a href="{% url 'account' %}" class="dropdown-item text-light">
+                                        Profile
+                                   </a> 
+                                </li>
+                                <li>
+                                    <a href="{% url 'edit_account'}" class="dropdown-item text-light">
+                                        Edit Profile
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'inbox' %}" class="dropdown-item text-light">
+                                        Inbox
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'logout' %}" class="dropdown-item text-light">
+                                        Logout
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a href="{% url 'login' %}" class="nav-link text-light">
+                                Login/Register
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
