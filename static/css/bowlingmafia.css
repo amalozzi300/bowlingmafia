@@ -1,4 +1,19 @@
-.header__logo {
-    width: 125px;
-    height: auto;
+nav {
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.header__brand {
+    font-family: 'Protest Revolution', 'Courier New';
+    color: rgb(207, 63, 54) !important;
+    margin: 5px 10px;
+    margin-right: 20px;
+}
+
+.nav-item {
+    margin-right: 20px;
+}
+
+.nav-item, .dropdown-item {
+    font-size: 140%;
+    font-weight: bolder;
 }

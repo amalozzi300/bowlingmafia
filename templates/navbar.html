@@ -1,10 +1,10 @@
 {% load static %}
 
 <header>
-    <nav class="navbar navbar-expand-lg bg-dark">
+    <nav class="navbar navbar-expand-lg bg-dark align-middle">
         <div class="container-fluid">
             <a href="{% url 'temp' %}" class="navbar-brand">
-                <img src="{% static 'images/bm_logo.png' %}" class="header__logo" alt="Bowling Mafia Logo" />
+                <h1 class="header__brand">Bowling Mafia</h1>
             </a>
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -32,7 +32,7 @@
                                 </li>
                                 <li>
                                     <a href="{% url 'inbox' %}" class="dropdown-item text-light">
-                                        Inbox
+                                        Messages
                                     </a>
                                 </li>
                                 <li>
@@ -45,7 +45,7 @@
                     {% else %}
                         <li class="nav-item">
                             <a href="{% url 'login' %}" class="nav-link text-light">
-                                Login/Register
+                                Login
                             </a>
                         </li>
                     {% endif %}
