@@ -93,7 +93,7 @@ def edit_account(request):
 def inbox(request):
     page = 'inbox'
     profile = request.user.profile
-    message_requests = profile.messages.all()
+    message_requests = Message.objects.filter(recipient=profile)
     unread_count = message_requests.filter(is_read=False).count()
     context = {
         'page': page,
@@ -106,10 +106,10 @@ def inbox(request):
 def outbox(request):
     page = 'outbox'
     profile = request.user.profile
-    sent_messages = Message.objects.filter(recipient=profile)
+    message_requests = Message.objects.filter(sender=profile)
     context = {
         'page': page,
-        'sent_messages': sent_messages,
+        'sent_messages': message_requests,
     }
     return render(request, 'profiles/in_outbox.html', context=context)
 
