@@ -1,14 +1,23 @@
+/* Resetting Defaults */
 * {
     box-sizing: border-box;
+    font-family: 'Courier New', Courier, monospace;
+    padding: 0;
+    margin: 0;
 }
 
+body {
+    background-color: rgb(211, 211, 211);
+}
+
+/* NAVBAR */
 nav {
     font-family: 'Courier New', Courier, monospace;
     vertical-align: center;
 }
 
 .header__brand {
-    font-family: 'Protest Revolution', 'Courier New';
+    font-family: 'Protest Revolution';
     font-size: 180%;
     color: rgb(207, 63, 54) !important;
     margin: 5px 10px;
@@ -22,4 +31,81 @@ nav {
 .nav-item, .dropdown-item {
     font-size: 125%;
     font-weight: bolder;
+}
+
+.nav-link, .dropdown-item {
+    color: rgb(211, 211, 211) !important;
+}
+
+/* LOGIN/REGISTER */
+.auth__wrapper {
+    background-color: whitesmoke;
+    border-radius: 15px;
+    box-shadow: 13px 13px 20px rgb(211, 211, 211), -13px -13px 20px black;
+    max-width: 400px;
+    min-height: 500px;
+    padding: 40px 30px 30px 30px;
+    margin: 80px auto;
+}
+
+.logo {
+    width: 200px;
+    margin: auto;
+}
+
+img.auth__logo {
+    width: 100%;
+    object-fit: cover;
+}
+
+.auth__header {
+    font-family: 'Protest Revolution';
+    font-size: 225%;
+    font-weight: 600;
+    letter-spacing: 1.3px;
+}
+
+.auth__form .form-field {
+    margin-bottom: 20px;
+}
+
+.auth__form .form-field input {
+    display: block;
+    background-color: rgb(211, 211, 211) !important;
+    border: 1px solid black;
+    border-radius: 20px;
+    outline: none;
+    font-size: 1.2rem;
+    width: 100%;
+    padding: 10px 15px 10px 10px;
+}
+
+.auth__form .form-field input::placeholder {
+    color: black;
+}
+
+.auth__wrapper .btn {
+    background-color: black;
+    color: rgb(211, 211, 211);
+    font-size: 120%;
+    letter-spacing: 1.3px;
+    border-radius: 25px;
+    box-shadow: none;
+    width: 40%;
+    height: 40px;
+}
+
+.auth__wrapper .btn:hover {
+    background-color: rgb(10, 10, 10);
+}
+
+.auth__register p, .auth__register a {
+    font-size: 110%;
+}
+
+@media(max-width: 300px) {
+    .auth__wrapper {
+        padding: 40px 15px 15px 15px;
+        margin: 30px 20px;
+    }
 }

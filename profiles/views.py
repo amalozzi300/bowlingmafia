@@ -19,8 +19,8 @@ def login_user(request):
         return redirect('account')
     
     if request.method == 'POST':
-        username = request.POST['username'].lower()
-        password = request.POST['password']
+        username = request.POST['login_username'].lower()
+        password = request.POST['login_password']
 
         try:
             user = User.objects.get(username=username)
@@ -50,7 +50,7 @@ def register_user(request):
 
         if form.is_valid():
             user = form.save(commit=False)
-            user.username = user.username.lower()
+            user.username = user.reg_username.lower()
             user.save()
 
             messages.success(request, 'User account was created!')

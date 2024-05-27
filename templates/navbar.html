@@ -18,33 +18,33 @@
             <div class="collapse navbar-collapse" id="collapsible-navbar">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a href="{% url 'temp' %}" class="nav-link text-light">
+                        <a href="{% url 'temp' %}" class="nav-link">
                             Leagues
                         </a>
                     </li>
                     {% if request.user.is_authenticated %}
                         <li class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle text-light" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 {{ request.user.username }}
                             </a>
-                            <ul class="dropdown-menu">
+                            <ul class="dropdown-menu bg-dark">
                                 <li>
-                                   <a href="{% url 'account' %}" class="dropdown-item text-light">
+                                   <a href="{% url 'account' %}" class="dropdown-item">
                                         Profile
                                    </a> 
                                 </li>
                                 <li>
-                                    <a href="{% url 'edit_account'}" class="dropdown-item text-light">
+                                    <a href="{% url 'edit_account'}" class="dropdown-item">
                                         Edit Profile
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{% url 'inbox' %}" class="dropdown-item text-light">
+                                    <a href="{% url 'inbox' %}" class="dropdown-item">
                                         Messages
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{% url 'logout' %}" class="dropdown-item text-light">
+                                    <a href="{% url 'logout' %}" class="dropdown-item">
                                         Logout
                                     </a>
                                 </li>
@@ -52,7 +52,7 @@
                         </li>
                     {% else %}
                         <li class="nav-item">
-                            <a href="{% url 'login' %}" class="nav-link text-light">
+                            <a href="{% url 'login' %}" class="nav-link">
                                 Login
                             </a>
                         </li>
