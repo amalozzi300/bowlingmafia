@@ -166,3 +166,7 @@ img.auth__logo {
     background-color: rgb(201, 201, 201);
     border: 1px solid black;
 }
+
+.profile-league__link, .profile-tournament__link {
+    color: black;
+}
