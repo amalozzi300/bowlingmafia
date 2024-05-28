@@ -7,7 +7,7 @@ from django.urls import conf
 from django.db.models import Q
 from django.contrib.auth.models import User
 
-from .models import Profile, Message
+from .models import Profile
 from .forms import CustomUserCreationForm, ProfileForm, MessageForm
 
 # Create your views here.
@@ -64,15 +64,31 @@ def register_user(request):
     return render(request, 'profiles/register.html', context=context)
 
 def user_profile(request, pk):
+    page = 'profile'
     profile = Profile.objects.get(id=pk)
-    context = {'profile': profile}
+    leagues = True if profile.league_admin.count() > 0 else False
+    tournaments = True if profile.tournament_director.count() > 0 else False
+    context = {
+        'page': page,
+        'profile': profile,
+        'leagues': leagues,
+        'tournaments': tournaments,
+    }
     return render(request, 'profiles/profile.html', context=context)
 
 @login_required(login_url='login')
 def user_account(request):
+    page = 'account'
     profile = request.user.profile
-    context = {'profile': profile}
-    return render(request, 'profiles/account.html', context=context)
+    leagues = True if profile.league_admin.count() > 0 else False
+    tournaments = True if profile.tournament_director.count() > 0 else False
+    context = {
+        'page': page,
+        'profile': profile,
+        'leagues': leagues,
+        'tournaments': tournaments,
+    }
+    return render(request, 'profiles/profile.html', context=context)
 
 @login_required(login_url='login')
 def edit_account(request):
@@ -93,7 +109,7 @@ def edit_account(request):
 def inbox(request):
     page = 'inbox'
     profile = request.user.profile
-    message_requests = Message.objects.filter(recipient=profile)
+    message_requests = profile.recipient.all()
     unread_count = message_requests.filter(is_read=False).count()
     context = {
         'page': page,
@@ -106,7 +122,7 @@ def inbox(request):
 def outbox(request):
     page = 'outbox'
     profile = request.user.profile
-    message_requests = Message.objects.filter(sender=profile)
+    message_requests = profile.sender.all()
     context = {
         'page': page,
         'sent_messages': message_requests,

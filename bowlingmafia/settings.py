@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'phonenumber_field',
     # custom apps
     'profiles.apps.ProfilesConfig',
+    'leagues.apps.LeaguesConfig',
+    'tournaments.apps.TournamentsConfig',
 ]
 
 MIDDLEWARE = [

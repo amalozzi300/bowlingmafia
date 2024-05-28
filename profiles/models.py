@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from phonenumber_field.modelfields import PhoneNumberField
 import uuid
 
 # Create your models here.
@@ -10,6 +11,7 @@ class Profile(models.Model):
     first_name = models.CharField(max_length=64, null=True, blank=True)
     last_name = models.CharField(max_length=128, null=True, blank=True)
     email = models.EmailField(max_length=256, null=True, blank=True)
+    phone_number = PhoneNumberField(null=True, blank=True)
     profile_image = models.ImageField(
         upload_to='profiles/', 
         default='profiles/user_default.png', 
