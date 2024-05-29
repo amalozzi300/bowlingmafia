@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
     <div class="container profile__container">
@@ -78,7 +79,7 @@
                                         {% for league in profile.league_admin.all %}
                                             <div class="row">
                                                 <div class="col-sm-12">
-                                                    <a href="{% url 'temp' %}" class="profile-league__link">
+                                                    <a href="{% url 'home' %}" class="profile-league__link">
                                                         {{ league.name }}
                                                     </a>
                                                 </div>
@@ -107,7 +108,7 @@
                                         {% for tournament in profile.tournament_director.all %}
                                             <div class="row">
                                                 <div class="col-sm-12">
-                                                    <a href="{% url 'temp' %}" class="profile-tournament__link">
+                                                    <a href="{% url 'home' %}" class="profile-tournament__link">
                                                         {{ tournament.name }}
                                                     </a>
                                                 </div>

@@ -11,8 +11,8 @@ from .models import Profile
 from .forms import CustomUserCreationForm, ProfileForm, MessageForm
 
 # Create your views here.
-def temp(request):
-    return render(request, 'profiles/temp.html')
+def home(request):
+    return redirect('login')
 
 def login_user(request):
     if request.user.is_authenticated:
@@ -40,7 +40,7 @@ def login_user(request):
 def logout_user(request):
     logout(request)
     messages.info(request, 'User was logged out.')
-    return redirect('temp')
+    return redirect('home')
 
 def register_user(request):
     form = CustomUserCreationForm()
@@ -116,7 +116,8 @@ def inbox(request):
         'message_requests': message_requests,
         'unread_count': unread_count,
     }
-    return render(request, 'profiles/in_outbox.html', context=context)
+    # return render(request, 'profiles/in_outbox.html', context=context)
+    return render(request, 'coming_soon.html')
 
 @login_required(login_url='login')
 def outbox(request):
@@ -139,7 +140,9 @@ def view_message(request, pk):
         message.save()
     
     context = {'message': message}
-    return render(request, 'profiles/message.html', context=context)
+    # return render(request, 'profiles/message.html', context=context)
+    return render(request, 'coming_soon.html')
+
 
 @login_required(login_url='login')
 def create_message(request, pk):
@@ -165,4 +168,5 @@ def create_message(request, pk):
         'recipient': recipient,
         'form': form,
     }
-    return render(request, 'profiles/message_form.html', context=context)
+    # return render(request, 'profiles/message_form.html', context=context)
+    return render(request, 'coming_soon.html')
