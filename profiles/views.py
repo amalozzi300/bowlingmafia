@@ -96,13 +96,16 @@ def edit_account(request):
     form = ProfileForm()
 
     if request.method == 'POST':
-        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        form = ProfileForm(request.POST, instance=profile)
 
         if form.is_valid():
             form.save()
             return redirect('account')
         
-    context = {'form': form}
+    context = {
+        'profile': profile,
+        'form': form,
+    }
     return render(request, 'profiles/profile_form.html', context=context)
     
 @login_required(login_url='login')

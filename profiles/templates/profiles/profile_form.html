@@ -2,5 +2,34 @@
 {% load static %}
 
 {% block content %}
+    <div class="container-xl px-4 mt-4">
+        <div class="row">
+            <div class="col-xl-4">
+                <div class="profile-edit__card mb-4 mb-xl-0">
+                    <h2 class="profile-edit__header">Profile Picture</h2>
+                    <div class="profile-edit__body text-center">
+                        <img src="{{ profile.profile_image.url }}" alt="Profile Picture" class="profile-edit__image rounded-circle" width="150">
+                        <button class="btn profile-image-upload__button">Upload new image</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-8">
+                <div class="profile-edit__card mb-4">
+                    <h2 class="profile-edit__header">Account Details</h2>
+                    <div class="profile-edit__body">
+                        <form method="POST" action="{% url 'edit_account' %}">
+                            {% csrf_token %}
 
+                            {% for field in form.fields %}
+                                <div class="form-field mb-3">
+                                    <label for="form-input" class="auth__field-label"><h5>{{ field.label }}:</h5></label>
+                                    {{ field }}
+                                </div>
+                            {% endfor %}
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock content %}

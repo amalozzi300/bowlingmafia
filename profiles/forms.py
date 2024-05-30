@@ -22,7 +22,6 @@ class ProfileForm(ModelForm):
             'last_name',
             'email',
             'phone_number',
-            'profile_image',
         ]
 
 class MessageForm(ModelForm):
