@@ -5,9 +5,16 @@
     <div class="container profile__container">
         <div class="profile__body">
             <div class="row gutters-sm">
+                <div class="col-md-2">
+                    <!-- spacing -->
+                </div>
                 <div class="col-md-8">
                     <div class="profile__card mb-3">
                         <div class="profile__card-body">
+                            <div class="mt-0 edit-account__header">
+                                Edit Your Profile
+                            </div>
+                            <hr class="mt-2">
                             <form method="POST" action="{% url 'edit_account' %}">
                                 {% csrf_token %}
 
@@ -40,6 +47,9 @@
                             </form>
                         </div>
                     </div>
+                </div>
+                <div class="col-md-2">
+                    <!-- spacing -->
                 </div>
             </div>
         </div>

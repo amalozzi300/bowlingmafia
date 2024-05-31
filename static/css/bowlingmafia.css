@@ -172,8 +172,19 @@ img.auth__logo {
 }
 
 /* Account Edit Form */
+.edit-account__header {
+    font-family: 'Protest Revolution';
+    font-size: 225%;
+    font-weight: 600;
+    letter-spacing: 1.3px;
+}
+
+form .profile-info__label {
+    padding-top: 3px;
+}
+
 .edit-account__input {
-    width: 80%;
+    width: 50%;
     padding: 2px 5px;
 }
 
