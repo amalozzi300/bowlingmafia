@@ -46,8 +46,9 @@ INSTALLED_APPS = [
     'localflavor',
     'phonenumber_field',
     # custom apps
-    'profiles.apps.ProfilesConfig',
     'leagues.apps.LeaguesConfig',
+    'profiles.apps.ProfilesConfig',
+    'sidepots.apps.SidepotsConfig',
     'tournaments.apps.TournamentsConfig',
 ]
 
