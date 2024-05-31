@@ -15,7 +15,7 @@
                                 Edit Your Profile
                             </div>
                             <hr class="mt-2">
-                            <form method="POST" action="{% url 'edit_account' %}">
+                            <form method="POST" action="{% url 'edit_account' %}" enctype="multipart/form-data">
                                 {% csrf_token %}
 
                                 {% for field in form %}
@@ -27,13 +27,10 @@
                                         </div>
                                         <div class="col-sm-9 profile-info__field">
                                         {% if field.label == 'Profile image' %}
-                                            <img src="{{ profile.profile_image.url }}" alt="Current Profile Picture" class="mb-1">
-                                            <br>
-                                            <input type="checkbox" name="profile_image-clear" id="profile_image-clear_id">
-                                            <label for="profile_image-clear_id">Clear</label>
-                                            <br>
-                                            Change:
+                                            <!-- {{ field }} -->
                                             <input type="file" name="profile_image" accept="image/*" class="edit-account__input" id="id_profile_image">
+                                            <br>
+                                            <img src="{{ profile.profile_image.url }}" alt="Current Profile Picture" class="rounded-circle mt-3 profile__image" width="150">
                                         {% else %}
                                             {{ field }}
                                         {% endif %}

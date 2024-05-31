@@ -143,6 +143,10 @@ img.auth__logo {
     padding: 1rem;
 }
 
+.profile__image {
+    border: 1px solid black;
+}
+
 .profile-info__label, .profile-admin__header {
     font-weight: bolder;
 }

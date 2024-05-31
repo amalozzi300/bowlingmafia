@@ -96,9 +96,12 @@ def edit_account(request):
     form = ProfileForm(instance=profile)
 
     if request.method == 'POST':
-        form = ProfileForm(request.POST, instance=profile)
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
 
         if form.is_valid():
+            if request.FILES.get('profile_image'):
+                profile.profile_image = request.FILES['profile_image']
+                profile.save()
             form.save()
             return redirect('account')
         
