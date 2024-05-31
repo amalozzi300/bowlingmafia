@@ -93,7 +93,7 @@ def user_account(request):
 @login_required(login_url='login')
 def edit_account(request):
     profile = request.user.profile
-    form = ProfileForm()
+    form = ProfileForm(instance=profile)
 
     if request.method == 'POST':
         form = ProfileForm(request.POST, instance=profile)

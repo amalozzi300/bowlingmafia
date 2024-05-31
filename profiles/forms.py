@@ -22,7 +22,14 @@ class ProfileForm(ModelForm):
             'last_name',
             'email',
             'phone_number',
+            'profile_image',
         ]
+
+    def __init__(self, *args, **kwargs):
+        super(ProfileForm, self).__init__(*args, **kwargs)
+
+        for name, field in self.fields.items():
+            field.widget.attrs.update({'class': 'edit-account__input'})
 
 class MessageForm(ModelForm):
     class Meta:

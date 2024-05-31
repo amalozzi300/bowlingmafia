@@ -156,13 +156,13 @@ img.auth__logo {
     margin-bottom: 1rem !important;
 }
 
-.message__btn, .edit-account__btn {
+.message__btn {
     color: black;
     background-color: rgb(211, 211, 211);
     border: 1px solid black;
 }
 
-.message__btn:hover, .edit-account__btn:hover {
+.message__btn:hover {
     background-color: rgb(201, 201, 201);
     border: 1px solid black;
 }
@@ -172,3 +172,18 @@ img.auth__logo {
 }
 
 /* Account Edit Form */
+.edit-account__input {
+    width: 80%;
+    padding: 2px 5px;
+}
+
+.edit-account__btn {
+    color: black;
+    background-color: #f0f0f0;
+    border: 1px solid black;
+}
+
+.edit-account__btn:hover {
+    background-color: rgb(211, 211, 211);
+    border: 1px solid black;
+}
