@@ -145,9 +145,10 @@ def view_message(request, pk):
         message.is_read = True
         message.save()
     
-    context = {'message': message}
-    # return render(request, 'profiles/message.html', context=context)
     return render(request, 'coming_soon.html')
+
+    # context = {'message': message}
+    # return render(request, 'profiles/message.html', context=context)
 
 
 @login_required(login_url='login')
