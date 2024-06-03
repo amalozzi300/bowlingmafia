@@ -24,10 +24,13 @@ class BowlingCenter(models.Model):
 class Event(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     name = models.CharField(max_length=256, null=True, blank=True)
-    bowling_centers = models.ManyToManyField(BowlingCenter, related_name='bowling_center')
+    bowling_centers = models.ManyToManyField(BowlingCenter, related_name='%(class)s_bowling_center')
 
     def __str__(self):
         return str(self.name)
+
+    class Meta:
+        abstract = True
 
 class League(Event):
     admins = models.ManyToManyField(Profile, related_name='league_admin')
