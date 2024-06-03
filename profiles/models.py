@@ -26,14 +26,6 @@ class Profile(models.Model):
     class Meta:
         ordering = ['created']
 
-    @property
-    def imageURL(self):
-        try:
-            url = self.profile_image.url
-        except:
-            url = ''
-        return url
-
 class Message(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     sender = models.ForeignKey(
