@@ -9,7 +9,7 @@ from profiles.models import Profile
 # Create your models here.
 class BowlingCenter(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
-    name = models.CharField(max_length=128, null=True, blank=True)
+    name = models.CharField(max_length=128)
     street_address = models.CharField(max_length=128, verbose_name='address')
     city = models.CharField(max_length=64)
     state = USStateField()
@@ -23,7 +23,7 @@ class BowlingCenter(models.Model):
 
 class Event(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
-    name = models.CharField(max_length=256, null=True, blank=True)
+    name = models.CharField(max_length=256)
     bowling_centers = models.ManyToManyField(BowlingCenter, related_name='%(class)s_bowling_center')
 
     def __str__(self):
