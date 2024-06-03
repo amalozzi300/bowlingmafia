@@ -59,7 +59,7 @@ class LeagueRoster(models.Model):
     
 class LeagueBowlerSidepotEntry(models.Model):
     bowler_entry = models.ForeignKey('LeagueBowlerEntry', on_delete=models.CASCADE, related_name='league_sidepot_entries')
-    sidepot = GenericRelation(LeagueSidepot)
+    sidepot = models.ForeignKey(LeagueSidepot, on_delete=models.CASCADE)
     entry_count = models.PositiveIntegerField(default=1)
 
     def clean(self):
@@ -71,7 +71,7 @@ class LeagueBowlerSidepotEntry(models.Model):
     
 class LeagueBowlerEntry(models.Model):
     league_roster = models.ForeignKey(LeagueRoster, on_delete=models.CASCADE, related_name='league_bowler_entries')
-    bowler = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    bowler = models.ForeignKey(Profile, on_delete=models.SET_NULL)
     sidepots = models.ManyToManyField(LeagueSidepot, through=LeagueBowlerSidepotEntry, related_name='league_bowler_entries')
 
     def __str__(self):
