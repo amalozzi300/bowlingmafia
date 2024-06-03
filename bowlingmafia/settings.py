@@ -46,10 +46,9 @@ INSTALLED_APPS = [
     'localflavor',
     'phonenumber_field',
     # custom apps
-    'leagues.apps.LeaguesConfig',
+    'events.apps.EventsConfig',
     'profiles.apps.ProfilesConfig',
     'sidepots.apps.SidepotsConfig',
-    'tournaments.apps.TournamentsConfig',
 ]
 
 MIDDLEWARE = [
