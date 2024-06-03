@@ -19,8 +19,8 @@ class Sidepot(models.Model):
 
 class HandicapSidepot(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
-    hdcp_percent = models.PositiveIntegerField(max_digits=3, validators=[MaxValueValidator(100)])
-    base_average = models.PositiveIntegerField(max_digits=3, validators=[MaxValueValidator(300)])
+    hdcp_percent = models.PositiveIntegerField( validators=[MaxValueValidator(100)])
+    base_average = models.PositiveIntegerField( validators=[MaxValueValidator(300)])
 
     class Meta:
         abstract = True

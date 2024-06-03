@@ -55,7 +55,7 @@ class LeagueRoster(models.Model):
     date = models.DateField()
 
     def __str__(self):
-        return f'{self.league.name} -- {self.date.strftime('%m/%d/%y')}'
+        return f'{self.league.name} -- {self.date.strftime("%m/%d/%y")}'
     
 class LeagueBowlerSidepotEntry(models.Model):
     bowler_entry = models.ForeignKey('LeagueBowlerEntry', on_delete=models.CASCADE, related_name='league_sidepot_entries')
@@ -63,19 +63,19 @@ class LeagueBowlerSidepotEntry(models.Model):
     entry_count = models.PositiveIntegerField(default=1)
 
     def clean(self):
-        if not self.sidepot.allow_multiple_entries and self.entry_count > 1:
+        if not self.sidepot.sidepot.allow_multiple_entries and self.entry_count > 1:
             raise ValidationError(f'Multiple entries are not allowed for {self.sidepot.name}')
         
     def __str__(self):
-        return f'{self.bowler_entry.bowler} -- {self.sidepot.name} x {self.entry_count}'
+        return f'{self.bowler_entry.bowler} -- {self.sidepot.sidepot.name} x {self.entry_count}'
     
 class LeagueBowlerEntry(models.Model):
     league_roster = models.ForeignKey(LeagueRoster, on_delete=models.CASCADE, related_name='league_bowler_entries')
-    bowler = models.ForeignKey(Profile, on_delete=models.SET_NULL)
+    bowler = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True)
     sidepots = models.ManyToManyField(LeagueSidepot, through=LeagueBowlerSidepotEntry, related_name='league_bowler_entries')
 
     def __str__(self):
-        return f'{self.league_roster.league.name} -- {self.league_roster.date.strftime('%m/%d/%y')} -- {self.bowler}'
+        return f'{self.league_roster.league.name} -- {self.league_roster.date.strftime("%m/%d/%y")} -- {self.bowler}'
 
 class Tournament(Event):
     directors = models.ManyToManyField(Profile, related_name='tournament_director')
