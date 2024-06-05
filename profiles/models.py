@@ -7,9 +7,9 @@ import uuid
 class Profile(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
-    username = models.CharField(max_length=64, null=True, blank=True)
-    first_name = models.CharField(max_length=64, null=True, blank=True)
-    last_name = models.CharField(max_length=128, null=True, blank=True)
+    username = models.CharField(max_length=64, null=True)
+    first_name = models.CharField(max_length=64, null=True)
+    last_name = models.CharField(max_length=128, null=True)
     email = models.EmailField(max_length=256, null=True, blank=True)
     phone_number = PhoneNumberField(null=True, blank=True)
     profile_image = models.ImageField(
@@ -25,6 +25,7 @@ class Profile(models.Model):
     
     class Meta:
         ordering = ['created']
+
 
 class Message(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)

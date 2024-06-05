@@ -34,7 +34,9 @@
                                     <h5 class="mb-0 profile-info__label">Name</h5>
                                 </div>
                                 <div class="col-sm-9 profile-info__field">
-                                    {{ profile.first_name }} {{ profile.last_name }}
+                                    {% if profile.first_name or profile.last_name %}
+                                        {{ profile.first_name }} {{ profile.last_name }}
+                                    {% endif %}
                                 </div>
                             </div>
                             <hr>
@@ -43,7 +45,9 @@
                                     <h5 class="mb-0 profile-info__label">Email</h5>
                                 </div>
                                 <div class="col-sm-9 profile-info__field">
-                                    {{ profile.email }}
+                                    {% if profile.email %}
+                                        {{ profile.email }}
+                                    {% endif %}
                                 </div>
                             </div>
                             <hr>
@@ -52,7 +56,9 @@
                                     <h5 class="mb-0 profile-info__label">Phone Number</h5>
                                 </div>
                                 <div class="col-sm-9 profile-info__field">
-                                    {{ profile.phone_number }}
+                                    {% if profile.phone_number %}
+                                        {{ profile.phone_number }}
+                                    {% endif %}
                                 </div>
                             </div>
                             {% if page == 'account' %}

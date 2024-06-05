@@ -17,6 +17,7 @@ class Sidepot(models.Model):
     def __str__(self):
         return str(self.name)
 
+
 class HandicapSidepot(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     hdcp_percent = models.PositiveIntegerField( validators=[MaxValueValidator(100)])
@@ -25,24 +26,31 @@ class HandicapSidepot(models.Model):
     class Meta:
         abstract = True
 
+
 class HighGame(Sidepot):
     name = models.CharField(max_length=64, default='High Game Pot', editable=False)
+
 
 class HandicapHighGame(Sidepot, HandicapSidepot):
     name = models.CharField(max_length=64, default='Handicap High Game Pot', editable=False)
     
+
 class HighSeries(Sidepot):
     name = models.CharField(max_length=64, default='High Series Pot', editable=False)
 
+
 class HandicapHighSeries(Sidepot, HandicapSidepot):
     name = models.CharField(max_length=64, default='Handicap High Series Pot', editable=False)
-    
+
+
 class WinnerTakeAll(Sidepot):
     name = models.CharField(max_length=64, default='Winner Take All Pot', editable=False)
+
 
 class HandicapWinnerTakeAll(Sidepot, HandicapSidepot):
     name = models.CharField(max_length=64, default='Handicap Winner Take All Pot', editable=False)
     
+
 class Eliminator(Sidepot):
     name = models.CharField(max_length=64, default='Eliminator', editable=False)
     reverse = models.BooleanField(default=False)
@@ -54,6 +62,7 @@ class Eliminator(Sidepot):
             name = f'Reverse {name}' 
 
         return name
+
 
 class HandicapEliminator(Sidepot, HandicapSidepot):
     name = models.CharField(max_length=64, default='Handicap Eliminator', editable=False)
@@ -67,13 +76,16 @@ class HandicapEliminator(Sidepot, HandicapSidepot):
 
         return name
 
+
 class MysteryDoubles(Sidepot):
     name = models.CharField(max_length=64, default='Mystery Doubles', editable=False)
     allow_multiple_entries = models.BooleanField(default=True, editable=False)
 
+
 class HandicapMysteryDoubles(Sidepot, HandicapSidepot):
     name = models.CharField(max_length=64, default='Handicap Mystery Doubles', editable=False)
     allow_multiple_entries = models.BooleanField(default=True, editable=False)
+
 
 # BRACKETS
 
@@ -89,6 +101,7 @@ class HandicapMysteryDoubles(Sidepot, HandicapSidepot):
 #             name = f'Reverse {name}' 
 
 #         return name
+
 
 # class HandicapBrackets(Sidepot, HandicapSidepot):
 #     name = models.CharField(max_length=64, default='Handicap Brackets', editable=False)
