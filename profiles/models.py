@@ -20,11 +20,11 @@ class Profile(models.Model):
     )
     created = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return str(self.username)
-    
     class Meta:
         ordering = ['created']
+
+    def __str__(self):
+        return str(self.username)
 
 
 class Message(models.Model):
@@ -50,8 +50,8 @@ class Message(models.Model):
     is_read = models.BooleanField(default=False, null=True)
     created = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return self.subject
-    
     class Meta:
         ordering = ['is_read', '-created']
+
+    def __str__(self):
+        return self.subject

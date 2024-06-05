@@ -5,27 +5,23 @@ from django.core.exceptions import ValidationError
 
 import uuid
 
-from common.models import Event
+from common.models import Bowler, Event, Game as G
 from profiles.models import Profile
+from sidepots.models import Sidepot
 
 # Create your models here.
 class League(Event):
     admins = models.ManyToManyField(Profile, related_name='league_admin')
     start_date = models.DateTimeField()
+    num_games = models.PositiveIntegerField(default=3)
 
 
-class LeagueSidepot(models.Model):
-    id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
+class LeagueSidepot(Sidepot):
     league = models.ForeignKey(League, on_delete=models.CASCADE, related_name='league_sidepots')
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    object_id = models.UUIDField()
-    sidepot = GenericForeignKey('content_type', 'object_id')
-
-    def __str__(self):
-        return f'{self.league.name} -- {self.sidepot.name}'
     
 
 class Roster(models.Model):
+    id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     league = models.ForeignKey(League, on_delete=models.CASCADE, related_name='league_rosters')
     date = models.DateField()
 
@@ -33,23 +29,30 @@ class Roster(models.Model):
         return f'{self.league.name} -- {self.date.strftime("%m/%d/%y")}'
 
 
+class RosterEntry(models.Model):
+    roster = models.ForeignKey(Roster, on_delete=models.CASCADE, related_name='league_roster_entries')
+    bowler = models.ForeignKey(Bowler, on_delete=models.CASCADE, related_name='league_bowlers')
+    sidepots = models.ManyToManyField(LeagueSidepot, through='BowlerSidepotEntry')
+
+    def __str__(self):
+        return f'{self.roster.league.name} -- {self.roster.date.strftime("%m/%d/%y")} -- {self.bowler}'
+
+
 class BowlerSidepotEntry(models.Model):
-    bowler = models.ForeignKey('RosterEntry', on_delete=models.CASCADE)
+    bowler = models.ForeignKey(RosterEntry, on_delete=models.CASCADE, related_name='league_bowler_sidepot_entries')
     sidepot = models.ForeignKey(LeagueSidepot, on_delete=models.CASCADE)
     entry_count = models.PositiveIntegerField(default=1)
 
     def clean(self):
-        if not self.sidepot.sidepot.allow_multiple_entries and self.entry_count > 1:
+        if not self.sidepot.allow_multiple_entries and self.entry_count > 1:
             raise ValidationError(f'Multiple entries are not allowed for {self.sidepot.name}')
         
     def __str__(self):
-        return f'{self.bowler_entry.bowler} -- {self.sidepot.sidepot.name} x {self.entry_count}'
+        return f'{self.bowler.bowler} -- {self.sidepot.name} x {self.entry_count}'
     
 
-class RosterEntry(models.Model):
-    roster = models.ForeignKey(Roster, on_delete=models.CASCADE, related_name='league_roster_entries')
-    bowler = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='league_bowler')
-    sidepots = models.ManyToManyField(LeagueSidepot, through=BowlerSidepotEntry, related_name='league_bowler_sidepot_entries')
+class Game(G):
+    bowler = models.ForeignKey(RosterEntry, on_delete=models.CASCADE, related_name='league_bowler_scores')
 
-    def __str__(self):
-        return f'{self.league_roster.league.name} -- {self.league_roster.date.strftime("%m/%d/%y")} -- {self.bowler}'
+    class Meta:
+        unique_together = ('bowler', 'game_number')
