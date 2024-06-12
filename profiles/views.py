@@ -1,10 +1,7 @@
-from django.dispatch.dispatcher import receiver
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.urls import conf
-from django.db.models import Q
 from django.contrib.auth.models import User
 
 from .models import Profile
@@ -102,6 +99,7 @@ def edit_account(request):
             if request.FILES.get('profile_image'):
                 profile.profile_image = request.FILES['profile_image']
                 profile.save()
+
             form.save()
             return redirect('account')
         
@@ -145,10 +143,9 @@ def view_message(request, pk):
         message.is_read = True
         message.save()
     
-    return render(request, 'coming_soon.html')
-
     # context = {'message': message}
     # return render(request, 'profiles/message.html', context=context)
+    return render(request, 'coming_soon.html')
 
 
 @login_required(login_url='login')

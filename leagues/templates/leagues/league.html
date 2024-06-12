@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <p>Name: {{ league.name }}</p>
+    <p>Number of Games: {{ league.num_games }}</p>
+    <p>
+        Bowling Centers: 
+        {% for bc in league.bowling_centers.all %}
+            {{ bc }},
+        {% endfor %}
+    </p>
+    <p>Start Date: {{ league.start_date }}</p>
+    
+{% endblock content %}

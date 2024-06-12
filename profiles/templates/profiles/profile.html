@@ -85,7 +85,7 @@
                                         {% for league in profile.league_admin.all %}
                                             <div class="row">
                                                 <div class="col-sm-12">
-                                                    <a href="{% url 'home' %}" class="profile-league__link">
+                                                    <a href="{% url 'league' league.id %}" class="profile-league__link">
                                                         {{ league }}
                                                     </a>
                                                 </div>

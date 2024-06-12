@@ -1,4 +1,4 @@
-from django.forms import ModelForm, widgets
+from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Profile, Message
@@ -28,7 +28,7 @@ class ProfileForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ProfileForm, self).__init__(*args, **kwargs)
 
-        for name, field in self.fields.items():
+        for field in self.fields.values():
             field.widget.attrs.update({'class': 'edit-account__input'})
 
 class MessageForm(ModelForm):
