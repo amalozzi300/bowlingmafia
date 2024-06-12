@@ -10,7 +10,14 @@ def create_league(request):
     form = LeagueForm()
 
     if request.method == 'POST':
-        pass
+        form = LeagueForm(request.POST)
+
+        if form.is_valid():
+            league = form.save()
+            league.admins.add(request.user.profile)
+            league.save()
+            return redirect('league', league.id)
+
 
     context = {'form': form}
     return render(request, 'leagues/league_form.html', context=context)

@@ -3,6 +3,12 @@
 
 {% block content %}
     <p>Name: {{ league.name }}</p>
+    <p>
+        Admins: 
+        {% for admin in league.admins.all %}
+            {{ admin }},
+        {% endfor %}
+    </p>
     <p>Number of Games: {{ league.num_games }}</p>
     <p>
         Bowling Centers: 
