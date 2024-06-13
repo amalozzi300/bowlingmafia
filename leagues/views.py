@@ -19,7 +19,10 @@ def create_league(request):
             return redirect('league', league.id)
 
 
-    context = {'form': form}
+    context = {
+        'form': form,
+        'action': 'create',
+    }
     return render(request, 'leagues/league_form.html', context=context)
 
 def league_profile(request, pk):
@@ -33,15 +36,20 @@ def edit_league(request, pk):
     form = LeagueForm(instance=league)
 
     if request.user.profile not in league.admins.all():
-        # raise 404 permission denied
+        # raise 403 permission denied
         pass
     
     if request.method == 'POST':
-        pass
+        form = LeagueForm(request.POST, instance=league)
+
+        if form.is_valid():
+            form.save()
+            return redirect('league', league.id)
 
     context = {
         'league': league,
         'form': form,
+        'action': 'edit',
     }
     return render(request, 'leagues/league_form.html', context=context)
 
