@@ -36,7 +36,6 @@ def login_user(request):
 
 def logout_user(request):
     logout(request)
-    messages.info(request, 'User was logged out.')
     return redirect('home')
 
 def register_user(request):
@@ -49,8 +48,6 @@ def register_user(request):
             user = form.save(commit=False)
             user.username = user.username.lower()
             user.save()
-
-            messages.success(request, 'User account was created!')
 
             login(request, user)
             return redirect('edit_account')
