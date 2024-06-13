@@ -17,4 +17,6 @@
         {% endfor %}
     </p>
     <p>Start Date: {{ league.start_date }}</p>
+
+    <a href="{% url 'edit_league' league.id %}" class="btn">Edit League</a>
 {% endblock content %}

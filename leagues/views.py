@@ -27,5 +27,25 @@ def league_profile(request, pk):
     context = {'league': league}
     return render(request, 'leagues/league.html', context=context)
 
+@login_required(login_url='login')
 def edit_league(request, pk):
+    league = League.objects.get(id=pk)
+    form = LeagueForm(instance=league)
+
+    if request.user.profile not in league.admins.all():
+        # raise 404 permission denied
+        pass
+    
+    if request.method == 'POST':
+        pass
+
+    context = {
+        'league': league,
+        'form': form,
+    }
+    return render(request, 'leagues/league_form.html', context=context)
+
+
+@login_required(login_url='login')
+def invite_admin(request, pk):
     pass
