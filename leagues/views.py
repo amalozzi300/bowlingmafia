@@ -19,11 +19,7 @@ def create_league(request):
 
             return redirect('league', league.id)
 
-
-    context = {
-        'form': form,
-        'action': 'create',
-    }
+    context = {'form': form}
     return render(request, 'leagues/league_form.html', context=context)
 
 def league_profile(request, pk):
@@ -51,7 +47,6 @@ def edit_league(request, pk):
     context = {
         'league': league,
         'form': form,
-        'action': 'edit',
     }
     return render(request, 'leagues/league_form.html', context=context)
 
