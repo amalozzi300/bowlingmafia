@@ -22,7 +22,11 @@
     <a href="{% url 'invite_admin' league.id %}" class="btn">Invite Admin</a>
     <br>
     <br>
-    <a href=""></a>
+    <a href="{% url 'create_league_roster' league.id %}" class="btn">Create Roster</a>
+    {% for roster in league.league_rosters.all %}
+        <br>
+        <a href="">{{ roster }}</a>
+    {% endfor %}
     <br>
     <br>
     <a href="{% url 'register_league_sidepot' league.id %}" class="btn">Register Sidepot</a>

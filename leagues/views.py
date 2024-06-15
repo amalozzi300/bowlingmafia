@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
 from .models import League
-from .forms import LeagueForm, LeagueSidepotForm
+from .forms import LeagueForm, LeagueSidepotForm, CreateLeagueRosterForm
 
 # Create your views here.
 @login_required(login_url='login')
@@ -103,3 +103,28 @@ def edit_sidepot(request, league_pk, sidepot_pk):
         'form': form,
     }
     return render(request, 'leagues/sidepot_form.html', context=context)
+
+@login_required(login_url='login')
+def create_roster(request, pk):
+    league = League.objects.get(id=pk)
+    form = CreateLeagueRosterForm()
+
+    if request.user.profile not in league.admins.all():
+        # raise 403 permission denied
+        pass
+
+    if request.method == 'POST':
+        form = CreateLeagueRosterForm(request.POST)
+
+        if form.is_valid():
+            roster = form.save(commit=False)
+            roster.league = league
+            roster.save()
+
+            return redirect('league', league.id)
+
+    context = {
+        'league': league,
+        'form': form,
+    }
+    return render(request, 'leagues/create_roster_form.html', context=context)

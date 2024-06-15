@@ -10,4 +10,6 @@ urlpatterns = [
 
     path('league/<str:pk>/register-sidepot/', views.register_sidepot, name='register_league_sidepot'),
     path('league/<str:league_pk>/edit-sidepot/<str:sidepot_pk>/', views.edit_sidepot, name='edit_league_sidepot'),
+
+    path('league/<str:pk>/create-roster/', views.create_roster, name='create_league_roster'),
 ]
