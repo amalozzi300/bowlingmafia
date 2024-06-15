@@ -27,7 +27,7 @@
                                         </div>
                                         <div class="col-sm-9 profile-info__field">
                                         {% if field.label == 'Profile image' %}
-                                            <input type="file" name="profile_image" accept="image/*" class="edit-account__input" id="id_profile_image">
+                                            <input type="file" name="profile_image" accept="image/*" class="account__input" id="id_profile_image">
                                             <br>
                                             <img src="{{ profile.profile_image.url }}" alt="Current Profile Picture" class="rounded-circle mt-3 profile__image" width="150">
                                         {% else %}

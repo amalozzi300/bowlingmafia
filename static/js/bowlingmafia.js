@@ -11,6 +11,6 @@ function readURL(input) {
     }
 }
 
-$(".edit-account__input").on('change', function() {
+$(".account__input").on('change', function() {
     readURL(this);
 });
