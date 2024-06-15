@@ -15,18 +15,16 @@ class Sidepot(models.Model):
     }
 
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
-    name = models.CharField(max_length=64, choices=SIDEPOTS)
+    type = models.CharField(max_length=64, choices=SIDEPOTS)
     entry_fee = models.DecimalField(max_digits=6, decimal_places=2)
     payout_ratio = models.PositiveSmallIntegerField(default=6, validators=[MinValueValidator(2)])
     is_handicap = models.BooleanField(default=False)
-    hdcp_pct = models.PositiveIntegerField(validators=[MaxValueValidator(100)], default=0)
-    base_avg = models.PositiveIntegerField(validators=[MaxValueValidator(300)], default=0)
     games_used = ArrayField(models.PositiveIntegerField())
-    reverse_sidepot = models.BooleanField(default=False)
+    is_reverse = models.BooleanField(default=False)
     allow_multiple_entries = models.BooleanField(default=False)
 
     class Meta:
         abstract = True
 
     def __str__(self):
-        return self.get_name_display()
+        return self.get_type_display()

@@ -45,10 +45,10 @@ class BowlerSidepotEntry(models.Model):
 
     def clean(self):
         if not self.sidepot.allow_multiple_entries and self.entry_count > 1:
-            raise ValidationError(f'Multiple entries are not allowed for {self.sidepot.name}')
+            raise ValidationError(f'Multiple entries are not allowed for {self.sidepot.type}')
         
     def __str__(self):
-        return f'{self.bowler.bowler} -- {self.sidepot.name} x {self.entry_count}'
+        return f'{self.bowler.bowler} -- {self.sidepot.type} x {self.entry_count}'
     
 
 class Game(G):

@@ -19,4 +19,16 @@
     <p>Start Date: {{ league.start_date }}</p>
 
     <a href="{% url 'edit_league' league.id %}" class="btn">Edit League</a>
+
+    <a href="{% url 'register_league_sidepot' league.id %}" class="btn">Register Sidepot</a>
+
+    {% for sidepot in league.league_sidepots.all %}
+        <p>Type: {{ sidepot.get_type_display }}</p>
+        <p>Handicap: {{ sidepot.is_handicap }}</p>
+        <p>Entry Fee: ${{ sidepot.entry_fee }}</p>
+        <p>Payout Ratio: 1:{{ sidepot.payout_ratio }}</p>
+        <p>Games: {{ sidepot.games_used }}</p>
+        <p>Reverse: {{ sidepot.is_reverse }}</p>
+        <p>Multiple Entries: {{ sidepot.allow_multiple_entries }}</p>
+    {% endfor %}
 {% endblock content %}
