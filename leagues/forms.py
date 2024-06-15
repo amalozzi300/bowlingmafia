@@ -22,7 +22,7 @@ class LeagueForm(ModelForm):
 class LeagueAdminInviteForm(forms.Form):
     admin_email = forms.EmailField(label='email_address', max_length=128)
 
-class RegisterSidepotForm(ModelForm):
+class LeagueSidepotForm(ModelForm):
     class Meta:
         model = LeagueSidepot
         fields = [
@@ -36,7 +36,7 @@ class RegisterSidepotForm(ModelForm):
         ]
 
     def __init__(self, *args, **kwargs):
-        super(RegisterSidepotForm, self).__init__(*args, **kwargs)
+        super(LeagueSidepotForm, self).__init__(*args, **kwargs)
 
         for field in self.fields.values():
             field.widget.attrs.update({'class': 'register-sidepot__input'})

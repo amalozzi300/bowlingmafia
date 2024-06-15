@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
 from .models import League
-from .forms import LeagueForm, RegisterSidepotForm
+from .forms import LeagueForm, LeagueSidepotForm
 
 # Create your views here.
 @login_required(login_url='login')
@@ -57,10 +57,14 @@ def invite_admin(request, pk):
 @login_required(login_url='login')
 def register_sidepot(request, pk):
     league = League.objects.get(id=pk)
-    form = RegisterSidepotForm()
+    form = LeagueSidepotForm()
+
+    if request.user.profile not in league.admins.all():
+        # raise 403 permission denied
+        pass
 
     if request.method == 'POST':
-        form = RegisterSidepotForm(request.POST)
+        form = LeagueSidepotForm(request.POST)
 
         if form.is_valid():
             sidepot = form.save(commit=False)
@@ -73,4 +77,29 @@ def register_sidepot(request, pk):
         'league': league,
         'form': form,
     }
-    return render(request, 'leagues/register_sidepot_form.html', context=context)
+    return render(request, 'leagues/sidepot_form.html', context=context)
+
+@login_required(login_url='login')
+def edit_sidepot(request, league_pk, sidepot_pk):
+    league = League.objects.get(id=league_pk)
+    sidepot = league.league_sidepots.get(id=sidepot_pk)
+    form = LeagueSidepotForm(instance=sidepot)
+
+    if request.user.profile not in league.admins.all():
+        # raise 403 permission denied
+        pass
+
+    if request.method == 'POST':
+        form = LeagueSidepotForm(request.POST, instance=sidepot)
+
+        if form.is_valid():
+            form.save()
+
+            return redirect('league', league.id)
+
+    context = {
+        'league': league,
+        'sidepot': sidepot,
+        'form': form,
+    }
+    return render(request, 'leagues/sidepot_form.html', context=context)

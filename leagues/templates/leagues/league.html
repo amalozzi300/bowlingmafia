@@ -19,7 +19,7 @@
     <p>Start Date: {{ league.start_date }}</p>
 
     <a href="{% url 'edit_league' league.id %}" class="btn">Edit League</a>
-
+    <br>
     <a href="{% url 'register_league_sidepot' league.id %}" class="btn">Register Sidepot</a>
 
     {% for sidepot in league.league_sidepots.all %}
@@ -30,5 +30,7 @@
         <p>Games: {{ sidepot.games_used }}</p>
         <p>Reverse: {{ sidepot.is_reverse }}</p>
         <p>Multiple Entries: {{ sidepot.allow_multiple_entries }}</p>
+
+        <a href="{% url 'edit_league_sidepot' league.id sidepot.id %}" class="btn">Edit Sidepot</a>
     {% endfor %}
 {% endblock content %}
