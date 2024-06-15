@@ -19,6 +19,11 @@
     <p>Start Date: {{ league.start_date }}</p>
 
     <a href="{% url 'edit_league' league.id %}" class="btn">Edit League</a>
+    <a href="{% url 'invite_admin' league.id %}" class="btn">Invite Admin</a>
+    <br>
+    <br>
+    <a href=""></a>
+    <br>
     <br>
     <a href="{% url 'register_league_sidepot' league.id %}" class="btn">Register Sidepot</a>
 

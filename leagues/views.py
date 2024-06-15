@@ -52,7 +52,7 @@ def edit_league(request, pk):
 
 @login_required(login_url='login')
 def invite_admin(request, pk):
-    pass
+    return render(request, 'coming_soon.html')
 
 @login_required(login_url='login')
 def register_sidepot(request, pk):

@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 
 import uuid
 
-from common.models import Bowler, Event, Game as G
+from common.models import Bowler, Event, Game
 from profiles.models import Profile
 from sidepots.models import Sidepot
 
@@ -51,7 +51,7 @@ class BowlerSidepotEntry(models.Model):
         return f'{self.bowler.bowler} -- {self.sidepot.type} x {self.entry_count}'
     
 
-class Game(G):
+class LeagueGame(Game):
     bowler = models.ForeignKey(RosterEntry, on_delete=models.CASCADE, related_name='league_bowler_scores')
 
     class Meta:
