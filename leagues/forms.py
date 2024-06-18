@@ -28,7 +28,6 @@ class LeagueSidepotForm(ModelForm):
         fields = [
             'type',
             'is_handicap',
-            'allow_multiple_entries',
             'entry_fee',
             'payout_ratio',
             'games_used',
@@ -38,8 +37,29 @@ class LeagueSidepotForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(LeagueSidepotForm, self).__init__(*args, **kwargs)
 
-        for field in self.fields.values():
+        for field_name, field in self.fields.items():
             field.widget.attrs.update({'class': 'league-sidepot__input'})
+
+            # if field_name in CONDITIONAL_FIELDS:
+            #     field.widget.attrs.update({'class': 'sidepot__conditional-toggle'})
+
+        self.fields['type'].widget.attrs.update({'id': 'sidepot__type'})
+
+    def save(self, commit=True):
+        instance = super(LeagueSidepotForm, self).save(commit=False)
+        multiple_entries_allowed = ['MD']
+        needs_games_used_and_reverse = ['Elim']
+
+        if instance.type not in needs_games_used_and_reverse:
+            instance.games_used = []
+            instance.is_reverse = False
+
+        instance.allow_multiple_entries = True if instance.type in multiple_entries_allowed else False
+        
+        if commit:
+            instance.save()
+
+        return instance
 
 class CreateLeagueRosterForm(ModelForm):
     class Meta:
