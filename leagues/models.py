@@ -11,6 +11,7 @@ from sidepots.models import Sidepot
 
 # Create your models here.
 class League(Event):
+    owner = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='owned_leagues')
     admins = models.ManyToManyField(Profile, related_name='league_admin')
     start_date = models.DateTimeField()
     num_games = models.PositiveIntegerField(default=3)

@@ -13,7 +13,9 @@ def create_league(request):
         form = LeagueForm(request.POST)
 
         if form.is_valid():
-            league = form.save()
+            league = form.save(commit=False)
+            league.owner = request.user.profile
+            league.save()
             league.admins.add(request.user.profile)
             league.save()
 

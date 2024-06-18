@@ -3,6 +3,7 @@
 
 {% block content %}
     <p>Name: {{ league.name }}</p>
+    <p>Owner: {{ league.owner }}</p>
     <p>
         Admins: 
         {% for admin in league.admins.all %}
