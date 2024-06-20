@@ -34,14 +34,18 @@ class LeagueSidepotForm(ModelForm):
             'is_reverse',
         ]
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, league, *args, **kwargs):
         super(LeagueSidepotForm, self).__init__(*args, **kwargs)
 
-        for field_name, field in self.fields.items():
-            field.widget.attrs.update({'class': 'league-sidepot__input'})
+        choices = []
 
-            # if field_name in CONDITIONAL_FIELDS:
-            #     field.widget.attrs.update({'class': 'sidepot__conditional-toggle'})
+        for i in range(league.num_games):
+            choices.append((f'{i + 1}', f'Game {i + 1}'))
+
+        self.fields['games_used'] = forms.MultipleChoiceField(choices=choices)
+
+        for field in self.fields.values():
+            field.widget.attrs.update({'class': 'league-sidepot__input'})
 
         self.fields['type'].widget.attrs.update({'id': 'sidepot__type'})
 

@@ -59,14 +59,14 @@ def invite_admin(request, pk):
 @login_required(login_url='login')
 def register_sidepot(request, pk):
     league = League.objects.get(id=pk)
-    form = LeagueSidepotForm()
+    form = LeagueSidepotForm(league=league)
 
     if request.user.profile not in league.admins.all():
         # raise 403 permission denied
         pass
 
     if request.method == 'POST':
-        form = LeagueSidepotForm(request.POST)
+        form = LeagueSidepotForm(request.POST, league=league)
 
         if form.is_valid():
             sidepot = form.save(commit=False)
@@ -85,14 +85,14 @@ def register_sidepot(request, pk):
 def edit_sidepot(request, league_pk, sidepot_pk):
     league = League.objects.get(id=league_pk)
     sidepot = league.league_sidepots.get(id=sidepot_pk)
-    form = LeagueSidepotForm(instance=sidepot)
+    form = LeagueSidepotForm(instance=sidepot, league=league)
 
     if request.user.profile not in league.admins.all():
         # raise 403 permission denied
         pass
 
     if request.method == 'POST':
-        form = LeagueSidepotForm(request.POST, instance=sidepot)
+        form = LeagueSidepotForm(request.POST, instance=sidepot, league=league)
 
         if form.is_valid():
             form.save()
