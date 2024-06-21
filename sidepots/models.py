@@ -19,8 +19,8 @@ class Sidepot(models.Model):
     entry_fee = models.DecimalField(max_digits=6, decimal_places=2)
     payout_ratio = models.PositiveSmallIntegerField(default=6, validators=[MinValueValidator(2)])
     is_handicap = models.BooleanField(default=False)
-    games_used = ArrayField(models.PositiveIntegerField())
-    is_reverse = models.BooleanField(default=False)
+    games_used = ArrayField(models.PositiveIntegerField(), blank=True, default=list)
+    is_reverse = models.BooleanField(default=False, blank=True)
     allow_multiple_entries = models.BooleanField(default=False)
 
     class Meta:

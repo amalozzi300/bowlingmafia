@@ -1,5 +1,7 @@
 from django import forms
 from django.forms import ModelForm
+from django.forms.widgets import CheckboxSelectMultiple
+from django.contrib.postgres.forms import SimpleArrayField
 
 from .models import League, LeagueSidepot, Roster
 
@@ -40,14 +42,31 @@ class LeagueSidepotForm(ModelForm):
         choices = []
 
         for i in range(league.num_games):
-            choices.append((f'{i + 1}', f'Game {i + 1}'))
+            choices.append((i + 1, f'Game {i + 1}'))
 
-        self.fields['games_used'] = forms.MultipleChoiceField(choices=choices)
+        self.fields['games_used'] = forms.MultipleChoiceField(
+            choices=choices,
+            widget= CheckboxSelectMultiple,
+            required=False,
+        )
 
         for field in self.fields.values():
             field.widget.attrs.update({'class': 'league-sidepot__input'})
 
         self.fields['type'].widget.attrs.update({'id': 'sidepot__type'})
+
+    def clean(self):
+        cleaned_data = super().clean()
+        type = cleaned_data.get('type')
+        games_used = cleaned_data.get('games_used')
+        needs_games_used_and_reverse = ['Elim']
+
+        if type in needs_games_used_and_reverse:
+            if len(games_used) != 3:
+                self.add_error('games_used', 'You must select exactly 3 games to be used.')
+
+        if games_used:
+            cleaned_data['games_used'] = [int(item) for item in games_used]
 
     def save(self, commit=True):
         instance = super(LeagueSidepotForm, self).save(commit=False)

@@ -12,6 +12,9 @@
         {% for field in form %}
             <div {% if field.label == 'Games used' or field.label == 'Is reverse' %}class="sidepot__conditional-toggle"{% endif %}>
                 {{ field.label.title }} {{ field }}
+                {% if field.errors %}
+                    <div class="form-field__errors">{{ field.errors }}</div>
+                {% endif %}
             </div>
         {% endfor %}
 
