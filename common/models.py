@@ -27,6 +27,7 @@ class Event(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     name = models.CharField(max_length=256)
     bowling_centers = models.ManyToManyField(BowlingCenter, related_name='%(class)s_bowling_centers')
+    is_archived = models.BooleanField(default=False)
 
     class Meta:
         abstract = True

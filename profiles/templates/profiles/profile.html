@@ -83,13 +83,15 @@
                                     </h5>
                                     {% if leagues %}
                                         {% for league in profile.league_admin.all %}
-                                            <div class="row">
-                                                <div class="col-sm-12">
-                                                    <a href="{% url 'league' league.id %}" class="profile-league__link">
-                                                        {{ league }}
-                                                    </a>
+                                            {% if not league.is_archived %}
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <a href="{% url 'league' league.id %}" class="profile-league__link">
+                                                            {{ league }}
+                                                        </a>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            {% endif %}
                                         {% endfor %}
                                     {% else %}
                                         <p class="mb-0 profile-no-admin">
@@ -117,13 +119,15 @@
                                     </h5>
                                     {% if tournaments %}
                                         {% for tournament in profile.tournament_director.all %}
-                                            <div class="row">
-                                                <div class="col-sm-12">
-                                                    <a href="" class="profile-tournament__link">
-                                                        {{ tournament }}
-                                                    </a>
+                                            {% if not tournament.is_archived %}
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <a href="" class="profile-tournament__link">
+                                                            {{ tournament }}
+                                                        </a>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            {% endif %}
                                         {% endfor %}
                                     {% else %}
                                         <p class="mb-0 profile-no-admin">
