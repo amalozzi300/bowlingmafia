@@ -2,12 +2,15 @@
 {% load static %}
 
 {% block content %}
+    <h1>League Information</h1>
     <p>Name: {{ league.name }}</p>
     <p>Owner: {{ league.owner }}</p>
     <p>
         Admins: 
         {% for admin in league.admins.all %}
-            {{ admin }},
+            {% if admin != league.owner %}
+                {{ admin }},
+            {% endif %}
         {% endfor %}
     </p>
     <p>Number of Games: {{ league.num_games }}</p>
@@ -21,26 +24,20 @@
 
     <a href="{% url 'edit_league' league.id %}" class="btn">Edit League</a>
     <a href="{% url 'invite_admin' league.id %}" class="btn">Invite Admin</a>
+    
     <br>
-    <br>
+    <h1>Rosters</h1>
     <a href="{% url 'create_league_roster' league.id %}" class="btn">Create Roster</a>
     {% for roster in league.league_rosters.all %}
         <br>
         <a href="" style="color: black">{{ roster }}</a>
     {% endfor %}
+    
     <br>
-    <br>
+    <h1>Sidepots</h1>
     <a href="{% url 'register_league_sidepot' league.id %}" class="btn">Register Sidepot</a>
-
     {% for sidepot in league.league_sidepots.all %}
-        <p>Type: {{ sidepot.get_type_display }}</p>
-        <!-- <p>Handicap: {{ sidepot.is_handicap }}</p>
-        <p>Entry Fee: ${{ sidepot.entry_fee }}</p>
-        <p>Payout Ratio: 1:{{ sidepot.payout_ratio }}</p>
-        <p>Games: {{ sidepot.games_used }}</p>
-        <p>Reverse: {{ sidepot.is_reverse }}</p>
-        <p>Multiple Entries: {{ sidepot.allow_multiple_entries }}</p> -->
-        
+        <p>Type: {{ sidepot.name }}</p>
         <a href="{% url 'edit_league_sidepot' league.id sidepot.id %}" class="btn">Edit Sidepot</a>
     {% endfor %}
 {% endblock content %}

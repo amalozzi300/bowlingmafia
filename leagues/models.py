@@ -19,7 +19,20 @@ class League(Event):
 
 class LeagueSidepot(Sidepot):
     league = models.ForeignKey(League, on_delete=models.CASCADE, related_name='league_sidepots')
-    
+
+    def __str__(self):
+        hdcp = 'Handicap' if self.is_handicap else 'Scratch'
+        games = ''
+        
+        for game in self.games_used:
+            games += f' {str(game)},'
+        
+        if games:
+            games = f'(games{games[:-1]})'
+
+        # games = f'(games {str(self.games_used)})' if self.games_used else ''
+        return f'{self.league.name} - {hdcp} {self.get_type_display()} {games}'
+
 
 class Roster(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)

@@ -26,5 +26,15 @@ class Sidepot(models.Model):
     class Meta:
         abstract = True
 
-    def __str__(self):
-        return self.get_type_display()
+    @property
+    def name(self):
+        hdcp = 'Handicap' if self.is_handicap else 'Scratch'
+        games = ''
+        
+        for game in self.games_used:
+            games += f' {str(game)},'
+        
+        if games:
+            games = f'(games{games[:-1]})'
+
+        return f'{hdcp} {self.get_type_display()} {games}'
