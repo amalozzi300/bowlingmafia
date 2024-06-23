@@ -84,13 +84,13 @@ class LeagueSidepotForm(ModelForm):
 
         return instance
 
-class CreateLeagueRosterForm(ModelForm):
+class CreateRosterForm(ModelForm):
     class Meta:
         model = Roster
-        fields = ['date']
+        fields = ['date', 'is_registration_open']
 
     def __init__(self, *args, **kwargs):
-        super(CreateLeagueRosterForm, self).__init__(*args, **kwargs)
+        super(CreateRosterForm, self).__init__(*args, **kwargs)
 
         for field in self.fields.values():
             field.widget.attrs.update({'class': 'league_roster__input'})

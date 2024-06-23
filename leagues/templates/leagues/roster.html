@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load league_extras %}
+
+{% block content %}
+    {% if request.user.profile in league.admins.all %}
+        <a href="" class="btn">
+            {% if roster.is_registration_open %}
+                Close Registration
+            {% else %}
+                Open Registration
+            {% endif %}
+        </a>
+    {% endif %}
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Bowler</th>
+                {% for sidepot in league.league_sidepots.all %}
+                    <th scope="col">{{ sidepot.name }}</th>
+                {% endfor %}
+                <th scope="col">Total Entry Fee</th>
+                {% if request.user.profile in league.admins.all and roster.is_registration_open %}
+                    <th scope="col"></th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in roster.league_roster_entries.all %}
+                <tr>
+                    <td>{{ entry.bowler.profile.username }}</td>
+                    {% for sidepot in league.league_sidepots.all %}
+                        <td>
+                            {% if sidepot in entry.sidepots.all %}
+                                X
+                            {% endif %}
+                        </td>
+                    {% endfor %}
+                    <td>${{ bowler_entry_fees|dict_lookup:entry.bowler }}</td>
+                    {% if request.user.profile in league.admins.all and roster.is_registration_open %}
+                        <td>
+                            <a href="">Refund and Remove Entry</a>
+                        </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock content %}

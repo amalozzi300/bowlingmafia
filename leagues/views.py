@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
 from .models import League
-from .forms import LeagueForm, LeagueSidepotForm, CreateLeagueRosterForm
+from .forms import LeagueForm, LeagueSidepotForm, CreateRosterForm
 
 # Create your views here.
 @login_required(login_url='login')
@@ -109,14 +109,14 @@ def edit_sidepot(request, league_pk, sidepot_pk):
 @login_required(login_url='login')
 def create_roster(request, pk):
     league = League.objects.get(id=pk)
-    form = CreateLeagueRosterForm()
+    form = CreateRosterForm()
 
     if request.user.profile not in league.admins.all():
         # raise 403 permission denied
         pass
 
     if request.method == 'POST':
-        form = CreateLeagueRosterForm(request.POST)
+        form = CreateRosterForm(request.POST)
 
         if form.is_valid():
             roster = form.save(commit=False)
@@ -130,3 +130,24 @@ def create_roster(request, pk):
         'form': form,
     }
     return render(request, 'leagues/create_roster_form.html', context=context)
+
+def roster_view(request, league_pk, roster_pk):
+    league = League.objects.get(id=league_pk)
+    roster = league.league_rosters.get(id=roster_pk)
+    bowler_entry_fees = {}
+    
+    for entry in roster.league_roster_entries.all():
+        cost = 0
+        bowler = entry.bowler
+
+        for sidepot in entry.sidepots.all():
+            cost += sidepot.entry_fee
+
+        bowler_entry_fees[bowler] = cost
+
+    context = {
+        'league': league,
+        'roster': roster,
+        'bowler_entry_fees': bowler_entry_fees
+    }
+    return render(request, 'leagues/roster.html', context=context)

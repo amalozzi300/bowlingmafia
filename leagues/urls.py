@@ -12,4 +12,5 @@ urlpatterns = [
     path('league/<str:league_pk>/edit-sidepot/<str:sidepot_pk>/', views.edit_sidepot, name='edit_league_sidepot'),
 
     path('league/<str:pk>/create-roster/', views.create_roster, name='create_league_roster'),
+    path('league/<str:league_pk>/roster/<str:roster_pk>/', views.roster_view, name='roster'),
 ]
