@@ -24,13 +24,14 @@ class LeagueSidepot(Sidepot):
         hdcp = 'Handicap' if self.is_handicap else 'Scratch'
         games = ''
         
-        for game in self.games_used:
+        games_used = self.games_used[::-1] if self.is_reverse else self.games_used
+
+        for game in games_used:
             games += f' {str(game)},'
         
         if games:
             games = f'(games{games[:-1]})'
 
-        # games = f'(games {str(self.games_used)})' if self.games_used else ''
         return f'{self.league.name} - {hdcp} {self.get_type_display()} {games}'
 
 

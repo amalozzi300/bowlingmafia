@@ -31,7 +31,9 @@ class Sidepot(models.Model):
         hdcp = 'Handicap' if self.is_handicap else 'Scratch'
         games = ''
         
-        for game in self.games_used:
+        games_used = self.games_used[::-1] if self.is_reverse else self.games_used
+
+        for game in games_used:
             games += f' {str(game)},'
         
         if games:
