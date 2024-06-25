@@ -26,9 +26,6 @@ class LeagueForm(ModelForm):
         for field in self.fields.values():
             field.widget.attrs.update({'class': 'league__input'})
 
-class LeagueAdminInviteForm(forms.Form):
-    admin_email = forms.EmailField(label='email_address', max_length=128)
-
 class LeagueSidepotForm(ModelForm):
     class Meta:
         model = LeagueSidepot
