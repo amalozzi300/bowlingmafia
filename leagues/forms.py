@@ -3,7 +3,12 @@ from django.forms import ModelForm
 from django.forms.widgets import CheckboxSelectMultiple
 from django.contrib.postgres.forms import SimpleArrayField
 
-from .models import League, LeagueSidepot, Roster
+from .models import (
+    League, 
+    LeagueSidepot, 
+    Roster,
+    RosterEntry,
+)
 
 class LeagueForm(ModelForm):
     class Meta:
@@ -94,3 +99,14 @@ class CreateRosterForm(ModelForm):
 
         for field in self.fields.values():
             field.widget.attrs.update({'class': 'league_roster__input'})
+
+class RosterEntryForm(ModelForm):
+    class Meta:
+        model = RosterEntry
+        fields = ['sidepots']
+
+    def __init__(self, *args, **kwargs):
+        super(RosterEntryForm, self).__init__(*args, **kwargs)
+
+        for field in self.fields.values():
+            field.widget.attrs.update({'class': 'roster_entry__input'})

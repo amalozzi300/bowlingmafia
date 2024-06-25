@@ -28,7 +28,7 @@
     <br>
     <h1>Rosters</h1>
     {% for roster in league.league_rosters.all %}
-        <a href="{% url 'roster' league.id roster.id %}" style="color: black">{{ roster }}</a>
+        <a href="{% url 'league_roster' league.id roster.id %}" style="color: black">{{ roster }}</a>
         <br>
     {% endfor %}
     <a href="{% url 'create_league_roster' league.id %}" class="btn">Create Roster</a>

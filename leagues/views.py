@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
 from .models import League
-from .forms import LeagueForm, LeagueSidepotForm, CreateRosterForm
+from .forms import LeagueForm, LeagueSidepotForm, CreateRosterForm, RosterEntryForm
 
 # Create your views here.
 @login_required(login_url='login')
@@ -151,3 +151,21 @@ def roster_view(request, league_pk, roster_pk):
         'bowler_entry_fees': bowler_entry_fees
     }
     return render(request, 'leagues/roster.html', context=context)
+
+def roster_entry(request, league_pk, roster_pk):
+    league = League.objects.get(id=league_pk)
+    roster = league.league_rosters.get(id=roster_pk)
+    form = RosterEntryForm
+
+    if request.method == 'POST':
+        form = RosterEntryForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+
+    context = {
+        'league': league,
+        'roster': roster,
+        'form': form,
+    }
+    return render(request, 'leagues/roster_entry_form.html', context=context)
