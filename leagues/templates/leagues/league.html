@@ -27,17 +27,18 @@
     
     <br>
     <h1>Rosters</h1>
-    <a href="{% url 'create_league_roster' league.id %}" class="btn">Create Roster</a>
     {% for roster in league.league_rosters.all %}
-        <br>
         <a href="{% url 'roster' league.id roster.id %}" style="color: black">{{ roster }}</a>
+        <br>
     {% endfor %}
+    <a href="{% url 'create_league_roster' league.id %}" class="btn">Create Roster</a>
     
     <br>
     <h1>Sidepots</h1>
-    <a href="{% url 'register_league_sidepot' league.id %}" class="btn">Register Sidepot</a>
     {% for sidepot in league.league_sidepots.all %}
         <p>Type: {{ sidepot.name }}</p>
         <a href="{% url 'edit_league_sidepot' league.id sidepot.id %}" class="btn">Edit Sidepot</a>
     {% endfor %}
+    <br>
+    <a href="{% url 'register_league_sidepot' league.id %}" class="btn">Register Sidepot</a>
 {% endblock content %}
