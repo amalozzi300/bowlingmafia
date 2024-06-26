@@ -13,5 +13,5 @@ urlpatterns = [
 
     path('league/<str:pk>/create-roster/', views.create_roster, name='create_league_roster'),
     path('league/<str:league_pk>/roster/<str:roster_pk>/', views.roster_view, name='league_roster'),
-    path('league/<str:league_pk>/roster/<str:roster_pk>/entry/', views.roster_entry, name='league_roster_entry'),
+    path('league/<str:league_pk>/roster/<str:roster_pk>/entry/', views.create_roster_entry, name='create_league_roster_entry'),
 ]

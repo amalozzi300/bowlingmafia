@@ -46,6 +46,7 @@ class Roster(models.Model):
 
 
 class RosterEntry(models.Model):
+    id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     roster = models.ForeignKey(Roster, on_delete=models.CASCADE, related_name='league_roster_entries')
     bowler = models.ForeignKey(Bowler, on_delete=models.CASCADE, related_name='league_bowlers')
     sidepots = models.ManyToManyField(LeagueSidepot, through='BowlerSidepotEntry')
@@ -57,7 +58,7 @@ class RosterEntry(models.Model):
 class BowlerSidepotEntry(models.Model):
     bowler = models.ForeignKey(RosterEntry, on_delete=models.CASCADE, related_name='league_bowler_sidepot_entries')
     sidepot = models.ForeignKey(LeagueSidepot, on_delete=models.CASCADE)
-    entry_count = models.PositiveIntegerField(default=0)
+    entry_count = models.PositiveIntegerField(default=1)
 
     def clean(self):
         if not self.sidepot.allow_multiple_entries and self.entry_count > 1:

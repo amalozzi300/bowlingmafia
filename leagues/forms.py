@@ -97,13 +97,38 @@ class CreateRosterForm(ModelForm):
         for field in self.fields.values():
             field.widget.attrs.update({'class': 'league_roster__input'})
 
+# class RosterEntryForm(ModelForm):
+#     class Meta:
+#         model = RosterEntry
+#         fields = ['sidepots']
+
+#     def __init__(self, *args, **kwargs):
+#         super(RosterEntryForm, self).__init__(*args, **kwargs)
+
+#         for field in self.fields.values():
+#             field.widget.attrs.update({'class': 'roster_entry__input'})
+
+
 class RosterEntryForm(ModelForm):
     class Meta:
         model = RosterEntry
-        fields = ['sidepots']
+        fields = []
 
-    def __init__(self, *args, **kwargs):
-        super(RosterEntryForm, self).__init__(*args, **kwargs)
+    def __init__(self, league, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        sidepots = league.league_sidepots.all()
 
-        for field in self.fields.values():
-            field.widget.attrs.update({'class': 'roster_entry__input'})
+        for sidepot in sidepots:
+            field_name = f'sidepot_{sidepot.id}'
+
+            if sidepot.allow_multiple_entries:
+                self.fields[field_name] = forms.IntegerField(
+                    label=sidepot.name,
+                    required=False,
+                    min_value=0,
+                )
+            else:
+                self.fields[field_name] = forms.BooleanField(
+                    label=sidepot.name,
+                    required=False,
+                )

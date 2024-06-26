@@ -152,7 +152,7 @@ def roster_view(request, league_pk, roster_pk):
     }
     return render(request, 'leagues/roster.html', context=context)
 
-def roster_entry(request, league_pk, roster_pk):
+def create_roster_entry(request, league_pk, roster_pk):
     league = League.objects.get(id=league_pk)
     roster = league.league_rosters.get(id=roster_pk)
     form = RosterEntryForm
