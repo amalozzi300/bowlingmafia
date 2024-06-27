@@ -97,18 +97,6 @@ class CreateRosterForm(ModelForm):
         for field in self.fields.values():
             field.widget.attrs.update({'class': 'league_roster__input'})
 
-# class RosterEntryForm(ModelForm):
-#     class Meta:
-#         model = RosterEntry
-#         fields = ['sidepots']
-
-#     def __init__(self, *args, **kwargs):
-#         super(RosterEntryForm, self).__init__(*args, **kwargs)
-
-#         for field in self.fields.values():
-#             field.widget.attrs.update({'class': 'roster_entry__input'})
-
-
 class RosterEntryForm(ModelForm):
     class Meta:
         model = RosterEntry
@@ -132,3 +120,5 @@ class RosterEntryForm(ModelForm):
                     label=sidepot.name,
                     required=False,
                 )
+
+            # self.fields[field_name].widgets.attrs.update({'class': 'form__input'})

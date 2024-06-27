@@ -56,7 +56,7 @@ class RosterEntry(models.Model):
 
 
 class BowlerSidepotEntry(models.Model):
-    bowler = models.ForeignKey(RosterEntry, on_delete=models.CASCADE, related_name='league_bowler_sidepot_entries')
+    roster_entry = models.ForeignKey(RosterEntry, on_delete=models.CASCADE, related_name='league_bowler_sidepot_entries')
     sidepot = models.ForeignKey(LeagueSidepot, on_delete=models.CASCADE)
     entry_count = models.PositiveIntegerField(default=1)
 

@@ -1,8 +1,18 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
-from .models import League
-from .forms import LeagueForm, LeagueSidepotForm, CreateRosterForm, RosterEntryForm
+from common.models import Bowler
+from .models import (
+    League, 
+    BowlerSidepotEntry, 
+    RosterEntry,
+)
+from .forms import (
+    LeagueForm, 
+    LeagueSidepotForm, 
+    CreateRosterForm, 
+    RosterEntryForm,
+)
 
 # Create your views here.
 @login_required(login_url='login')
@@ -152,16 +162,33 @@ def roster_view(request, league_pk, roster_pk):
     }
     return render(request, 'leagues/roster.html', context=context)
 
+@login_required(login_url='login')
 def create_roster_entry(request, league_pk, roster_pk):
     league = League.objects.get(id=league_pk)
     roster = league.league_rosters.get(id=roster_pk)
-    form = RosterEntryForm
+    form = RosterEntryForm(league=league)
 
     if request.method == 'POST':
-        form = RosterEntryForm(request.POST)
+        form = RosterEntryForm(league, request.POST)
 
         if form.is_valid():
-            form.save()
+            bowler = Bowler.objects.create(profile=request.user.profile)
+            roster_entry = RosterEntry.objects.create(roster=roster, bowler=bowler)
+
+            for field_name, value in form.cleaned_data.items():
+                if field_name.startswith('sidepot_'):
+                    sidepot_id = field_name.split('_')[1]
+                    sidepot = league.league_sidepots.get(id=sidepot_id)
+                    num_entries = value if sidepot.allow_multiple_entries else 1
+
+                    if value > 0:
+                        BowlerSidepotEntry.objects.create(
+                            roster_entry=roster_entry,
+                            sidepot=sidepot,
+                            entry_count=num_entries,
+                        )
+            
+            return redirect('league_roster', league_pk, roster_pk)
 
     context = {
         'league': league,

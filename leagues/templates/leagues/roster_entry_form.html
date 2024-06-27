@@ -2,10 +2,14 @@
 {% load static %}
 
 {% block content %}
-    <form method="POST" action="__">
+    <form method="POST" action="{% url 'create_league_roster_entry' league.id roster.id %}">
         {% csrf_token %}
         {% for field in form %}
-            {{ field.label }} {{ field }}
+            <div>
+                {{ field.label }} {{ field }}
+            </div>
         {% endfor %}
+
+        <button type="submit" class="btn">Confirm</button>
     </form>
 {% endblock content %}
