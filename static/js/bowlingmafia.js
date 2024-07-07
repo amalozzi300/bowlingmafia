@@ -4,7 +4,7 @@ function update_profile_image_on_upload(input) {
     if(input.files && input.files[0]) {
         var reader = new FileReader();
 
-        reader.onload = function (e) {
+        reader.onload = function(e) {
             $('.profile__image').attr('src', e.target.result);
         }
 
@@ -20,7 +20,7 @@ $('.account__input').on('change', function() {
 // Sidepot Registration Form
 function toggle_sidepot_field_visibility() {
     // toggles visibility of games_used and is_reverse sidepot form fields depending on the chosen sidepot type
-    var sidepot_type = $('#sidepot__type')[0].value;
+    var sidepot_type = $('#sidepot__type')[0].val();
     var type_needs_games_used = ['Elim'];
 
     if(type_needs_games_used.includes(sidepot_type)) {
@@ -31,7 +31,7 @@ function toggle_sidepot_field_visibility() {
     }
 }
 
-$(function () {
+$(function() {
     // checks for initial visibility toggle
     toggle_sidepot_field_visibility();
 });
@@ -39,4 +39,30 @@ $(function () {
 $('#sidepot__type').on('change', function() {
     // listener for change to sidepot's type field value
     toggle_sidepot_field_visibility()
+});
+
+$(function() {
+    const form = $('form');
+    const totalEntryFeeElement = $('#total-entry-fee');
+
+    function updateTotalEntryFee() {
+        let totalEntryFee = 0;
+        const sidepotFields = form.find('[data-entry-fee]');
+
+        sidepotFields.each(function() {
+            const entryFee = parseFloat($(this).data('entry-fee'));
+            
+            if ($(this).is(':checkbox') && $(this).is(':checked')) {
+                totalEntryFee += entryFee;
+            }
+            else if ($(this).attr('type') == 'number') {
+                totalEntryFee += entryFee * $(this).val();
+            }
+        });
+
+        totalEntryFeeElement.text(totalEntryFee.toFixed(2));
+    }
+
+    form.on('change', updateTotalEntryFee);
+    updateTotalEntryFee();
 });

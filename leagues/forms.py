@@ -114,11 +114,11 @@ class RosterEntryForm(ModelForm):
                     label=sidepot.name,
                     required=False,
                     min_value=0,
+                    widget=forms.NumberInput(attrs={'data-entry-fee': sidepot.entry_fee}),
                 )
             else:
                 self.fields[field_name] = forms.BooleanField(
                     label=sidepot.name,
                     required=False,
+                    widget=forms.CheckboxInput(attrs={'data-entry-fee': sidepot.entry_fee}),
                 )
-
-            # self.fields[field_name].widgets.attrs.update({'class': 'form__input'})

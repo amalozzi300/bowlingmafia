@@ -176,17 +176,24 @@ def create_roster_entry(request, league_pk, roster_pk):
             roster_entry = RosterEntry.objects.create(roster=roster, bowler=bowler)
 
             for field_name, value in form.cleaned_data.items():
+                empty_form = True
+
                 if field_name.startswith('sidepot_'):
                     sidepot_id = field_name.split('_')[1]
                     sidepot = league.league_sidepots.get(id=sidepot_id)
                     num_entries = value if sidepot.allow_multiple_entries else 1
 
                     if value > 0:
+                        empty_form = False
                         BowlerSidepotEntry.objects.create(
                             roster_entry=roster_entry,
                             sidepot=sidepot,
                             entry_count=num_entries,
                         )
+
+            if empty_form:
+                bowler.delete()
+                roster_entry.delete()
             
             return redirect('league_roster', league_pk, roster_pk)
 
