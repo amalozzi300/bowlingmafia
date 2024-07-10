@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
-from common.models import Bowler
 from .models import (
     League, 
     BowlerSidepotEntry, 
@@ -172,8 +171,7 @@ def create_roster_entry(request, league_pk, roster_pk):
         form = RosterEntryForm(league, request.POST)
 
         if form.is_valid():
-            bowler = Bowler.objects.create(profile=request.user.profile)
-            roster_entry = RosterEntry.objects.create(roster=roster, bowler=bowler)
+            roster_entry = RosterEntry.objects.create(roster=roster, bowler=request.user.profile)
 
             for field_name, value in form.cleaned_data.items():
                 empty_form = True
@@ -192,7 +190,6 @@ def create_roster_entry(request, league_pk, roster_pk):
                         )
 
             if empty_form:
-                bowler.delete()
                 roster_entry.delete()
             
             return redirect('league_roster', league_pk, roster_pk)

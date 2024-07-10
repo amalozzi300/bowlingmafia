@@ -49,7 +49,6 @@ INSTALLED_APPS = [
     'common.apps.CommonConfig',
     'leagues.apps.LeaguesConfig',
     'profiles.apps.ProfilesConfig',
-    'sidepots.apps.SidepotsConfig',
     'tournaments.apps.TournamentsConfig',
 ]
 

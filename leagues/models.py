@@ -1,13 +1,10 @@
 from django.db import models
-from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes.fields import GenericForeignKey
 from django.core.exceptions import ValidationError
 
 import uuid
 
-from common.models import Bowler, Event, Game
+from common.models import Event, Sidepot, Game
 from profiles.models import Profile
-from sidepots.models import Sidepot
 
 # Create your models here.
 class League(Event):
@@ -48,8 +45,9 @@ class Roster(models.Model):
 class RosterEntry(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     roster = models.ForeignKey(Roster, on_delete=models.CASCADE, related_name='league_roster_entries')
-    bowler = models.ForeignKey(Bowler, on_delete=models.CASCADE, related_name='league_bowlers')
+    bowler = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='league_bowlers')
     sidepots = models.ManyToManyField(LeagueSidepot, through='BowlerSidepotEntry')
+    handicap = models.PositiveIntegerField(default=0, blank=True)
 
     def __str__(self):
         return f'{self.roster.league.name} -- {self.roster.date.strftime("%m/%d/%y")} -- {self.bowler}'

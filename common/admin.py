@@ -1,7 +1,6 @@
 from django.contrib import admin
 
-from .models import Bowler, BowlingCenter
+from .models import BowlingCenter
 
 # Register your models here.
-admin.site.register(Bowler)
 admin.site.register(BowlingCenter)
