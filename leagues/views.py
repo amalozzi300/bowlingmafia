@@ -8,7 +8,7 @@ from .forms import(
     CreateRosterForm, 
     RosterEntryForm,
 )
-from common.models import BowlerSidepotEntry, RosterEntry
+from events.models import BowlerSidepotEntry, RosterEntry
 
 # Create your views here.
 @login_required(login_url='login')

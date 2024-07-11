@@ -1,6 +1,6 @@
 from django.db import models
 
-from common.models import Event
+from events.models import Event
 from profiles.models import Profile
 
 class League(Event):

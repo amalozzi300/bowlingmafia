@@ -3,7 +3,7 @@ from django.forms import ModelForm
 from django.forms.widgets import CheckboxSelectMultiple
 
 from .models import League
-from common.models import(
+from events.models import(
     Sidepot,
     Roster,
     RosterEntry,

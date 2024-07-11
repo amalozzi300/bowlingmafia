@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% load common_tags %}
-{% load league_tags %}
+{% load event_tags %}
 
 {% block content %}
     {% if request.user.profile in league.admins.all %}
@@ -37,7 +36,7 @@
                         <td>
                             {% if sidepot in entry.sidepots.all %}
                                 {% if sidepot.allow_multiple_entries %}
-                                    {{ entry|get_league_sidepot_entry_count:sidepot }}
+                                    {{ entry|get_sidepot_entry_count:sidepot }}
                                 {% else %}
                                     X
                                 {% endif %}
