@@ -1,17 +1,14 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
-from .models import (
-    League, 
-    BowlerSidepotEntry, 
-    RosterEntry,
-)
-from .forms import (
+from .models import League
+from .forms import(
     LeagueForm, 
     LeagueSidepotForm, 
     CreateRosterForm, 
     RosterEntryForm,
 )
+from common.models import BowlerSidepotEntry, RosterEntry
 
 # Create your views here.
 @login_required(login_url='login')

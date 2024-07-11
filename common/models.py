@@ -1,12 +1,15 @@
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
+from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 from localflavor.us.models import USStateField, USZipCodeField
 from phonenumber_field.modelfields import PhoneNumberField
+from polymorphic.models import PolymorphicModel
 import uuid
 
-# Create your models here.
+from profiles.models import Profile
+
 class BowlingCenter(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     name = models.CharField(max_length=128)
@@ -22,18 +25,19 @@ class BowlingCenter(models.Model):
         return f'{self.name} -- {self.city}, {self.state}'
 
 
-class Event(models.Model):
+class Event(PolymorphicModel):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     name = models.CharField(max_length=256)
+    owner = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='owned_events')
     bowling_centers = models.ManyToManyField(BowlingCenter, related_name='%(class)s_bowling_centers')
     is_archived = models.BooleanField(default=False)
 
-    class Meta:
-        abstract = True
+    # class Meta:
+    #     abstract = True
 
     def __str__(self):
         return str(self.name)
-
+    
     
 class Sidepot(models.Model):
     SIDEPOTS = {
@@ -45,6 +49,7 @@ class Sidepot(models.Model):
     }
 
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='sidepots')
     type = models.CharField(max_length=64, choices=SIDEPOTS)
     entry_fee = models.DecimalField(max_digits=6, decimal_places=2)
     payout_ratio = models.PositiveSmallIntegerField(default=6, validators=[MinValueValidator(2)])
@@ -71,14 +76,57 @@ class Sidepot(models.Model):
 
         return f'{hdcp} {self.get_type_display()} {games}'
     
+    def __str__(self):
+        return f'{self.event.name} - {self.name}'
+    
+
+class Roster(models.Model):
+    id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='rosters')
+    date = models.DateField()
+    is_registration_open = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f'{self.event.name} -- {self.date.strftime("%m/%d/%y")}'
+    
+
+class RosterEntry(models.Model):
+    id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
+    roster = models.ForeignKey(Roster, on_delete=models.CASCADE, related_name='roster_entries')
+    bowler = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='league_bowlers')
+    sidepots = models.ManyToManyField(Sidepot, through='BowlerSidepotEntry')
+    handicap = models.PositiveIntegerField(default=0, blank=True)
+
+    def __str__(self):
+        return f'{self.roster.event.name} -- {self.roster.date.strftime("%m/%d/%y")} -- {self.bowler}'
+    
+
+class BowlerSidepotEntry(models.Model):
+    roster_entry = models.ForeignKey(RosterEntry, on_delete=models.CASCADE, related_name='bowler_sidepot_entries')
+    sidepot = models.ForeignKey(Sidepot, on_delete=models.CASCADE)
+    entry_count = models.PositiveIntegerField(default=0)
+
+    def clean(self):
+        if not self.sidepot.allow_multiple_entries and self.entry_count > 1:
+            raise ValidationError(f'Multiple entries are not allowed for {self.sidepot.type}')
+        
+    def __str__(self):
+        return f'{self.roster_entry.bowler.username} -- {self.sidepot.type} x {self.entry_count}'
+    
 
 class Game(models.Model):
+    bowler = models.ForeignKey(RosterEntry, on_delete=models.CASCADE, related_name='bowler_scores')
     game_number = models.PositiveIntegerField()
     scr_score = models.PositiveIntegerField(validators=[MaxValueValidator(300)])
-    hdcp_score = models.PositiveIntegerField(validators=[MaxValueValidator(300)])
 
     class Meta:
-        abstract = True
+        unique_together = ('bowler', 'game_number')
+    
+    @property
+    def hdcp_score(self):
+        hdcp_score = self.scr_score + self.bowler.handicap
 
+        return hdcp_score if hdcp_score <= 300 else 300
+    
     def __str__(self):
         return str(self.hdcp_score)

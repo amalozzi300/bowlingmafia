@@ -1,11 +1,10 @@
 from django import forms
 from django.forms import ModelForm
 from django.forms.widgets import CheckboxSelectMultiple
-from django.contrib.postgres.forms import SimpleArrayField
 
-from .models import (
-    League, 
-    LeagueSidepot, 
+from .models import League
+from common.models import(
+    Sidepot,
     Roster,
     RosterEntry,
 )
@@ -28,7 +27,7 @@ class LeagueForm(ModelForm):
 
 class LeagueSidepotForm(ModelForm):
     class Meta:
-        model = LeagueSidepot
+        model = Sidepot
         fields = [
             'type',
             'is_handicap',
