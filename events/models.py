@@ -58,9 +58,6 @@ class Sidepot(models.Model):
     is_reverse = models.BooleanField(default=False, blank=True)
     allow_multiple_entries = models.BooleanField(default=False)
 
-    class Meta:
-        abstract = True
-
     @property
     def name(self):
         hdcp = 'Handicap' if self.is_handicap else 'Scratch'
