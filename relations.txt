@@ -1,0 +1,53 @@
+obj = model instance
+tgt = single target instance
+qm() = query method (returns one or more objects)
+sqm() = query method (returns one object)
+
+
+From Event (and children -- League, Tournament):
+owner               obj.owner                       --> tgt.username
+bowling_centers     obj.bowling_centers.qm()        --> tgt.city
+Sidepot(s)          obj.sidepots.qm()               --> tgt.type
+Roster(s)           obj.rosters.qm()                --> tgt.date
+
+
+From League
+admins              obj.admins.qm()                 --> tgt.username
+
+
+From Tournament
+directors           obj.directors.qm()              --> tgt.username
+
+
+From BowlingCenter
+Event(s) (or child) obj.events.qm()                 --> tgt.owner.username
+                    (returns ALL events, Tournament or League)
+RosterEntry(ies)    obj.roster_entries.qm()         --> tgt.handicap
+
+
+From Profile
+owned Event(s)      obj.owned_events.qm()           --> tgt.is_archived
+                    (returns ALL events, Tournament or League)
+admined League(s)   obj.is_league_admin.qm()        --> tgt.num_games
+dir. Tournament(s)  obj.is_tournament_director.qm() --> tgt.num_qualifying_games
+
+
+From Sidepot
+event               obj.event                       --> tgt.owner.username
+
+
+From Roster
+event               obj.event                       --> tgt.owner.username
+roster_entry(ies)   obj.roster_entries.qm()         --> tgt.handicap
+
+
+From RosterEntry
+roster              obj.roster                      --> tgt.date
+bowler              obj.bowler                      --> tgt.username
+sidepots            obj.sidepots.qm()               --> tgt.type
+sp entry_count      obj.bowler_sidepot_entries.sqm().entry_count
+Game(s)             obj.game_scores.qm()            --> tgt.hdcp_score
+
+
+From Game
+bowler [Rost.Ent.]  obj.bowler                      --> tgt.username

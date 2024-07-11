@@ -29,7 +29,7 @@ class Event(PolymorphicModel):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     name = models.CharField(max_length=256)
     owner = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='owned_events')
-    bowling_centers = models.ManyToManyField(BowlingCenter, related_name='%(class)s_bowling_centers')
+    bowling_centers = models.ManyToManyField(BowlingCenter, related_name='events')
     is_archived = models.BooleanField(default=False)
 
     # class Meta:
@@ -90,7 +90,7 @@ class Roster(models.Model):
 class RosterEntry(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     roster = models.ForeignKey(Roster, on_delete=models.CASCADE, related_name='roster_entries')
-    bowler = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='league_bowlers')
+    bowler = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='roster_entries')
     sidepots = models.ManyToManyField(Sidepot, through='BowlerSidepotEntry')
     handicap = models.PositiveIntegerField(default=0, blank=True)
 
@@ -112,7 +112,7 @@ class BowlerSidepotEntry(models.Model):
     
 
 class Game(models.Model):
-    bowler = models.ForeignKey(RosterEntry, on_delete=models.CASCADE, related_name='bowler_scores')
+    bowler = models.ForeignKey(RosterEntry, on_delete=models.CASCADE, related_name='game_scores')
     game_number = models.PositiveIntegerField()
     scr_score = models.PositiveIntegerField(validators=[MaxValueValidator(300)])
 
@@ -121,6 +121,9 @@ class Game(models.Model):
     
     @property
     def hdcp_score(self):
+        if not self.scr_score:
+            return 0
+
         hdcp_score = self.scr_score + self.bowler.handicap
 
         return hdcp_score if hdcp_score <= 300 else 300
