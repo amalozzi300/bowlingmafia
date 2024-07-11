@@ -66,7 +66,7 @@
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <a href="{% url 'edit_account' %}" class="btn edit-account__btn">
-                                            Edit
+                                            Edit Account
                                         </a>
                                     </div>
                                 </div>
@@ -82,7 +82,7 @@
                                         Leagues
                                     </h5>
                                     {% if leagues %}
-                                        {% for league in profile.league_admin.all %}
+                                        {% for league in profile.is_league_admin.all %}
                                             {% if not league.is_archived %}
                                                 <div class="row">
                                                     <div class="col-sm-12">
@@ -103,11 +103,13 @@
                                             not currently a league admin
                                         </p>
                                     {% endif %}
-                                    <div class="text-center">
-                                        <a href="{% url 'create_league' %}" class="btn mt-3 register-event__btn">
-                                            Register League
-                                        </a>
-                                    </div>
+                                    {% if page == 'account' %}
+                                        <div class="text-center">
+                                            <a href="{% url 'create_league' %}" class="btn mt-3 register-event__btn">
+                                                Register League
+                                            </a>
+                                        </div>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -118,7 +120,7 @@
                                         Tournaments
                                     </h5>
                                     {% if tournaments %}
-                                        {% for tournament in profile.tournament_director.all %}
+                                        {% for tournament in profile.is_tournament_director.all %}
                                             {% if not tournament.is_archived %}
                                                 <div class="row">
                                                     <div class="col-sm-12">
@@ -139,11 +141,13 @@
                                             not currently a tournament director
                                         </p>
                                     {% endif %}
-                                    <div class="text-center">
-                                        <a href="" class="btn mt-3 register-event__btn">
-                                            Register Tournament
-                                        </a>
-                                    </div>
+                                    {% if page == 'account' %}
+                                        <div class="text-center">
+                                            <a href="" class="btn mt-3 register-event__btn">
+                                                Register Tournament
+                                            </a>
+                                        </div>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>

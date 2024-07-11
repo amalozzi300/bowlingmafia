@@ -103,7 +103,7 @@ class RosterEntryForm(ModelForm):
 
     def __init__(self, league, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        sidepots = league.league_sidepots.all()
+        sidepots = league.sidepots.all()
 
         for sidepot in sidepots:
             field_name = f'sidepot_{sidepot.id}'

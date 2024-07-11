@@ -27,7 +27,7 @@
     
     <br>
     <h1>Rosters</h1>
-    {% for roster in league.league_rosters.all %}
+    {% for roster in league.rosters.all %}
         <a href="{% url 'league_roster' league.id roster.id %}" style="color: black">{{ roster }}</a>
         <br>
     {% endfor %}
@@ -35,7 +35,7 @@
     
     <br>
     <h1>Sidepots</h1>
-    {% for sidepot in league.league_sidepots.all %}
+    {% for sidepot in league.sidepots.all %}
         <p>Type: {{ sidepot.name }}</p>
         <a href="{% url 'edit_league_sidepot' league.id sidepot.id %}" class="btn">Edit Sidepot</a>
     {% endfor %}

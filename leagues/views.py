@@ -10,7 +10,6 @@ from .forms import(
 )
 from events.models import BowlerSidepotEntry, RosterEntry
 
-# Create your views here.
 @login_required(login_url='login')
 def create_league(request):
     form = LeagueForm()
@@ -76,7 +75,7 @@ def register_sidepot(request, pk):
 
         if form.is_valid():
             sidepot = form.save(commit=False)
-            sidepot.league = league
+            sidepot.event = league
             sidepot.save()
             
             return redirect('league', league.id)
@@ -90,7 +89,7 @@ def register_sidepot(request, pk):
 @login_required(login_url='login')
 def edit_sidepot(request, league_pk, sidepot_pk):
     league = League.objects.get(id=league_pk)
-    sidepot = league.league_sidepots.get(id=sidepot_pk)
+    sidepot = league.sidepots.get(id=sidepot_pk)
     form = LeagueSidepotForm(league, instance=sidepot)
 
     if request.user.profile not in league.admins.all():
@@ -126,7 +125,7 @@ def create_roster(request, pk):
 
         if form.is_valid():
             roster = form.save(commit=False)
-            roster.league = league
+            roster.event = league
             roster.save()
 
             return redirect('league', league.id)
@@ -139,10 +138,10 @@ def create_roster(request, pk):
 
 def roster_view(request, league_pk, roster_pk):
     league = League.objects.get(id=league_pk)
-    roster = league.league_rosters.get(id=roster_pk)
+    roster = league.rosters.get(id=roster_pk)
     bowler_entry_fees = {}
     
-    for entry in roster.league_roster_entries.all():
+    for entry in roster.roster_entries.all():
         cost = 0
         bowler = entry.bowler
 
@@ -161,20 +160,20 @@ def roster_view(request, league_pk, roster_pk):
 @login_required(login_url='login')
 def create_roster_entry(request, league_pk, roster_pk):
     league = League.objects.get(id=league_pk)
-    roster = league.league_rosters.get(id=roster_pk)
+    roster = league.rosters.get(id=roster_pk)
     form = RosterEntryForm(league=league)
 
     if request.method == 'POST':
         form = RosterEntryForm(league, request.POST)
 
         if form.is_valid():
-            emptry_form = True
+            empty_form = True
             all_entry_counts = {}
 
             for field_name, value in form.cleaned_data.items():
                 if field_name.startswith('sidepot_'):
                     sidepot_pk = field_name.split('_')[1]
-                    sidepot = league.league_sidepots.get(id=sidepot_pk)
+                    sidepot = league.sidepots.get(id=sidepot_pk)
                     num_entries = value if sidepot.allow_multiple_entries else 1
 
                     if value > 0:
@@ -200,7 +199,7 @@ def create_roster_entry(request, league_pk, roster_pk):
 
             #     if field_name.startswith('sidepot_'):
             #         sidepot_id = field_name.split('_')[1]
-            #         sidepot = league.league_sidepots.get(id=sidepot_id)
+            #         sidepot = league.sidepots.get(id=sidepot_id)
             #         num_entries = value if sidepot.allow_multiple_entries else 1
 
             #         if value > 0:

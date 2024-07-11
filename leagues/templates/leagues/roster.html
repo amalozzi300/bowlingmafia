@@ -19,7 +19,7 @@
         <thead>
             <tr>
                 <th scope="col">Bowler</th>
-                {% for sidepot in league.league_sidepots.all %}
+                {% for sidepot in league.sidepots.all %}
                     <th scope="col">{{ sidepot.name }}</th>
                 {% endfor %}
                 <th scope="col">Total Entry Fee</th>
@@ -29,10 +29,10 @@
             </tr>
         </thead>
         <tbody>
-            {% for entry in roster.league_roster_entries.all %}
+            {% for entry in roster.roster_entries.all %}
                 <tr>
                     <td>{{ entry.bowler.username }}</td>
-                    {% for sidepot in league.league_sidepots.all %}
+                    {% for sidepot in league.sidepots.all %}
                         <td>
                             {% if sidepot in entry.sidepots.all %}
                                 {% if sidepot.allow_multiple_entries %}

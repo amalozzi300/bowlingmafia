@@ -60,8 +60,8 @@ def register_user(request):
 def user_profile(request, pk):
     page = 'profile'
     profile = Profile.objects.get(id=pk)
-    leagues = True if profile.league_admin.count() > 0 else False
-    tournaments = True if profile.tournament_director.count() > 0 else False
+    leagues = True if profile.is_league_admin.count() > 0 else False
+    tournaments = True if profile.is_tournament_director.count() > 0 else False
     context = {
         'page': page,
         'profile': profile,
@@ -74,8 +74,8 @@ def user_profile(request, pk):
 def user_account(request):
     page = 'account'
     profile = request.user.profile
-    leagues = True if profile.league_admin.count() > 0 else False
-    tournaments = True if profile.tournament_director.count() > 0 else False
+    leagues = True if profile.is_league_admin.count() > 0 else False
+    tournaments = True if profile.is_tournament_director.count() > 0 else False
     context = {
         'page': page,
         'profile': profile,
