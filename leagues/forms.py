@@ -121,3 +121,10 @@ class RosterEntryForm(ModelForm):
                     required=False,
                     widget=forms.CheckboxInput(attrs={'data-entry-fee': sidepot.entry_fee}),
                 )
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        for field, value in cleaned_data.items():
+            if not value:
+                cleaned_data[field] = 0
