@@ -88,7 +88,7 @@ class LeagueSidepotForm(ModelForm):
 class CreateRosterForm(ModelForm):
     class Meta:
         model = Roster
-        fields = ['date', 'is_registration_open']
+        fields = ['date']
 
     def __init__(self, *args, **kwargs):
         super(CreateRosterForm, self).__init__(*args, **kwargs)

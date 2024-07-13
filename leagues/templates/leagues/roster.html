@@ -7,13 +7,17 @@
         <a href="" class="btn">
             {% if roster.is_registration_open %}
                 Close Registration
-            {% else %}
-                Open Registration
             {% endif %}
         </a>
     {% endif %}
 
-    <a href="{% url 'create_league_roster_entry' league.id roster.id %}" class="btn">Sign Up</a>
+    {% if roster.is_registration_open %}
+        {% if request.user.profile not in signed_up_users_list %}
+            <a href="{% url 'create_league_roster_entry' league.id roster.id %}" class="btn">Sign Up</a>
+        {% else %}
+            <a href="" class="btn">Edit Entry</a>
+        {% endif %}
+    {% endif %}
 
     <table class="table">
         <thead>

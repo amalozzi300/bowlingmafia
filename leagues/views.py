@@ -139,10 +139,12 @@ def create_roster(request, pk):
 def roster_view(request, league_pk, roster_pk):
     league = League.objects.get(id=league_pk)
     roster = league.rosters.get(id=roster_pk)
+    signed_up_users = roster.roster_entries.all().values_list('bowler')
 
     context = {
         'league': league,
         'roster': roster,
+        'signed_up_users': signed_up_users,
     }
     return render(request, 'leagues/roster.html', context=context)
 
