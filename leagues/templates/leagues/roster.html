@@ -43,7 +43,7 @@
                             {% endif %}
                         </td>
                     {% endfor %}
-                    <td>${{ bowler_entry_fees|dict_lookup:entry.bowler }}</td>
+                    <td>${{ entry|get_total_entry_fee }}</td>
                     {% if request.user.profile in league.admins.all and roster.is_registration_open %}
                         <td>
                             <a href="">Refund and Remove Entry</a>

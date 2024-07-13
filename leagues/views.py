@@ -139,21 +139,10 @@ def create_roster(request, pk):
 def roster_view(request, league_pk, roster_pk):
     league = League.objects.get(id=league_pk)
     roster = league.rosters.get(id=roster_pk)
-    bowler_entry_fees = {}
-    
-    for entry in roster.roster_entries.all():
-        cost = 0
-        bowler = entry.bowler
-
-        for sidepot in entry.sidepots.all():
-            cost += sidepot.entry_fee
-
-        bowler_entry_fees[bowler] = cost
 
     context = {
         'league': league,
         'roster': roster,
-        'bowler_entry_fees': bowler_entry_fees
     }
     return render(request, 'leagues/roster.html', context=context)
 
@@ -189,29 +178,6 @@ def create_roster_entry(request, league_pk, roster_pk):
                         sidepot=sidepot,
                         entry_count=entry_count,
                     )
-
-
-
-            # roster_entry = RosterEntry.objects.create(roster=roster, bowler=request.user.profile)
-
-            # for field_name, value in form.cleaned_data.items():
-            #     empty_form = True
-
-            #     if field_name.startswith('sidepot_'):
-            #         sidepot_id = field_name.split('_')[1]
-            #         sidepot = league.sidepots.get(id=sidepot_id)
-            #         num_entries = value if sidepot.allow_multiple_entries else 1
-
-            #         if value > 0:
-            #             empty_form = False
-            #             BowlerSidepotEntry.objects.create(
-            #                 roster_entry=roster_entry,
-            #                 sidepot=sidepot,
-            #                 entry_count=num_entries,
-            #             )
-
-            # if empty_form:
-            #     roster_entry.delete()
             
             return redirect('league_roster', league_pk, roster_pk)
 
