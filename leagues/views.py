@@ -154,6 +154,9 @@ def create_roster_entry(request, league_pk, roster_pk):
     roster = league.rosters.get(id=roster_pk)
     form = RosterEntryForm(league=league)
 
+    if request.user.profile in roster.roster_entries.all().values_list('bowler'):
+        redirect() # to edit entry page
+    
     if request.method == 'POST':
         form = RosterEntryForm(league, request.POST)
 
