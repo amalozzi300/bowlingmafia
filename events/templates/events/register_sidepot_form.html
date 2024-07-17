@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <form method="POST"
+      {% if sidepot %}
+        action="{% url 'edit_league_sidepot' league.id sidepot.id %}"
+      {% else %}
+        action="{% url 'register_league_sidepot' league.id %}"
+      {% endif %}>
+        {% csrf_token %}
+        {% for field in form %}
+            <div {% if field.label == 'Games used' or field.label == 'Is reverse' %}class="sidepot__conditional-toggle"{% endif %}>
+                {{ field.label.title }} {{ field }}
+                {% if field.errors %}
+                    <div class="form-field__errors">{{ field.errors }}</div>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <button type="submit" class="btn">
+            {% if sidepot %}
+                Save and Exit
+            {% else %}
+                Create
+            {% endif %}
+        </button>
+    </form>
+{% endblock content %}

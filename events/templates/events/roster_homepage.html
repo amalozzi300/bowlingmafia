@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load event_tags %}
+
+{% block content %}
+    {% if request.user.profile in event.admins.all and roster.is_registration_open %}
+        <a href="" class="btn">
+            Close Registration
+        </a>
+    {% endif %}
+
+    {% if roster.is_registration_open %}
+        {% if request.user.profile not in signed_up_users_list %}
+            <a href="{% url 'create_league_roster_entry' league.id roster.id %}" class="btn">Sign Up</a>
+        {% else %}
+            <a href="" class="btn">Edit Entry</a>
+        {% endif %}
+    {% endif %}
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Bowler</th>
+                {% for sidepot in event.sidepots.all %}
+                    <th scope="col">{{ sidepot.name }}</th>
+                {% endfor %}
+                <th scope="col">Total Entry Fee</th>
+                {% if request.user.profile in event.admins.all and roster.is_registration_open %}
+                    <th scope="col"></th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in roster.roster_entries.all %}
+                <tr>
+                    <td>{{ entry.bowler.username }}</td>
+                    {% for sidepot in event.sidepots.all %}
+                        <td>
+                            {% if sidepot in entry.sidepots.all %}
+                                {% if sidepot.allow_multiple_entries %}
+                                    {{ entry|get_sidepot_entry_count:sidepot }}
+                                {% else %}
+                                    X
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                    {% endfor %}
+                    <td>${{ entry|get_total_entry_fee }}</td>
+                    {% if request.user.profile in event.admins.all and roster.is_registration_open %}
+                        <td>
+                            <a href="">Refund and Remove Entry</a>
+                        </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock content %}

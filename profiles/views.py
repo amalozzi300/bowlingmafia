@@ -57,9 +57,9 @@ def register_user(request):
     context = {'form': form}
     return render(request, 'profiles/register.html', context=context)
 
-def user_profile(request, pk):
+def user_profile(request, username):
     page = 'profile'
-    profile = Profile.objects.get(id=pk)
+    profile = Profile.objects.get(username=username)
     leagues = True if profile.is_league_admin.count() > 0 else False
     tournaments = True if profile.is_tournament_director.count() > 0 else False
     context = {
@@ -132,9 +132,9 @@ def outbox(request):
     return render(request, 'profiles/in_outbox.html', context=context)
 
 @login_required(login_url='login')
-def view_message(request, pk):
+def view_message(request, message_pk):
     profile = request.user.profile
-    message = profile.messages.get(id=pk)
+    message = profile.messages.get(id=message_pk)
     
     if not message.is_read:
         message.is_read = True
@@ -146,10 +146,10 @@ def view_message(request, pk):
 
 
 @login_required(login_url='login')
-def create_message(request, pk):
-    recipient = Profile.objects.get(id=pk)
-    form = MessageForm()
+def create_message(request, recipient_pk):
     sender = request.user.profile
+    recipient = Profile.objects.get(id=recipient_pk)
+    form = MessageForm()
 
     if request.method == 'POST':
         form = MessageForm(request.POST)

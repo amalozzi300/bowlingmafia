@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.postgres.fields import ArrayField
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.utils.text import slugify
 
 from localflavor.us.models import USStateField, USZipCodeField
 from phonenumber_field.modelfields import PhoneNumberField
@@ -26,14 +27,12 @@ class BowlingCenter(models.Model):
 
 
 class Event(PolymorphicModel):
-    id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
+    slug = models.SlugField(unique=True)
     name = models.CharField(max_length=256)
     owner = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='owned_events')
+    admins = models.ManyToManyField(Profile, on_delete=models.CASCADE, related_name='admined_events')
     bowling_centers = models.ManyToManyField(BowlingCenter, related_name='events')
     is_archived = models.BooleanField(default=False)
-
-    # class Meta:
-    #     abstract = True
 
     def __str__(self):
         return str(self.name)
@@ -49,6 +48,7 @@ class Sidepot(models.Model):
     }
 
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
+    slug = models.SlugField()
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='sidepots')
     type = models.CharField(max_length=64, choices=SIDEPOTS)
     entry_fee = models.DecimalField(max_digits=6, decimal_places=2)
@@ -73,18 +73,47 @@ class Sidepot(models.Model):
 
         return f'{hdcp} {self.get_type_display()} {games}'
     
+    class Meta:
+        unique_together = ('event', 'type', 'is_handicap', 'games_used', 'is_reverse')
+    
     def __str__(self):
         return f'{self.event.name} - {self.name}'
     
+    def save(self, *args, **kwargs):
+        hdcp = 'hdcp' if self.is_handicap else 'scr'
+        games = ''
+        games_used = self.games_used[::-1] if self.is_reverse else self.games_used
+
+        for game in games_used:
+            games += f' {str(game)}-'
+        
+        if games:
+            games = f'(games{games[:-1]})'
+
+        games.strip()
+
+        self.slug = slugify(f'{hdcp}_{self.type}_{games}')
+
+        super(Sidepot, self).save(*args, **kwargs)
+
 
 class Roster(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
+    slug = models.SlugField()
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='rosters')
     date = models.DateField()
     is_registration_open = models.BooleanField(default=True)
 
+    class Meta:
+        unique_together = ('event', 'slug')
+
     def __str__(self):
         return f'{self.event.name} -- {self.date.strftime("%m/%d/%y")}'
+    
+    def save(self, *args, **kwargs):
+        date = self.date.strftime('%m-%d-%y')
+        self.slug = slugify(date)
+        super(Roster, self).save(*args, **kwargs)
     
 
 class RosterEntry(models.Model):
@@ -94,9 +123,16 @@ class RosterEntry(models.Model):
     sidepots = models.ManyToManyField(Sidepot, through='BowlerSidepotEntry')
     handicap = models.PositiveIntegerField(default=0, blank=True)
 
+    class Meta:
+        unique_together = ('roster', 'bowler')
+
     def __str__(self):
         return f'{self.roster.event.name} -- {self.roster.date.strftime("%m/%d/%y")} -- {self.bowler}'
     
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.bowler.username)
+        super(RosterEntry, self).save(*args, **kwargs)
+
 
 class BowlerSidepotEntry(models.Model):
     roster_entry = models.ForeignKey(RosterEntry, on_delete=models.CASCADE, related_name='bowler_sidepot_entries')
@@ -115,9 +151,6 @@ class Game(models.Model):
     bowler = models.ForeignKey(RosterEntry, on_delete=models.CASCADE, related_name='game_scores')
     game_number = models.PositiveIntegerField()
     scr_score = models.PositiveIntegerField(validators=[MaxValueValidator(300)])
-
-    class Meta:
-        unique_together = ('bowler', 'game_number')
     
     @property
     def hdcp_score(self):
@@ -128,5 +161,8 @@ class Game(models.Model):
 
         return hdcp_score if hdcp_score <= 300 else 300
     
+    class Meta:
+        unique_together = ('bowler', 'game_number')
+
     def __str__(self):
         return str(self.hdcp_score)
