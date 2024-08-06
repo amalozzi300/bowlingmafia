@@ -37,6 +37,18 @@ class Event(PolymorphicModel):
     def __str__(self):
         return str(self.name)
     
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            # object does not exist in the database, so does not have pk value 
+            # pk value is need for slug creation, so we temporarily save the object to create a pk value
+            needs_slug = True
+            self.slug = f'temp_{self.name}_slug'
+            super().save(*args, **kwargs)
+
+        self.slug = slugify(f'{self.name}_{self.pk}')
+        super().save(*args, **kwargs)
+
+    
     
 class Sidepot(models.Model):
     SIDEPOTS = {

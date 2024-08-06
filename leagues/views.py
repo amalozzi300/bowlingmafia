@@ -18,7 +18,7 @@ def create_league(request):
             league.admins.add(request.user.profile)
             league.save()
 
-            return redirect('league', league.id)
+            return redirect('event_homepage', league.slug)
 
     context = {'form': form}
     return render(request, 'leagues/league_form.html', context=context)
@@ -29,8 +29,8 @@ def create_league(request):
 #     return render(request, 'leagues/league.html', context=context)
 
 @login_required(login_url='login')
-def edit_league(request, pk):
-    league = League.objects.get(id=pk)
+def edit_league(request, league_slug):
+    league = League.objects.get(slug=league_slug)
     form = LeagueForm(instance=league)
 
     if request.user.profile not in league.admins.all():
@@ -43,7 +43,7 @@ def edit_league(request, pk):
         if form.is_valid():
             form.save()
 
-            return redirect('league', league.id)
+            return redirect('event_homepage', league.slug)
 
     context = {
         'league': league,
