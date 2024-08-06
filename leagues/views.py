@@ -2,13 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
 from .models import League
-from .forms import(
-    LeagueForm, 
-    LeagueSidepotForm, 
-    CreateRosterForm, 
-    RosterEntryForm,
-)
-from events.models import BowlerSidepotEntry, RosterEntry
+from .forms import LeagueForm
 
 @login_required(login_url='login')
 def create_league(request):

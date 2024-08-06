@@ -30,7 +30,7 @@ class Event(PolymorphicModel):
     slug = models.SlugField(unique=True)
     name = models.CharField(max_length=256)
     owner = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='owned_events')
-    admins = models.ManyToManyField(Profile, on_delete=models.CASCADE, related_name='admined_events')
+    admins = models.ManyToManyField(Profile, related_name='admined_events')
     bowling_centers = models.ManyToManyField(BowlingCenter, related_name='events')
     is_archived = models.BooleanField(default=False)
 
