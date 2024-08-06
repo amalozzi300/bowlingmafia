@@ -28,8 +28,8 @@ RosterEntry(ies)    obj.roster_entries.qm()         --> tgt.handicap
 From Profile
 owned Event(s)      obj.owned_events.qm()           --> tgt.is_archived
                     (returns ALL events, Tournament or League)
-admined League(s)   obj.is_league_admin.qm()        --> tgt.num_games
-dir. Tournament(s)  obj.is_tournament_director.qm() --> tgt.num_qualifying_games
+admined Event(s)    obj.admined_events.qm()         --> tgt.is_archived
+                    (returns ALL events, Tournament or League)
 
 
 From Sidepot
