@@ -4,7 +4,7 @@
 {% block content %}
     <form method="POST" 
       {% if league %}
-        action="{% url 'edit_league' league.id %}"
+        action="{% url 'edit_league' league.slug %}"
       {% else %}
         action="{% url 'create_league' %}"
       {% endif %}>

@@ -82,11 +82,11 @@
                                         Leagues
                                     </h5>
                                     {% if leagues %}
-                                        {% for league in profile.is_league_admin.all %}
+                                        {% for league in admined_leagues %}
                                             {% if not league.is_archived %}
                                                 <div class="row">
                                                     <div class="col-sm-12">
-                                                        <a href="{% url 'league' league.id %}" class="profile-league__link">
+                                                        <a href="{% url 'event_homepage' league.slug %}" class="profile-league__link">
                                                             {{ league }}
                                                         </a>
                                                     </div>
@@ -120,7 +120,7 @@
                                         Tournaments
                                     </h5>
                                     {% if tournaments %}
-                                        {% for tournament in profile.is_tournament_director.all %}
+                                        {% for tournament in admined_tournaments %}
                                             {% if not tournament.is_archived %}
                                                 <div class="row">
                                                     <div class="col-sm-12">
@@ -138,7 +138,7 @@
                                             {% else %}
                                                 You are
                                             {% endif %}
-                                            not currently a tournament director
+                                            not currently a tournament admin
                                         </p>
                                     {% endif %}
                                     {% if page == 'account' %}

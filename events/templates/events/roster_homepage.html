@@ -11,7 +11,7 @@
 
     {% if roster.is_registration_open %}
         {% if request.user.profile not in signed_up_users_list %}
-            <a href="{% url 'create_league_roster_entry' league.id roster.id %}" class="btn">Sign Up</a>
+            <a href="{% url 'register_roster_entry' event.slug roster.slug %}" class="btn">Sign Up</a>
         {% else %}
             <a href="" class="btn">Edit Entry</a>
         {% endif %}

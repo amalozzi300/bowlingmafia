@@ -4,9 +4,9 @@
 {% block content %}
     <form method="POST"
       {% if sidepot %}
-        action="{% url 'edit_league_sidepot' league.id sidepot.id %}"
+        action="{% url 'edit_sidepot' event.slug sidepot.slug %}"
       {% else %}
-        action="{% url 'register_league_sidepot' league.id %}"
+        action="{% url 'register_sidepot' event.slug %}"
       {% endif %}>
         {% csrf_token %}
         {% for field in form %}

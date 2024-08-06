@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 
 from .models import Profile
+from leagues.models import League
 from .forms import CustomUserCreationForm, ProfileForm, MessageForm
 
 # Create your views here.
@@ -60,13 +61,25 @@ def register_user(request):
 def user_profile(request, username):
     page = 'profile'
     profile = Profile.objects.get(username=username)
-    leagues = True if profile.is_league_admin.count() > 0 else False
-    tournaments = True if profile.is_tournament_director.count() > 0 else False
+    admined_events = profile.admined_events.all()
+    admined_leagues = []
+    admined_tournaments = []
+    
+    for event in admined_events:
+        if type(event) is League:
+            admined_leagues.append(event)
+        else:
+            admined_tournaments.append(event)
+
+    leagues = True if len(admined_leagues) > 0 else False
+    tournaments = True if len(admined_tournaments) > 0 else False
     context = {
         'page': page,
         'profile': profile,
         'leagues': leagues,
+        'admined_leagues': admined_leagues,
         'tournaments': tournaments,
+        'admined_tournaments': admined_tournaments,
     }
     return render(request, 'profiles/profile.html', context=context)
 
@@ -74,13 +87,25 @@ def user_profile(request, username):
 def user_account(request):
     page = 'account'
     profile = request.user.profile
-    leagues = True if profile.is_league_admin.count() > 0 else False
-    tournaments = True if profile.is_tournament_director.count() > 0 else False
+    admined_events = profile.admined_events.all()
+    admined_leagues = []
+    admined_tournaments = []
+
+    for event in admined_events:
+        if type(event) is League:
+            admined_leagues.append(event)
+        else:
+            admined_tournaments.append(event)
+
+    leagues = True if len(admined_leagues) > 0 else False
+    tournaments = True if len(admined_tournaments) > 0 else False
     context = {
         'page': page,
         'profile': profile,
         'leagues': leagues,
+        'admined_leagues': admined_leagues,
         'tournaments': tournaments,
+        'admined_tournaments': admined_tournaments,
     }
     return render(request, 'profiles/profile.html', context=context)
 

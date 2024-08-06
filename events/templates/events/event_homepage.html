@@ -22,23 +22,29 @@
     </p>
     <p>Start Date: {{ event.start_date }}</p>
 
-    <a href="{% url 'edit_league' league.id %}" class="btn">Edit League</a>
-    <a href="{% url 'invite_admin' league.id %}" class="btn">Invite Admin</a>
+    {% if type == 'League' %}
+        <a href="{% url 'edit_league' event.slug %}" class="btn">Edit League</a>
+    {% else %}
+        <a href="" class="btn">Edit Tournament</a>
+    {% endif %}
+
+    <a href="{% url 'invite_admin' event.slug %}" class="btn">Invite Admin</a>
+
     
     <br>
     <h1>Rosters</h1>
     {% for roster in event.rosters.all %}
-        <a href="{% url 'league_roster' league.id roster.id %}" style="color: black">{{ roster }}</a>
+        <a href="{% url 'roster_home' event.slug roster.slug %}" style="color: black">{{ roster }}</a>
         <br>
     {% endfor %}
-    <a href="{% url 'create_league_roster' league.id %}" class="btn">Create Roster</a>
+    <a href="{% url 'create_roster' event.slug %}" class="btn">Create Roster</a>
     
     <br>
     <h1>Sidepots</h1>
     {% for sidepot in event.sidepots.all %}
         <p>Type: {{ sidepot.name }}</p>
-        <a href="{% url 'edit_league_sidepot' league.id sidepot.id %}" class="btn">Edit Sidepot</a>
+        <a href="{% url 'edit_sidepot' event.slug sidepot.slug %}" class="btn">Edit Sidepot</a>
     {% endfor %}
     <br>
-    <a href="{% url 'register_league_sidepot' league.id %}" class="btn">Register Sidepot</a>
+    <a href="{% url 'register_sidepot' event.slug %}" class="btn">Register Sidepot</a>
 {% endblock content %}
