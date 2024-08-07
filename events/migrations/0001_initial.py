@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='BowlingCenter',
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=128)),
                 ('street_address', models.CharField(max_length=128, verbose_name='address')),
                 ('city', models.CharField(max_length=64)),
@@ -53,7 +53,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Roster',
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('slug', models.SlugField()),
                 ('date', models.DateField()),
                 ('is_registration_open', models.BooleanField(default=True)),
@@ -83,7 +83,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Sidepot',
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('slug', models.SlugField()),
                 ('type', models.CharField(choices=[('HG', 'High Game'), ('HS', 'High Series'), ('WTA', 'Winner Takes All'), ('Elim', 'Eliminator'), ('MD', 'Mystery Doubles')], max_length=64)),
                 ('entry_fee', models.DecimalField(decimal_places=2, max_digits=6)),

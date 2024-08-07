@@ -16,9 +16,10 @@ def create_league(request):
             league.owner = request.user.profile
             league.save()
             league.admins.add(request.user.profile)
+            league.bowling_centers.set(request.POST.getlist('bowling_centers'))
             league.save()
 
-            return redirect('event_homepage', league.slug)
+            return redirect('event_home', league.slug)
 
     context = {'form': form}
     return render(request, 'leagues/league_form.html', context=context)
@@ -43,7 +44,7 @@ def edit_league(request, league_slug):
         if form.is_valid():
             form.save()
 
-            return redirect('event_homepage', league.slug)
+            return redirect('event_home', league.slug)
 
     context = {
         'league': league,

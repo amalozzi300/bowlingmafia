@@ -20,7 +20,7 @@ $('.account__input').on('change', function() {
 // Sidepot Registration Form
 function toggle_sidepot_field_visibility() {
     // toggles visibility of games_used and is_reverse sidepot form fields depending on the chosen sidepot type
-    var sidepot_type = $('#sidepot__type')[0].val();
+    var sidepot_type = $('#sidepot__type')[0].value;
     var type_needs_games_used = ['Elim'];
 
     if(type_needs_games_used.includes(sidepot_type)) {

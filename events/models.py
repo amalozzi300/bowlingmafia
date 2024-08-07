@@ -40,7 +40,7 @@ class Event(PolymorphicModel):
         if not self.pk:
             # object does not exist in the database, so does not have pk value 
             # pk value is needed for slug creation, so we temporarily save the object to create a pk value
-            self.slug = f'temp_{self.name}_slug'
+            self.slug = slugify(f'temp_{self.name}_slug')
             super().save(*args, **kwargs)
 
         self.slug = slugify(f'{self.name}_{self.pk}')
@@ -57,7 +57,7 @@ class Sidepot(models.Model):
         'MD': 'Mystery Doubles',
     }
 
-    slug = models.SlugField()
+    slug = models.SlugField(unique=True)
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='sidepots')
     type = models.CharField(max_length=64, choices=SIDEPOTS)
     entry_fee = models.DecimalField(max_digits=6, decimal_places=2)
@@ -92,17 +92,16 @@ class Sidepot(models.Model):
         if not self.pk:
             # object does not exist in the database, so does not have a pk value
             # pk value is needed for slug creation, so we temporarily save the object to create a pk value
-            self.slug = f'temp_sidepot_slug'
+            self.slug = slugify(f'{self.event.name} {self.type} {self.is_handicap}')
             super().save(*args, **kwargs)
 
         hdcp = 'hdcp' if self.is_handicap else 'scr'
-        self.slug = slugify(f'{hdcp}-{self.type}_{self.pk}')
+        self.slug = slugify(f'{hdcp}-{self.get_type_display()}_{self.pk}')
         super().save(*args, **kwargs)
 
 
 class Roster(models.Model):
-    id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
-    slug = models.SlugField()
+    slug = models.SlugField(unique=True)
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='rosters')
     date = models.DateField()
     is_registration_open = models.BooleanField(default=True)
@@ -114,8 +113,15 @@ class Roster(models.Model):
         return f'{self.event.name} -- {self.date.strftime("%m/%d/%y")}'
     
     def save(self, *args, **kwargs):
-        date = self.date.strftime('%m_%d_%y')
-        self.slug = slugify(date)
+        date = self.date.strftime('%m-%d-%y')
+
+        if not self.pk:
+            # object does not exist in the database, so does not have a pk value
+            # pk value is needed for slug creation, so we temporarily save the object to create a pk value
+            self.slug = slugify(f'{self.event} {date}')
+            super().save(*args, **kwargs)
+
+        self.slug = slugify(f'{date}_{self.pk}')
         super().save(*args, **kwargs)
     
 
@@ -131,10 +137,6 @@ class RosterEntry(models.Model):
 
     def __str__(self):
         return f'{self.roster.event.name} -- {self.roster.date.strftime("%m/%d/%y")} -- {self.bowler}'
-    
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.bowler.username)
-        super(RosterEntry, self).save(*args, **kwargs)
 
 
 class BowlerSidepotEntry(models.Model):

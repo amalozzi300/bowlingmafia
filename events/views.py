@@ -16,10 +16,10 @@ from tournaments.models import Tournament
 
 def event_homepage(request, event_slug):
     event = Event.objects.get(slug=event_slug)
-    type = 'League' if type(event) is League else 'Tournament'
+    event_type = 'League' if type(event) is League else 'Tournament'
     context = {
         'event': event,
-        'type': type,
+        'type': event_type,
     }
     return render(request, 'events/event_homepage.html', context=context)
 
