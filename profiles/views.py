@@ -61,6 +61,10 @@ def register_user(request):
 def user_profile(request, username):
     page = 'profile'
     profile = Profile.objects.get(username=username)
+
+    if request.user.profile.id == profile.id:
+        return redirect('account')
+
     admined_events = profile.admined_events.all()
     admined_leagues = []
     admined_tournaments = []
