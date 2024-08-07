@@ -12,7 +12,6 @@ import uuid
 from profiles.models import Profile
 
 class BowlingCenter(models.Model):
-    id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     name = models.CharField(max_length=128)
     street_address = models.CharField(max_length=128, verbose_name='address')
     city = models.CharField(max_length=64)
@@ -40,8 +39,7 @@ class Event(PolymorphicModel):
     def save(self, *args, **kwargs):
         if not self.pk:
             # object does not exist in the database, so does not have pk value 
-            # pk value is need for slug creation, so we temporarily save the object to create a pk value
-            needs_slug = True
+            # pk value is needed for slug creation, so we temporarily save the object to create a pk value
             self.slug = f'temp_{self.name}_slug'
             super().save(*args, **kwargs)
 
@@ -59,7 +57,6 @@ class Sidepot(models.Model):
         'MD': 'Mystery Doubles',
     }
 
-    id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     slug = models.SlugField()
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='sidepots')
     type = models.CharField(max_length=64, choices=SIDEPOTS)
@@ -92,21 +89,15 @@ class Sidepot(models.Model):
         return f'{self.event.name} - {self.name}'
     
     def save(self, *args, **kwargs):
+        if not self.pk:
+            # object does not exist in the database, so does not have a pk value
+            # pk value is needed for slug creation, so we temporarily save the object to create a pk value
+            self.slug = f'temp_sidepot_slug'
+            super().save(*args, **kwargs)
+
         hdcp = 'hdcp' if self.is_handicap else 'scr'
-        games = ''
-        games_used = self.games_used[::-1] if self.is_reverse else self.games_used
-
-        for game in games_used:
-            games += f' {str(game)}-'
-        
-        if games:
-            games = f'(games{games[:-1]})'
-
-        games.strip()
-
-        self.slug = slugify(f'{hdcp}_{self.type}_{games}')
-
-        super(Sidepot, self).save(*args, **kwargs)
+        self.slug = slugify(f'{hdcp}-{self.type}_{self.pk}')
+        super().save(*args, **kwargs)
 
 
 class Roster(models.Model):
@@ -123,9 +114,9 @@ class Roster(models.Model):
         return f'{self.event.name} -- {self.date.strftime("%m/%d/%y")}'
     
     def save(self, *args, **kwargs):
-        date = self.date.strftime('%m-%d-%y')
+        date = self.date.strftime('%m_%d_%y')
         self.slug = slugify(date)
-        super(Roster, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
     
 
 class RosterEntry(models.Model):
