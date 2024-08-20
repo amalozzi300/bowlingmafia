@@ -10,7 +10,7 @@
     {% endif %}
 
     {% if roster.is_registration_open %}
-        {% if request.user.profile not in signed_up_users_list %}
+        {% if request.user.profile not in signed_up_users %}
             <a href="{% url 'register_roster_entry' event.slug roster.slug %}" class="btn">Sign Up</a>
         {% else %}
             <a href="" class="btn">Edit Entry</a>

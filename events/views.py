@@ -105,7 +105,7 @@ def create_roster(request, event_slug):
 def roster_homepage(request, event_slug, roster_slug):
     event = Event.objects.get(slug=event_slug)
     roster = event.rosters.get(slug=roster_slug)
-    signed_up_users = roster.roster_entries.all().values_list('bowler')
+    signed_up_users = roster.roster_entries.all().values_list('bowler', flat=True)
 
     context = {
         'event': event,
