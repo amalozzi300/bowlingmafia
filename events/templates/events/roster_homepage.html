@@ -4,7 +4,7 @@
 
 {% block content %}
     {% if request.user.profile in event.admins.all and roster.is_registration_open %}
-        <a href="" class="btn">
+        <a href="{% url 'close_registration_form' event.slug roster.slug %}" class="btn">
             Close Registration
         </a>
     {% endif %}

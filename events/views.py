@@ -5,6 +5,7 @@ from .models import(
     Event,
     RosterEntry,
     BowlerSidepotEntry,
+    Game,
 )
 from .forms import(
     RegisterSidepotForm,
@@ -114,6 +115,33 @@ def roster_homepage(request, event_slug, roster_slug):
     }
     return render(request, 'events/roster_homepage.html', context=context)
 
+@login_required(login_url='login')
+def confirm_close_registration(request, event_slug, roster_slug):
+    context = {
+        'event_slug': event_slug,
+        'roster_slug': roster_slug,
+    }
+    return render(request, 'events/close_registration_form.html', context=context)
+
+@login_required(login_url='login')
+def handle_close_registration(request, event_slug, roster_slug):
+    event = Event.objects.get(slug=event_slug)
+    roster = event.rosters.get(slug=roster_slug)
+
+    if roster.is_registration_open:
+        roster.is_registration_open = False
+        roster.save()
+
+        for roster_entry in roster.roster_entries.all():
+            games = []
+
+            for i in range(event.num_games):
+                games.append(Game(bowler=roster_entry, game_number=(i + 1)))
+
+        Game.objects.bulk_create(games)  
+        
+    return redirect('roster_home', event_slug, roster_slug)
+    
 @login_required(login_url='login')
 def create_roster_entry(request, event_slug, roster_slug):
     event = Event.objects.get(slug=event_slug)

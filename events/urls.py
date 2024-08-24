@@ -31,14 +31,19 @@ urlpatterns = [
         name='create_roster',
     ),
     path(
+        'event/<str:event_slug>/roster/<str:roster_slug>/', 
+        views.roster_homepage, 
+        name='roster_home',
+    ),
+    path(
         'event/<str:event_slug>/roster/<str:roster_slug>/close_registration', 
         views.confirm_close_registration, 
         name='close_registration_form',
     ),
     path(
-        'event/<str:event_slug>/roster/<str:roster_slug>/', 
-        views.roster_homepage, 
-        name='roster_home',
+        'event/<str:event_slug>/roster/<str:roster_slug>/handle_close',
+        views.handle_close_registration,
+        name='handle_close_registration',
     ),
     path(
         'event/<str:event_slug>/roster/<str:roster_slug>/register/', 

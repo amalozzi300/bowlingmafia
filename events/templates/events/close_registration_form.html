@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <a href="{% url 'close_registration_workflow' roster.id %}" class="btn">Confirm</a>
-    <a href="{% url 'roster_home' event.slug roster.slug %}"></a>
+    <a href="{% url 'handle_close_registration' event_slug roster_slug %}" class="btn">Confirm</a>
+    <a href="{% url 'roster_home' event_slug roster_slug %}" class="btn">Go Back</a>
 {% endblock content %}
