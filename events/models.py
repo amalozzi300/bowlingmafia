@@ -155,7 +155,7 @@ class BowlerSidepotEntry(models.Model):
 class Game(models.Model):
     bowler = models.ForeignKey(RosterEntry, on_delete=models.CASCADE, related_name='game_scores')
     game_number = models.PositiveIntegerField()
-    scr_score = models.PositiveIntegerField(validators=[MaxValueValidator(300)])
+    scr_score = models.PositiveIntegerField(default=0, validators=[MaxValueValidator(300)])
     
     @property
     def hdcp_score(self):
