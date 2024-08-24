@@ -20,7 +20,7 @@ class RegisterSidepotForm(forms.ModelForm):
         ]
 
     def __init__(self, event, *args, **kwargs):
-        super(RegisterSidepotForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         choices = []
 
@@ -52,7 +52,7 @@ class RegisterSidepotForm(forms.ModelForm):
             cleaned_data['games_used'] = [int(item) for item in games_used]
 
     def save(self, commit=True):
-        instance = super(RegisterSidepotForm, self).save(commit=False)
+        instance = super().save(commit=False)
         multiple_entries_allowed = ['MD']
         needs_games_used_and_reverse = ['Elim']
 
@@ -73,7 +73,7 @@ class CreateRosterForm(forms.ModelForm):
         fields = ['date']
 
     def __init__(self, *args, **kwargs):
-        super(CreateRosterForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         for field in self.fields.values():
             field.widget.attrs.update({'class': 'roster__input'})

@@ -13,7 +13,7 @@ class LeagueForm(forms.ModelForm):
         ]
 
     def __init__(self, *args, **kwargs):
-        super(LeagueForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         for field in self.fields.values():
             field.widget.attrs.update({'class': 'league__input'})
@@ -31,7 +31,7 @@ class LeagueForm(forms.ModelForm):
 #         ]
 
 #     def __init__(self, league, *args, **kwargs):
-#         super(LeagueSidepotForm, self).__init__(*args, **kwargs)
+#         super().__init__(*args, **kwargs)
 
 #         choices = []
 
@@ -63,7 +63,7 @@ class LeagueForm(forms.ModelForm):
 #             cleaned_data['games_used'] = [int(item) for item in games_used]
 
 #     def save(self, commit=True):
-#         instance = super(LeagueSidepotForm, self).save(commit=False)
+#         instance = super().save(commit=False)
 #         multiple_entries_allowed = ['MD']
 #         needs_games_used_and_reverse = ['Elim']
 
@@ -84,7 +84,7 @@ class LeagueForm(forms.ModelForm):
 #         fields = ['date']
 
 #     def __init__(self, *args, **kwargs):
-#         super(CreateRosterForm, self).__init__(*args, **kwargs)
+#         super().__init__(*args, **kwargs)
 
 #         for field in self.fields.values():
 #             field.widget.attrs.update({'class': 'league_roster__input'})
