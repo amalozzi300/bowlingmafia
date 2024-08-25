@@ -22,6 +22,7 @@
     </p>
     <p>Start Date: {{ event.start_date }}</p>
 
+
     {% if type == 'League' %}
         <a href="{% url 'edit_league' event.slug %}" class="btn">Edit League</a>
     {% else %}
@@ -37,7 +38,37 @@
         <a href="{% url 'roster_home' event.slug roster.slug %}" style="color: black">{{ roster }}</a>
         <br>
     {% endfor %}
-    <a href="{% url 'create_roster' event.slug %}" class="btn">Create Roster</a>
+    
+    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#create_roster_modal">
+        Create a Roster
+    </button>
+    
+    <div class="modal fade" id="create_roster_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="create_roster_label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title" id="create_roster_label">Create a Roster</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="POST" action="{% url 'event_home' event.slug %}">
+                            {% csrf_token %}
+                            {% for field in form %}
+                                {{ field.label.title }} {{ field }}
+                            {% endfor %}
+                    
+                            <br>
+                            <br>
+                            <button type="submit" class="btn">Create</button>
+                            <button type="button" class="btn" data-bs-dismiss="modal">Go Back</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     
     <br>
     <h1>Sidepots</h1>

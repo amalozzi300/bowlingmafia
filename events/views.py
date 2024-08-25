@@ -17,10 +17,27 @@ from tournaments.models import Tournament
 
 def event_homepage(request, event_slug):
     event = Event.objects.get(slug=event_slug)
+    form = CreateRosterForm()
+
+    if request.user.profile not in event.admins.all():
+        # raise 403 permission denied
+        pass
+
+    if request.method == 'POST':
+        form = CreateRosterForm(request.POST)
+
+        if form.is_valid():
+            roster = form.save(commit=False)
+            roster.event = event 
+            roster.save()
+
+            return redirect('event_home', event.slug)
+
     event_type = 'League' if type(event) is League else 'Tournament'
     context = {
         'event': event,
         'type': event_type,
+        'form': form,
     }
     return render(request, 'events/event_homepage.html', context=context)
 
@@ -77,31 +94,6 @@ def edit_sidepot(request, event_slug, sidepot_slug):
         'form': form,
     }
     return render(request, 'events/register_sidepot_form.html', context=context)
-
-@login_required(login_url='login')
-def create_roster(request, event_slug):
-    event = Event.objects.get(slug=event_slug)
-    form = CreateRosterForm()
-
-    if request.user.profile not in event.admins.all():
-        # raise 403 permission denied
-        pass
-
-    if request.method == 'POST':
-        form = CreateRosterForm(request.POST)
-
-        if form.is_valid():
-            roster = form.save(commit=False)
-            roster.event = event
-            roster.save()
-
-            return redirect('event_home', event.slug)
-
-    context = {
-        'event': event,
-        'form': form,
-    }
-    return render(request, 'events/create_roster_form.html', context=context)
 
 def roster_homepage(request, event_slug, roster_slug):
     event = Event.objects.get(slug=event_slug)

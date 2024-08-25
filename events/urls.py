@@ -26,11 +26,6 @@ urlpatterns = [
     ),
 
     path(
-        'event/<str:event_slug>/create-roster/',
-        views.create_roster, 
-        name='create_roster',
-    ),
-    path(
         'event/<str:event_slug>/roster/<str:roster_slug>/', 
         views.roster_homepage, 
         name='roster_home',
