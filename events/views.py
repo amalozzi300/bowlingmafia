@@ -112,6 +112,10 @@ def handle_close_registration(request, event_slug, roster_slug):
     event = Event.objects.get(slug=event_slug)
     roster = event.rosters.get(slug=roster_slug)
 
+    if request.user.profile not in event.admins.all():
+        # raise 403 permission denied
+        pass
+
     if roster.is_registration_open:
         roster.is_registration_open = False
         roster.save()
