@@ -1,8 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
 from .models import(
     Event,
+    Sidepot, 
+    Roster,
     RosterEntry,
     BowlerSidepotEntry,
     Game,
@@ -16,7 +18,7 @@ from leagues.models import League
 from tournaments.models import Tournament
 
 def event_homepage(request, event_slug):
-    event = Event.objects.get(slug=event_slug)
+    event = get_object_or_404(Event, slug=event_slug)
     form = CreateRosterForm()
 
     if request.user.profile not in event.admins.all():
@@ -47,7 +49,7 @@ def invite_admin(request, event_slug):
 
 @login_required(login_url='login')
 def register_sidepot(request, event_slug):
-    event = Event.objects.get(slug=event_slug)
+    event = get_object_or_404(Event, slug=event_slug)
     form = RegisterSidepotForm(event)
 
     if request.user.profile not in event.admins.all():
@@ -72,8 +74,8 @@ def register_sidepot(request, event_slug):
 
 @login_required(login_url='login')
 def edit_sidepot(request, event_slug, sidepot_slug):
-    event = Event.objects.get(slug=event_slug)
-    sidepot = event.sidepots.get(slug=sidepot_slug)
+    event = get_object_or_404(Event, slug=event_slug)
+    sidepot = get_object_or_404(Sidepot, event=event, slug=sidepot_slug)
     form = RegisterSidepotForm(event, instance=sidepot)
 
     if request.user.profile not in event.admins.all():
@@ -96,8 +98,8 @@ def edit_sidepot(request, event_slug, sidepot_slug):
     return render(request, 'events/register_sidepot_form.html', context=context)
 
 def roster_homepage(request, event_slug, roster_slug):
-    event = Event.objects.get(slug=event_slug)
-    roster = event.rosters.get(slug=roster_slug)
+    event = get_object_or_404(Event, slug=event_slug)
+    roster = get_object_or_404(Roster, event=event, slug=roster_slug)
     signed_up_users = roster.roster_entries.all().values_list('bowler', flat=True)
 
     context = {
@@ -109,8 +111,8 @@ def roster_homepage(request, event_slug, roster_slug):
 
 @login_required(login_url='login')
 def handle_close_registration(request, event_slug, roster_slug):
-    event = Event.objects.get(slug=event_slug)
-    roster = event.rosters.get(slug=roster_slug)
+    event = get_object_or_404(Event, slug=event_slug)
+    roster = get_object_or_404(Roster, event=event, slug=roster_slug)
 
     if request.user.profile not in event.admins.all():
         # raise 403 permission denied
@@ -132,8 +134,8 @@ def handle_close_registration(request, event_slug, roster_slug):
     
 @login_required(login_url='login')
 def create_roster_entry(request, event_slug, roster_slug):
-    event = Event.objects.get(slug=event_slug)
-    roster = event.rosters.get(slug=roster_slug)
+    event = get_object_or_404(Event, slug=event_slug)
+    roster = get_object_or_404(Roster, event=event, slug=roster_slug)
     form = RosterEntryForm(event)
 
     if request.user.profile in roster.roster_entries.all().values_list('bowler'):

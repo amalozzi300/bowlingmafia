@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
 from .models import League
@@ -31,7 +31,7 @@ def create_league(request):
 
 @login_required(login_url='login')
 def edit_league(request, league_slug):
-    league = League.objects.get(slug=league_slug)
+    league = get_object_or_404(League, slug=league_slug)
     form = LeagueForm(instance=league)
 
     if request.user.profile not in league.admins.all():

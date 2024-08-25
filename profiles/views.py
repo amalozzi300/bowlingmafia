@@ -1,10 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.models import User
 
-from .models import Profile
+from .models import Profile, Message
 from leagues.models import League
 from .forms import CustomUserCreationForm, ProfileForm, MessageForm
 
@@ -60,7 +60,7 @@ def register_user(request):
 
 def user_profile(request, username):
     page = 'profile'
-    profile = Profile.objects.get(username=username)
+    profile = get_object_or_404(Profile, usernmae=username)
 
     if request.user.profile.id == profile.id:
         return redirect('account')
@@ -162,8 +162,8 @@ def outbox(request):
 
 @login_required(login_url='login')
 def view_message(request, message_pk):
-    profile = request.user.profile
-    message = profile.messages.get(id=message_pk)
+    recipient = request.user.profile
+    message = get_object_or_404(Message, recipient=recipient, id=message_pk)
     
     if not message.is_read:
         message.is_read = True
@@ -177,7 +177,7 @@ def view_message(request, message_pk):
 @login_required(login_url='login')
 def create_message(request, recipient_pk):
     sender = request.user.profile
-    recipient = Profile.objects.get(id=recipient_pk)
+    recipient = get_object_or_404(Profile, id=recipient_pk)
     form = MessageForm()
 
     if request.method == 'POST':

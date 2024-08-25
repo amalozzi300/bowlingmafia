@@ -31,14 +31,14 @@ class Message(models.Model):
     sender = models.ForeignKey(
         Profile,
         on_delete=models.CASCADE,
-        related_name='sender',
+        related_name='sent_messages',
         null=True, 
         blank=True,
     )
     recipient = models.ForeignKey(
         Profile, 
         on_delete=models.SET_NULL,
-        related_name = 'recipient',
+        related_name = 'received_messages',
         null=True, 
         blank=True,
     )
