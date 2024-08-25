@@ -121,7 +121,7 @@ def confirm_close_registration(request, event_slug, roster_slug):
         'event_slug': event_slug,
         'roster_slug': roster_slug,
     }
-    return render(request, 'events/close_registration_form.html', context=context)
+    return render(request, 'events/close_registration_modal.html', context=context)
 
 @login_required(login_url='login')
 def handle_close_registration(request, event_slug, roster_slug):
