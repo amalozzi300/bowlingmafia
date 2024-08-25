@@ -116,14 +116,6 @@ def roster_homepage(request, event_slug, roster_slug):
     return render(request, 'events/roster_homepage.html', context=context)
 
 @login_required(login_url='login')
-def confirm_close_registration(request, event_slug, roster_slug):
-    context = {
-        'event_slug': event_slug,
-        'roster_slug': roster_slug,
-    }
-    return render(request, 'events/close_registration_modal.html', context=context)
-
-@login_required(login_url='login')
 def handle_close_registration(request, event_slug, roster_slug):
     event = Event.objects.get(slug=event_slug)
     roster = event.rosters.get(slug=roster_slug)
