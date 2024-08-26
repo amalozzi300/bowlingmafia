@@ -13,7 +13,9 @@ from .forms import(
     RegisterSidepotForm,
     CreateRosterForm,
     RosterEntryForm,
+    RosterEntryScoreForm,
 )
+from.formsets import GameInputFormSet
 from leagues.models import League
 from tournaments.models import Tournament
 
@@ -176,3 +178,34 @@ def create_roster_entry(request, event_slug, roster_slug):
         'form': form,
     }
     return render(request, 'events/roster_entry_form.html', context=context)
+
+@login_required(login_url='login')
+def user_game_score_input(request, event_slug, roster_slug):
+    event = get_object_or_404(Event, slug=event_slug)
+    roster = get_object_or_404(Roster, event=event, slug=roster_slug)
+
+    if roster.is_registration_open:
+        return redirect('roster_home', event_slug, roster_slug)
+
+    roster_entry = get_object_or_404(RosterEntry, roster=roster, bowler=request.user.profile)
+    form = RosterEntryScoreForm(instance=roster_entry)
+    formset = GameInputFormSet(instance=roster_entry, queryset=roster_entry.game_scores.all())
+
+    if request.method == 'POST':
+        for key, val in request.POST.items():
+            print(key, val)
+        form = RosterEntryScoreForm(request.POST, instance=roster_entry)
+        formset = GameInputFormSet(request.POST, instance=roster_entry, queryset=roster_entry.game_scores.all())
+
+        if form.is_valid() and formset.is_valid():
+            form.save()
+            formset.save()
+            return redirect('roster_home', event_slug, roster_slug)
+        
+    context = {
+        'event': event,
+        'roster': roster,
+        'form': form,
+        'formset': formset,
+    }
+    return render(request, 'events/score_input_form.html', context=context)

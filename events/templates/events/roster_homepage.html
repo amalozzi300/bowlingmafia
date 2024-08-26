@@ -3,35 +3,39 @@
 {% load event_tags %}
 
 {% block content %}
-    {% if request.user.profile in event.admins.all and roster.is_registration_open %}
-        <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#close_roster_reg_modal">
-            Close Registration
-        </button>
+    {% if roster.is_registration_open %}
+        {% if request.user.profile in event.admins.all %}
+            <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#close_roster_reg_modal">
+                Close Registration
+            </button>
 
-        <div class="modal fade" id="close_roster_reg_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="close_roster_reg_label" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title" id="close_roster_reg_label">Confirm Close Registration</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Are you sure you want to close this registration period?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <a href="{% url 'handle_close_registration' event.slug roster.slug %}" class="btn">Confirm</a>
-                        <button type="button" class="btn" data-bs-dismiss="modal">Go Back</button>
+            <div class="modal fade" id="close_roster_reg_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="close_roster_reg_label" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title" id="close_roster_reg_label">Confirm Close Registration</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Are you sure you want to close this registration period?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="{% url 'handle_close_registration' event.slug roster.slug %}" class="btn">Confirm</a>
+                            <button type="button" class="btn" data-bs-dismiss="modal">Go Back</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    {% endif %}
+        {% endif %}
 
-    {% if roster.is_registration_open %}
-        {% if request.user.profile not in signed_up_users %}
+        {% if request.user.profile.id not in signed_up_users %}
             <a href="{% url 'register_roster_entry' event.slug roster.slug %}" class="btn">Sign Up</a>
         {% else %}
             <a href="" class="btn">Edit Entry</a>
+        {% endif %}
+    {% else %}
+        {% if request.user.profile.id in signed_up_users %}
+            <a href="{% url 'game_input_form' event.slug roster.slug %}" class="btn">Input Your Scores</a>
         {% endif %}
     {% endif %}
 

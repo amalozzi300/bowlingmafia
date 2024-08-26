@@ -40,4 +40,9 @@ urlpatterns = [
         views.create_roster_entry, 
         name='register_roster_entry',
     ),
+    path(
+        'event/<str:event_slug>/roster/<str:roster_slug>/input_scores',
+        views.user_game_score_input,
+        name='game_input_form',
+    )
 ]

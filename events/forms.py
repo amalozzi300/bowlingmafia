@@ -5,6 +5,7 @@ from .models import(
     Sidepot,
     Roster,
     RosterEntry,
+    Game,
 )
 
 class RegisterSidepotForm(forms.ModelForm):
@@ -110,3 +111,19 @@ class RosterEntryForm(forms.ModelForm):
         for field, value in cleaned_data.items():
             if not value:
                 cleaned_data[field] = 0
+
+class GameInputForm(forms.ModelForm):
+    class Meta:
+        model = Game
+        fields = ['scr_score']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        if self.instance and self.instance.pk:
+            self.fields['scr_score'].label = f'Game {self.instance.game_number}'
+
+class RosterEntryScoreForm(forms.ModelForm):
+    class Meta:
+        model = RosterEntry
+        fields = ['handicap']
