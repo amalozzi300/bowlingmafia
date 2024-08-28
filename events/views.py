@@ -213,8 +213,12 @@ def user_game_score_input(request, event_slug, roster_slug):
 @login_required(login_url='login')
 def score_verification(request, event_slug, roster_slug):
     event = get_object_or_404(Event, slug=event_slug)
-    roster = get_object_or_404(Roster, event=event, slug=roster_slug)
 
+    if request.user.profile not in event.admins.all():
+        # raise 403 permission denied
+        pass
+
+    roster = get_object_or_404(Roster, event=event, slug=roster_slug)
     roster_entry_formset = ScoreVerificationFormSet(instance=roster, prefix='roster_entry')
     game_formsets = [
         GameInputFormSet(

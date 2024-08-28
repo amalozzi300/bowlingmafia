@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-    <form method="POST" action="{% url 'game_input_form' event.slug roster.slug %}">
+    <form method="POST" action="{% url 'game_input' event.slug roster.slug %}">
         {% csrf_token %}
         {% for field in form %}
             <div>

@@ -35,7 +35,11 @@
         {% endif %}
     {% else %}
         {% if request.user.profile.id in signed_up_users %}
-            <a href="{% url 'game_input_form' event.slug roster.slug %}" class="btn">Input Your Scores</a>
+            <a href="{% url 'game_input' event.slug roster.slug %}" class="btn">Input Your Scores</a>
+        {% endif %}
+
+        {% if request.user.profile in event.admins.all %}
+            <a href="{% url 'score_verification' event.slug roster.slug %}" class="btn">Verify Final Scores</a>
         {% endif %}
     {% endif %}
 

@@ -43,6 +43,11 @@ urlpatterns = [
     path(
         'event/<str:event_slug>/roster/<str:roster_slug>/input_scores',
         views.user_game_score_input,
-        name='game_input_form',
-    )
+        name='game_input',
+    ),
+    path(
+        'event/<str:event_slug>/roster/<str:roster_slug>/score_verification',
+        views.score_verification,
+        name='score_verification',
+    ),
 ]
