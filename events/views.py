@@ -15,7 +15,7 @@ from .forms import(
     RosterEntryForm,
     RosterEntryScoreForm,
 )
-from.formsets import GameInputFormSet
+from.formsets import GameInputFormSet, ScoreVerificationFormSet
 from leagues.models import League
 from tournaments.models import Tournament
 
@@ -209,3 +209,49 @@ def user_game_score_input(request, event_slug, roster_slug):
         'formset': formset,
     }
     return render(request, 'events/score_input_form.html', context=context)
+
+@login_required(login_url='login')
+def score_verification(request, event_slug, roster_slug):
+    event = get_object_or_404(Event, slug=event_slug)
+    roster = get_object_or_404(Roster, event=event, slug=roster_slug)
+
+    roster_entry_formset = ScoreVerificationFormSet(instance=roster, prefix='roster_entry')
+    game_formsets = [
+        GameInputFormSet(
+            instance=form.instance, 
+            prefix=f'game-{index}'
+        ) for index, form in enumerate(roster_entry_formset.forms)
+    ]
+
+    if request.method == 'POST':
+        roster_entry_formset = ScoreVerificationFormSet(request.POST, instance=roster, prefix='roster_entry')
+        game_formsets = []
+
+        if roster_entry_formset.is_valid():
+            roster_entries = roster_entry_formset.save(commit=False)
+            
+            for index, form in enumerate(roster_entry_formset.forms):
+                entry = form.instance
+                new_game_formset = GameInputFormSet(
+                    request.POST,
+                    instance=entry,
+                    prefix=f'game-{index}'
+                )
+                game_formsets.append(new_game_formset)
+            
+            if all([gfs.is_valid() for gfs in game_formsets]):
+                for entry in roster_entries:
+                    entry.save()  # Save child instances
+
+                for gfs in game_formsets:
+                    gfs.save()  # Save grandchild instances
+                
+                return redirect('roster_home', event_slug, roster_slug)  # Replace with your success URL
+    
+    context = {
+        'event': event,
+        'roster': roster,
+        'roster_entry_formset': roster_entry_formset,
+        'game_formsets': game_formsets,
+    }
+    return render(request, 'score_verification_form.html', context)
