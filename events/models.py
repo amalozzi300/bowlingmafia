@@ -55,6 +55,7 @@ class Sidepot(models.Model):
         'WTA': 'Winner Takes All',
         'Elim': 'Eliminator',
         'MD': 'Mystery Doubles',
+        'BR': 'Brackets',
     }
 
     slug = models.SlugField(unique=True)
