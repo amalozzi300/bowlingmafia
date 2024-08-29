@@ -60,7 +60,7 @@ def register_user(request):
 
 def user_profile(request, username):
     page = 'profile'
-    profile = get_object_or_404(Profile, usernmae=username)
+    profile = get_object_or_404(Profile, username=username)
 
     if request.user.profile.id == profile.id:
         return redirect('account')

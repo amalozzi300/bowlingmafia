@@ -258,4 +258,4 @@ def score_verification(request, event_slug, roster_slug):
         'roster_entry_formset': roster_entry_formset,
         'game_formsets': game_formsets,
     }
-    return render(request, 'score_verification_form.html', context)
+    return render(request, 'events/score_verification_form.html', context)
