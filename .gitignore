@@ -1,4 +1,9 @@
 *.env
 /env
 .vscode
-*.pyc
+*.log
+__pycache__/
+*.py[cod]
+*$py.class
+.ruff_cache
+bowlingmafia/settings/__init__.py
