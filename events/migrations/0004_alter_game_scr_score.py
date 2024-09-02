@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('events', '0003_alter_game_scr_score'),
     ]
@@ -14,6 +13,9 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='game',
             name='scr_score',
-            field=models.PositiveIntegerField(default=0, validators=[django.core.validators.MinValueValidator(0), django.core.validators.MaxValueValidator(300)]),
+            field=models.PositiveIntegerField(
+                default=0,
+                validators=[django.core.validators.MinValueValidator(0), django.core.validators.MaxValueValidator(300)],
+            ),
         ),
     ]

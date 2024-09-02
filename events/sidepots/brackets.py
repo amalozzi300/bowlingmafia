@@ -3,6 +3,7 @@ from random import randint
 
 from events.models import BowlerSidepotEntry, RosterEntry
 
+
 class BracketNode:
     def __init__(self, left=None, right=None):
         self.matchup = None
@@ -13,14 +14,14 @@ class BracketNode:
         return self.matchup == other_node.matchup
 
     def set_node(self, top, bottom):
-        top = [top] if type(top) == RosterEntry else top
-        bottom = [bottom] if type(top) == RosterEntry else bottom
+        top = [top] if isinstance(top, RosterEntry) else top
+        bottom = [bottom] if isinstance(bottom, RosterEntry) else bottom
         self.matchup = set(top) | set(bottom)
 
     def is_set(self):
         return bool(self.matchup)
 
-                    
+
 class Bracket:
     def __init__(self):
         nodes = [BracketNode() for i in range(4)]
@@ -44,12 +45,10 @@ class Bracket:
         for node in self.round_list_map[round_num]:
             if not node.is_set():
                 node.matchup = new_node.matchup
-                bowler_list |= node.matchup
+                self.bowler_list |= node.matchup
                 return
 
-        raise Exception # preferably custom
-
-                    
+        raise Exception  # preferably custom
 
     def is_full(self):
         return all((node.is_set() for node in self.round_one))
@@ -74,9 +73,9 @@ def create_brackets(roster):
     entries_per_entrant_map = Counter(master_list)
 
     # process data to ensure bracket requirements are met
-        # len(master_list) % 8 == 0
-        # entry count for each entrant must be <= int(len(master_list) / 8)
-        # additional edge cases as we find them
+    # len(master_list) % 8 == 0
+    # entry count for each entrant must be <= int(len(master_list) / 8)
+    # additional edge cases as we find them
     # will need to refund bowlers who have some bracket entries removed to meet bracket requirements
 
     # once all conditions are met to ensure there is at least one way of successfully compiling brackets
@@ -94,7 +93,7 @@ def create_brackets(roster):
             top = master_list.pop(index)
             index = randint(0, len(master_list) - 1)
             bottom = master_list.pop(index)
-        
+
         new_node = BracketNode()
         new_node.set_node(top, bottom)
 

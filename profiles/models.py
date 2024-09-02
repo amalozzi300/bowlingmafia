@@ -1,7 +1,10 @@
-from django.db import models
-from django.contrib.auth.models import User
-from phonenumber_field.modelfields import PhoneNumberField
 import uuid
+
+from django.contrib.auth.models import User
+from django.db import models
+
+from phonenumber_field.modelfields import PhoneNumberField
+
 
 class Profile(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
@@ -12,9 +15,9 @@ class Profile(models.Model):
     email = models.EmailField(max_length=256, null=True, blank=True)
     phone_number = PhoneNumberField(null=True, blank=True)
     profile_image = models.ImageField(
-        upload_to='profiles/', 
-        default='profiles/user_default.png', 
-        null=True, 
+        upload_to='profiles/',
+        default='profiles/user_default.png',
+        null=True,
         blank=True,
     )
     created = models.DateTimeField(auto_now_add=True)
@@ -32,14 +35,14 @@ class Message(models.Model):
         Profile,
         on_delete=models.CASCADE,
         related_name='sent_messages',
-        null=True, 
+        null=True,
         blank=True,
     )
     recipient = models.ForeignKey(
-        Profile, 
+        Profile,
         on_delete=models.SET_NULL,
-        related_name = 'received_messages',
-        null=True, 
+        related_name='received_messages',
+        null=True,
         blank=True,
     )
     name = models.CharField(max_length=200, null=True, blank=True)

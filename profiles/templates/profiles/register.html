@@ -1,32 +1,36 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+
 {% load static %}
 
 {% block content %}
     <div class="auth__wrapper">
         <div class="logo">
-            <img src="{% static 'images/bm_logo.png' %}" alt="Bowling Mafia Logo" class="auth__logo">
+            <img src="{% static 'images/bm_logo.png' %}"
+                 alt="Bowling Mafia Logo"
+                 class="auth__logo">
         </div>
-        <div class="text-center mt-2 auth__header">
-            Join the Family
-        </div>
-
-        <form method="POST" action="{% url 'register' %}" class="p-3 mt-3 align-items-center auth__form">
+        <div class="text-center mt-2 auth__header">Join the Family</div>
+        <form method="POST"
+              action="{% url 'register' %}"
+              class="p-3 mt-3 align-items-center auth__form">
             {% csrf_token %}
-
             {% for field in form %}
                 <div class="form-field">
-                    <label for="form-input" class="auth__field-label"><h5>{{ field.label }}:</h5></label>
+                    <label for="form-input" class="auth__field-label">
+                        <h5>{{ field.label }}:</h5>
+                    </label>
                     {{ field }}
                 </div>
             {% endfor %}
-            
+
             <div class="text-center">
                 <button class="btn mt-1 justify-content-center">Create Account</button>
-            </div> 
+            </div>
         </form>
-
         <div class="text-center fs-6 mt-2 auth__link">
-            <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
+            <p>
+                Already have an account? <a href="{% url 'login' %}">Login</a>
+            </p>
         </div>
     </div>
 {% endblock content %}

@@ -1,63 +1,61 @@
 from django.urls import path
+
 from . import views
 
 urlpatterns = [
     path(
-        '', 
-        views.home, 
+        '',
+        views.home,
         name='home',
     ),
-    
     path(
-        'login/', 
-        views.login_user, 
+        'login/',
+        views.login_user,
         name='login',
     ),
     path(
-        'logout/', 
-        views.logout_user, 
+        'logout/',
+        views.logout_user,
         name='logout',
     ),
     path(
-        'register/', 
-        views.register_user, 
+        'register/',
+        views.register_user,
         name='register',
     ),
-
     path(
-        'profile/<str:username>/', 
-        views.user_profile, 
+        'profile/<str:username>/',
+        views.user_profile,
         name='user_profile',
     ),
     path(
-        'account/', 
-        views.user_account, 
+        'account/',
+        views.user_account,
         name='account',
     ),
     path(
-        'edit-account/', 
-        views.edit_account, 
+        'edit-account/',
+        views.edit_account,
         name='edit_account',
     ),
-
     path(
-        'inbox/', 
-        views.inbox, 
+        'inbox/',
+        views.inbox,
         name='inbox',
     ),
     path(
-        'outbox/', 
-        views.outbox, 
+        'outbox/',
+        views.outbox,
         name='outbox',
     ),
     path(
-        'message/<str:message_pk>/', 
-        views.view_message, 
+        'message/<str:message_pk>/',
+        views.view_message,
         name='message',
     ),
     path(
-        'create-message/<str:recipient_pk>/', 
-        views.create_message, 
+        'create-message/<str:recipient_pk>/',
+        views.create_message,
         name='create_message',
     ),
 ]

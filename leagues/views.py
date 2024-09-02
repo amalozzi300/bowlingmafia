@@ -1,8 +1,9 @@
-from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, redirect, render
 
-from .models import League
 from .forms import LeagueForm
+from .models import League
+
 
 @login_required(login_url='login')
 def create_league(request):
@@ -24,10 +25,12 @@ def create_league(request):
     context = {'form': form}
     return render(request, 'leagues/league_form.html', context=context)
 
+
 # def league_profile(request, pk):
 #     league = League.objects.get(id=pk)
 #     context = {'league': league}
 #     return render(request, 'leagues/league.html', context=context)
+
 
 @login_required(login_url='login')
 def edit_league(request, league_slug):
@@ -37,7 +40,7 @@ def edit_league(request, league_slug):
     if request.user.profile not in league.admins.all():
         # raise 403 permission denied
         pass
-    
+
     if request.method == 'POST':
         form = LeagueForm(request.POST, instance=league)
 
@@ -51,6 +54,7 @@ def edit_league(request, league_slug):
         'form': form,
     }
     return render(request, 'leagues/league_form.html', context=context)
+
 
 # @login_required(login_url='login')
 # def invite_admin(request, pk):
@@ -72,7 +76,7 @@ def edit_league(request, league_slug):
 #             sidepot = form.save(commit=False)
 #             sidepot.event = league
 #             sidepot.save()
-            
+
 #             return redirect('league', league.id)
 
 #     context = {
@@ -151,7 +155,7 @@ def edit_league(request, league_slug):
 
 #     if request.user.profile in roster.roster_entries.all().values_list('bowler'):
 #         redirect() # to edit entry page
-    
+
 #     if request.method == 'POST':
 #         form = RosterEntryForm(league, request.POST)
 
@@ -178,7 +182,7 @@ def edit_league(request, league_slug):
 #                         sidepot=sidepot,
 #                         entry_count=entry_count,
 #                     )
-            
+
 #             return redirect('league_roster', league_pk, roster_pk)
 
 #     context = {

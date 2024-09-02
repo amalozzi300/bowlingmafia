@@ -1,17 +1,16 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+
 {% load static %}
 
 {% block content %}
-    <form method="POST" action="{% url 'create_league_roster_entry' league.id roster.id %}">
+    <form method="POST"
+          action="{% url 'create_league_roster_entry' league.id roster.id %}">
         {% csrf_token %}
-        {% for field in form %}
-            <div>
-                {{ field.label }} {{ field }}
-            </div>
-        {% endfor %}
+        {% for field in form %}<div>{{ field.label }} {{ field }}</div>{% endfor %}
 
-        <label>Total Entry Fee: $<span id="total-entry-fee">0.00</span></label>
-
+        <label>
+            Total Entry Fee: $<span id="total-entry-fee">0.00</span>
+        </label>
         <button type="submit" class="btn">Confirm</button>
     </form>
 {% endblock content %}

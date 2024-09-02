@@ -1,21 +1,24 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import login, authenticate, logout
-from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404, redirect, render
 
-from .models import Profile, Message
 from leagues.models import League
-from .forms import CustomUserCreationForm, ProfileForm, MessageForm
+
+from .forms import CustomUserCreationForm, MessageForm, ProfileForm
+from .models import Message, Profile
+
 
 # Create your views here.
 def home(request):
     return redirect('login')
 
+
 def login_user(request):
     if request.user.is_authenticated:
         return redirect('account')
-    
+
     if request.method == 'POST':
         username = request.POST['login_username'].lower()
         password = request.POST['login_password']
@@ -35,9 +38,11 @@ def login_user(request):
 
     return render(request, 'profiles/login.html')
 
+
 def logout_user(request):
     logout(request)
     return redirect('home')
+
 
 def register_user(request):
     form = CustomUserCreationForm()
@@ -58,6 +63,7 @@ def register_user(request):
     context = {'form': form}
     return render(request, 'profiles/register.html', context=context)
 
+
 def user_profile(request, username):
     page = 'profile'
     profile = get_object_or_404(Profile, username=username)
@@ -68,7 +74,7 @@ def user_profile(request, username):
     admined_events = profile.admined_events.all()
     admined_leagues = []
     admined_tournaments = []
-    
+
     for event in admined_events:
         if type(event) is League:
             admined_leagues.append(event)
@@ -86,6 +92,7 @@ def user_profile(request, username):
         'admined_tournaments': admined_tournaments,
     }
     return render(request, 'profiles/profile.html', context=context)
+
 
 @login_required(login_url='login')
 def user_account(request):
@@ -113,6 +120,7 @@ def user_account(request):
     }
     return render(request, 'profiles/profile.html', context=context)
 
+
 @login_required(login_url='login')
 def edit_account(request):
     profile = request.user.profile
@@ -128,13 +136,14 @@ def edit_account(request):
 
             form.save()
             return redirect('account')
-        
+
     context = {
         'profile': profile,
         'form': form,
     }
     return render(request, 'profiles/profile_form.html', context=context)
-    
+
+
 @login_required(login_url='login')
 def inbox(request):
     page = 'inbox'
@@ -149,6 +158,7 @@ def inbox(request):
     # return render(request, 'profiles/in_outbox.html', context=context)
     return render(request, 'coming_soon.html')
 
+
 @login_required(login_url='login')
 def outbox(request):
     page = 'outbox'
@@ -160,15 +170,16 @@ def outbox(request):
     }
     return render(request, 'profiles/in_outbox.html', context=context)
 
+
 @login_required(login_url='login')
 def view_message(request, message_pk):
     recipient = request.user.profile
     message = get_object_or_404(Message, recipient=recipient, id=message_pk)
-    
+
     if not message.is_read:
         message.is_read = True
         message.save()
-    
+
     # context = {'message': message}
     # return render(request, 'profiles/message.html', context=context)
     return render(request, 'coming_soon.html')
@@ -193,7 +204,7 @@ def create_message(request, recipient_pk):
 
             messages.success(request, 'Your message was sent successfully!')
             return redirect('outbox')
-        
+
     context = {
         'recipient': recipient,
         'form': form,

@@ -2,6 +2,7 @@ from django import forms
 
 from .models import League
 
+
 class LeagueForm(forms.ModelForm):
     class Meta:
         model = League
@@ -17,6 +18,7 @@ class LeagueForm(forms.ModelForm):
 
         for field in self.fields.values():
             field.widget.attrs.update({'class': 'league__input'})
+
 
 # class LeagueSidepotForm(ModelForm):
 #     class Meta:
@@ -72,7 +74,7 @@ class LeagueForm(forms.ModelForm):
 #             instance.is_reverse = False
 
 #         instance.allow_multiple_entries = True if instance.type in multiple_entries_allowed else False
-        
+
 #         if commit:
 #             instance.save()
 
