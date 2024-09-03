@@ -1,0 +1,8 @@
+{
+    "ignore": [
+        {
+            "id": "CVE-2018-20225",
+            "reason": "pip - We don't use the –extra-index-url option"
+        }
+    ]
+}
