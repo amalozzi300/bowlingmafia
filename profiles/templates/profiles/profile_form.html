@@ -1,4 +1,5 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+
 {% load static %}
 
 {% block content %}
@@ -11,35 +12,37 @@
                 <div class="col-md-8">
                     <div class="profile__card mb-3">
                         <div class="profile__card-body">
-                            <div class="mt-0 edit-account__header">
-                                Edit Your Profile
-                            </div>
+                            <div class="mt-0 edit-account__header">Edit Your Profile</div>
                             <hr class="mt-2">
-                            <form method="POST" action="{% url 'edit_account' %}" enctype="multipart/form-data">
+                            <form method="POST"
+                                  action="{% url 'edit_account' %}"
+                                  enctype="multipart/form-data">
                                 {% csrf_token %}
-
                                 {% for field in form %}
                                     <div class="row mt-3">
                                         <div class="col-sm-3">
-                                            <h5 class="mb-0 profile-info__label">
-                                                {{ field.label.title }}
-                                            </h5>
+                                            <h5 class="mb-0 profile-info__label">{{ field.label.title }}</h5>
                                         </div>
                                         <div class="col-sm-9 profile-info__field">
-                                        {% if field.label == 'Profile image' %}
-                                            <input type="file" name="profile_image" accept="image/*" class="account__input" id="id_profile_image">
-                                            <br>
-                                            <img src="{{ profile.profile_image.url }}" alt="Current Profile Picture" class="rounded-circle mt-3 profile__image" width="150">
-                                        {% else %}
-                                            {{ field }}
-                                        {% endif %}
+                                            {% if field.label == 'Profile image' %}
+                                                <input type="file"
+                                                       name="profile_image"
+                                                       accept="image/*"
+                                                       class="account__input"
+                                                       id="id_profile_image">
+                                                <br>
+                                                <img src="{{ profile.profile_image.url }}"
+                                                     alt="Current Profile Picture"
+                                                     class="rounded-circle mt-3 profile__image"
+                                                     width="150">
+                                            {% else %}
+                                                {{ field }}
+                                            {% endif %}
                                         </div>
                                     </div>
                                 {% endfor %}
 
-                                <button class="btn mt-3 save-account__btn">
-                                    Save and Exit
-                                </button>
+                                <button class="btn mt-3 save-account__btn">Save and Exit</button>
                             </form>
                         </div>
                     </div>

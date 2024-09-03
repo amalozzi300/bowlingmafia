@@ -1,15 +1,17 @@
-from django.db import models
+import uuid
+
 from django.contrib.postgres.fields import ArrayField
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.db import models
 from django.utils.text import slugify
 
 from localflavor.us.models import USStateField, USZipCodeField
 from phonenumber_field.modelfields import PhoneNumberField
 from polymorphic.models import PolymorphicModel
-import uuid
 
 from profiles.models import Profile
+
 
 class BowlingCenter(models.Model):
     name = models.CharField(max_length=128)
@@ -35,10 +37,10 @@ class Event(PolymorphicModel):
 
     def __str__(self):
         return str(self.name)
-    
+
     def save(self, *args, **kwargs):
         if not self.pk:
-            # object does not exist in the database, so does not have pk value 
+            # object does not exist in the database, so does not have pk value
             # pk value is needed for slug creation, so we temporarily save the object to create a pk value
             self.slug = slugify(f'temp_{self.name}_slug')
             super().save(*args, **kwargs)
@@ -46,8 +48,7 @@ class Event(PolymorphicModel):
         self.slug = slugify(f'{self.name}_{self.pk}')
         super().save(*args, **kwargs)
 
-    
-    
+
 class Sidepot(models.Model):
     SIDEPOTS = {
         'HG': 'High Game',
@@ -72,23 +73,23 @@ class Sidepot(models.Model):
     def name(self):
         hdcp = 'Handicap' if self.is_handicap else 'Scratch'
         games = ''
-        
+
         games_used = self.games_used[::-1] if self.is_reverse else self.games_used
 
         for game in games_used:
             games += f' {str(game)},'
-        
+
         if games:
             games = f'(games{games[:-1]})'
 
         return f'{hdcp} {self.get_type_display()} {games}'
-    
+
     class Meta:
         unique_together = ('event', 'type', 'is_handicap', 'games_used', 'is_reverse')
-    
+
     def __str__(self):
         return f'{self.event.name} - {self.name}'
-    
+
     def save(self, *args, **kwargs):
         if not self.pk:
             # object does not exist in the database, so does not have a pk value
@@ -112,7 +113,7 @@ class Roster(models.Model):
 
     def __str__(self):
         return f'{self.event.name} -- {self.date.strftime("%m/%d/%y")}'
-    
+
     def save(self, *args, **kwargs):
         date = self.date.strftime('%m-%d-%y')
 
@@ -124,7 +125,7 @@ class Roster(models.Model):
 
         self.slug = slugify(f'{date}_{self.pk}')
         super().save(*args, **kwargs)
-    
+
 
 class RosterEntry(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
@@ -148,16 +149,16 @@ class BowlerSidepotEntry(models.Model):
     def clean(self):
         if not self.sidepot.allow_multiple_entries and self.entry_count > 1:
             raise ValidationError(f'Multiple entries are not allowed for {self.sidepot.type}')
-        
+
     def __str__(self):
         return f'{self.roster_entry.bowler.username} -- {self.sidepot.type} x {self.entry_count}'
-    
+
 
 class Game(models.Model):
     bowler = models.ForeignKey(RosterEntry, on_delete=models.CASCADE, related_name='game_scores')
     game_number = models.PositiveIntegerField()
     scr_score = models.PositiveIntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(300)])
-    
+
     @property
     def hdcp_score(self):
         if not self.scr_score:
@@ -166,7 +167,7 @@ class Game(models.Model):
         hdcp_score = self.scr_score + self.bowler.handicap
 
         return hdcp_score if hdcp_score <= 300 else 300
-    
+
     class Meta:
         unique_together = ('bowler', 'game_number')
 

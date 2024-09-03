@@ -1,23 +1,24 @@
-from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, redirect, render
 
-from .models import(
-    Event,
-    Sidepot, 
-    Roster,
-    RosterEntry,
-    BowlerSidepotEntry,
-    Game,
-)
-from .forms import(
-    RegisterSidepotForm,
+from leagues.models import League
+
+from .forms import (
     CreateRosterForm,
+    RegisterSidepotForm,
     RosterEntryForm,
     RosterEntryScoreForm,
 )
-from.formsets import GameInputFormSet, ScoreVerificationFormSet
-from leagues.models import League
-from tournaments.models import Tournament
+from .formsets import GameInputFormSet, ScoreVerificationFormSet
+from .models import (
+    BowlerSidepotEntry,
+    Event,
+    Game,
+    Roster,
+    RosterEntry,
+    Sidepot,
+)
+
 
 def event_homepage(request, event_slug):
     event = get_object_or_404(Event, slug=event_slug)
@@ -32,7 +33,7 @@ def event_homepage(request, event_slug):
 
         if form.is_valid():
             roster = form.save(commit=False)
-            roster.event = event 
+            roster.event = event
             roster.save()
 
             return redirect('event_home', event.slug)
@@ -45,9 +46,11 @@ def event_homepage(request, event_slug):
     }
     return render(request, 'events/event_homepage.html', context=context)
 
+
 @login_required(login_url='login')
 def invite_admin(request, event_slug):
     return render(request, 'coming_soon.html')
+
 
 @login_required(login_url='login')
 def register_sidepot(request, event_slug):
@@ -65,7 +68,7 @@ def register_sidepot(request, event_slug):
             sidepot = form.save(commit=False)
             sidepot.event = event
             sidepot.save()
-            
+
             return redirect('event_home', event.slug)
 
     context = {
@@ -73,6 +76,7 @@ def register_sidepot(request, event_slug):
         'form': form,
     }
     return render(request, 'events/register_sidepot_form.html', context=context)
+
 
 @login_required(login_url='login')
 def edit_sidepot(request, event_slug, sidepot_slug):
@@ -99,6 +103,7 @@ def edit_sidepot(request, event_slug, sidepot_slug):
     }
     return render(request, 'events/register_sidepot_form.html', context=context)
 
+
 def roster_homepage(request, event_slug, roster_slug):
     event = get_object_or_404(Event, slug=event_slug)
     roster = get_object_or_404(Roster, event=event, slug=roster_slug)
@@ -110,6 +115,7 @@ def roster_homepage(request, event_slug, roster_slug):
         'signed_up_users': signed_up_users,
     }
     return render(request, 'events/roster_homepage.html', context=context)
+
 
 @login_required(login_url='login')
 def handle_close_registration(request, event_slug, roster_slug):
@@ -130,10 +136,11 @@ def handle_close_registration(request, event_slug, roster_slug):
             for i in range(event.num_games):
                 games.append(Game(bowler=roster_entry, game_number=(i + 1)))
 
-        Game.objects.bulk_create(games)  
-        
+        Game.objects.bulk_create(games)
+
     return redirect('roster_home', event_slug, roster_slug)
-    
+
+
 @login_required(login_url='login')
 def create_roster_entry(request, event_slug, roster_slug):
     event = get_object_or_404(Event, slug=event_slug)
@@ -141,8 +148,8 @@ def create_roster_entry(request, event_slug, roster_slug):
     form = RosterEntryForm(event)
 
     if request.user.profile in roster.roster_entries.all().values_list('bowler'):
-        redirect() # to edit entry page
-    
+        redirect()  # to edit entry page
+
     if request.method == 'POST':
         form = RosterEntryForm(event, request.POST)
 
@@ -169,7 +176,7 @@ def create_roster_entry(request, event_slug, roster_slug):
                         sidepot=sidepot,
                         entry_count=entry_count,
                     )
-            
+
             return redirect('roster_home', event_slug, roster_slug)
 
     context = {
@@ -178,6 +185,7 @@ def create_roster_entry(request, event_slug, roster_slug):
         'form': form,
     }
     return render(request, 'events/roster_entry_form.html', context=context)
+
 
 @login_required(login_url='login')
 def user_game_score_input(request, event_slug, roster_slug):
@@ -201,7 +209,7 @@ def user_game_score_input(request, event_slug, roster_slug):
             form.save()
             formset.save()
             return redirect('roster_home', event_slug, roster_slug)
-        
+
     context = {
         'event': event,
         'roster': roster,
@@ -209,6 +217,7 @@ def user_game_score_input(request, event_slug, roster_slug):
         'formset': formset,
     }
     return render(request, 'events/score_input_form.html', context=context)
+
 
 @login_required(login_url='login')
 def score_verification(request, event_slug, roster_slug):
@@ -221,10 +230,8 @@ def score_verification(request, event_slug, roster_slug):
     roster = get_object_or_404(Roster, event=event, slug=roster_slug)
     roster_entry_formset = ScoreVerificationFormSet(instance=roster, prefix='roster_entry')
     game_formsets = [
-        GameInputFormSet(
-            instance=form.instance, 
-            prefix=f'game-{index}'
-        ) for index, form in enumerate(roster_entry_formset.forms)
+        GameInputFormSet(instance=form.instance, prefix=f'game-{index}')
+        for index, form in enumerate(roster_entry_formset.forms)
     ]
 
     if request.method == 'POST':
@@ -233,25 +240,21 @@ def score_verification(request, event_slug, roster_slug):
 
         if roster_entry_formset.is_valid():
             roster_entries = roster_entry_formset.save(commit=False)
-            
+
             for index, form in enumerate(roster_entry_formset.forms):
                 entry = form.instance
-                new_game_formset = GameInputFormSet(
-                    request.POST,
-                    instance=entry,
-                    prefix=f'game-{index}'
-                )
+                new_game_formset = GameInputFormSet(request.POST, instance=entry, prefix=f'game-{index}')
                 game_formsets.append(new_game_formset)
-            
+
             if all([gfs.is_valid() for gfs in game_formsets]):
                 for entry in roster_entries:
                     entry.save()  # Save child instances
 
                 for gfs in game_formsets:
                     gfs.save()  # Save grandchild instances
-                
+
                 return redirect('roster_home', event_slug, roster_slug)  # Replace with your success URL
-    
+
     context = {
         'event': event,
         'roster': roster,

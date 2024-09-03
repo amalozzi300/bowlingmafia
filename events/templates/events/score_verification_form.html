@@ -1,40 +1,33 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+
 {% load static %}
 
 {% block content %}
-    <form method="POST" action="{% url 'score_verification' event.slug roster.slug %}">
+    <form method="POST"
+          action="{% url 'score_verification' event.slug roster.slug %}">
         {% csrf_token %}
-
         {{ roster_entry_formset.management_form }}
-
         <table class="table">
             {% for roster_entry_form in roster_entry_formset.forms %}
                 <tr>
                     <td>
                         {{ roster_entry_form.as_p }}
-
                         {{ game_formsets.forloop.parentloop.counter0.management_form }}
-
                         <table class="table ms-20">
                             {% for game_form in game_formsets.forloop.parentloop.counter0.forms %}
                                 <tr>
-                                    <td>
-                                        {{ game_form.as_p }}
-                                    </td>
+                                    <td>{{ game_form.as_p }}</td>
                                 </tr>
                             {% endfor %}
+
                         </table>
                     </td>
                 </tr>
             {% endfor %}
-        </table>
 
+        </table>
         <button type="submit" class="btn">Confirm</button>
     </form>
 {% endblock content %}
-
-
-
-
 score_verification_form.html
 score_verification_form.html

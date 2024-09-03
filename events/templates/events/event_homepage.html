@@ -1,63 +1,72 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+
 {% load static %}
 
+{% block css %}
+    <style>
+    .roster-link {
+        color: black
+    }
+    </style>
+{% endblock css %}
 {% block content %}
     <h1>{{ type }} Information</h1>
     <p>Name: {{ event.name }}</p>
     <p>Owner: {{ event.owner }}</p>
     <p>
-        Admins: 
+        Admins:
         {% for admin in event.admins.all %}
-            {% if admin != event.owner %}
-                {{ admin }},
-            {% endif %}
+            {% if admin != event.owner %}{{ admin }},{% endif %}
         {% endfor %}
+
     </p>
     <p>Number of Games: {{ event.num_games }}</p>
     <p>
-        Bowling Centers: 
-        {% for bc in event.bowling_centers.all %}
-            {{ bc }},
-        {% endfor %}
+        Bowling Centers:
+        {% for bc in event.bowling_centers.all %}{{ bc }},{% endfor %}
+
     </p>
     <p>Start Date: {{ event.start_date }}</p>
-
-
     {% if type == 'League' %}
         <a href="{% url 'edit_league' event.slug %}" class="btn">Edit League</a>
     {% else %}
         <a href="" class="btn">Edit Tournament</a>
     {% endif %}
-
     <a href="{% url 'invite_admin' event.slug %}" class="btn">Invite Admin</a>
-
-    
     <br>
     <h1>Rosters</h1>
     {% for roster in event.rosters.all %}
-        <a href="{% url 'roster_home' event.slug roster.slug %}" style="color: black">{{ roster }}</a>
+        <a class="roster-link"
+           href="{% url 'roster_home' event.slug roster.slug %}">{{ roster }}</a>
         <br>
     {% endfor %}
-    
-    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#create_roster_modal">
-        Create a Roster
-    </button>
-    
-    <div class="modal fade" id="create_roster_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="create_roster_label" aria-hidden="true">
+
+    <button type="button"
+            class="btn"
+            data-bs-toggle="modal"
+            data-bs-target="#create_roster_modal">Create a Roster</button>
+    <div class="modal fade"
+         id="create_roster_modal"
+         data-bs-backdrop="static"
+         data-bs-keyboard="false"
+         tabindex="-1"
+         aria-labelledby="create_roster_label"
+         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title" id="create_roster_label">Create a Roster</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <form method="POST" action="{% url 'event_home' event.slug %}">
                             {% csrf_token %}
-                            {% for field in form %}
-                                {{ field.label.title }} {{ field }}
-                            {% endfor %}
-                    
+                            {% for field in form %}{{ field.label.title }} {{ field }}{% endfor %}
+
                             <br>
                             <br>
                             <button type="submit" class="btn">Create</button>
@@ -68,14 +77,13 @@
             </div>
         </div>
     </div>
-
-    
     <br>
     <h1>Sidepots</h1>
     {% for sidepot in event.sidepots.all %}
         <p>Type: {{ sidepot.name }}</p>
         <a href="{% url 'edit_sidepot' event.slug sidepot.slug %}" class="btn">Edit Sidepot</a>
     {% endfor %}
+
     <br>
     <a href="{% url 'register_sidepot' event.slug %}" class="btn">Register Sidepot</a>
 {% endblock content %}

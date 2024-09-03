@@ -9,16 +9,18 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-import environ
+
 import os
 from pathlib import Path
+
+import environ
 
 # Set up new .env connection
 env = environ.Env()
 environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 
 # Quick-start development settings - unsuitable for production
@@ -30,7 +32,7 @@ SECRET_KEY = 'django-insecure-v!o^1l3mhfu4dw+k+0#j)1_!q*9mm19tgq9ym-b5ndowax*(v*
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -46,6 +48,7 @@ INSTALLED_APPS = [
     'localflavor',
     'phonenumber_field',
     # custom apps
+    'bowlingmafia',
     'events.apps.EventsConfig',
     'leagues.apps.LeaguesConfig',
     'profiles.apps.ProfilesConfig',
@@ -92,7 +95,7 @@ WSGI_APPLICATION = 'bowlingmafia.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': env('DB_NAME'),
         'USER': env('DB_USER'),
         'PASSWORD': env('DB_PASSWORD'),

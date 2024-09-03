@@ -1,17 +1,12 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+
 {% load static %}
 
 {% block content %}
-    <form method="POST" 
-      {% if league %}
-        action="{% url 'edit_league' league.slug %}"
-      {% else %}
-        action="{% url 'create_league' %}"
-      {% endif %}>
+    <form method="POST"
+          {% if league %} action="{% url 'edit_league' league.slug %}" {% else %} action="{% url 'create_league' %}" {% endif %}>
         {% csrf_token %}
-        {% for field in form %}
-            {{ field.label.title }} {{ field }}
-        {% endfor %}
+        {% for field in form %}{{ field.label.title }} {{ field }}{% endfor %}
 
         <button type="submit" class="btn">
             {% if league %}

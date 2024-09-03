@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -16,7 +15,17 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='League',
             fields=[
-                ('event_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='events.event')),
+                (
+                    'event_ptr',
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to='events.event',
+                    ),
+                ),
                 ('start_date', models.DateTimeField()),
                 ('num_games', models.PositiveIntegerField(default=3)),
             ],

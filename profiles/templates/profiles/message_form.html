@@ -1,13 +1,14 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+
 {% load static %}
 
 {% block content %}
     <div class="auth__wrapper">
         <div class="logo">
-            <img src="{% static 'images/bm_logo.png' %}" alt="Bowling Mafia Logo" class="auth__logo">
+            <img src="{% static 'images/bm_logo.png' %}"
+                 alt="Bowling Mafia Logo"
+                 class="auth__logo">
         </div>
-        <div class="text-center mt-2 auth__header">
-            This feature is coming soon!
-        </div>
+        <div class="text-center mt-2 auth__header">This feature is coming soon!</div>
     </div>
 {% endblock content %}

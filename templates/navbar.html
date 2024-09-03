@@ -3,58 +3,52 @@
 <header>
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
         <div class="container-fluid">
-            <a href="{% url 'home' %}" class="navbar-brand header__brand">
-                Bowling Mafia
-            </a>
-
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsible-navbar">
+            <a href="{% url 'home' %}" class="navbar-brand header__brand">Bowling Mafia</a>
+            <button class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#collapsible-navbar">
                 <span class="navbar-toggle-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         width="25"
+                         height="25"
+                         fill="currentColor"
+                         class="bi bi-list"
+                         viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5" />
                     </svg>
                 </span>
             </button>
-
             <div class="collapse navbar-collapse" id="collapsible-navbar">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a href="" class="nav-link">
-                            Leagues
-                        </a>
+                        <a href="" class="nav-link">Leagues</a>
                     </li>
                     {% if request.user.is_authenticated %}
                         <li class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                {{ request.user.username }}
-                            </a>
+                            <a href="#"
+                               class="nav-link dropdown-toggle"
+                               role="button"
+                               data-bs-toggle="dropdown"
+                               aria-expanded="false">{{ request.user.username }}</a>
                             <ul class="dropdown-menu bg-dark">
                                 <li>
-                                   <a href="{% url 'account' %}" class="dropdown-item">
-                                        Profile
-                                   </a> 
+                                    <a href="{% url 'account' %}" class="dropdown-item">Profile</a>
                                 </li>
                                 <li>
-                                    <a href="{% url 'edit_account' %}" class="dropdown-item">
-                                        Edit Profile
-                                    </a>
+                                    <a href="{% url 'edit_account' %}" class="dropdown-item">Edit Profile</a>
                                 </li>
                                 <li>
-                                    <a href="{% url 'inbox' %}" class="dropdown-item">
-                                        Messages
-                                    </a>
+                                    <a href="{% url 'inbox' %}" class="dropdown-item">Messages</a>
                                 </li>
                                 <li>
-                                    <a href="{% url 'logout' %}" class="dropdown-item">
-                                        Logout
-                                    </a>
+                                    <a href="{% url 'logout' %}" class="dropdown-item">Logout</a>
                                 </li>
                             </ul>
                         </li>
                     {% else %}
                         <li class="nav-item">
-                            <a href="{% url 'login' %}" class="nav-link">
-                                Login
-                            </a>
+                            <a href="{% url 'login' %}" class="nav-link">Login</a>
                         </li>
                     {% endif %}
                 </ul>

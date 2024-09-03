@@ -1,12 +1,13 @@
 from django import forms
 from django.forms.widgets import CheckboxSelectMultiple
 
-from .models import(
-    Sidepot,
+from .models import (
+    Game,
     Roster,
     RosterEntry,
-    Game,
+    Sidepot,
 )
+
 
 class RegisterSidepotForm(forms.ModelForm):
     class Meta:
@@ -30,7 +31,7 @@ class RegisterSidepotForm(forms.ModelForm):
 
         self.fields['games_used'] = forms.MultipleChoiceField(
             choices=choices,
-            widget= CheckboxSelectMultiple,
+            widget=CheckboxSelectMultiple,
             required=False,
         )
 
@@ -62,12 +63,13 @@ class RegisterSidepotForm(forms.ModelForm):
             instance.is_reverse = False
 
         instance.allow_multiple_entries = True if instance.type in multiple_entries_allowed else False
-        
+
         if commit:
             instance.save()
 
         return instance
-    
+
+
 class CreateRosterForm(forms.ModelForm):
     class Meta:
         model = Roster
@@ -78,6 +80,7 @@ class CreateRosterForm(forms.ModelForm):
 
         for field in self.fields.values():
             field.widget.attrs.update({'class': 'roster__input'})
+
 
 class RosterEntryForm(forms.ModelForm):
     class Meta:
@@ -112,6 +115,7 @@ class RosterEntryForm(forms.ModelForm):
             if not value:
                 cleaned_data[field] = 0
 
+
 class GameInputForm(forms.ModelForm):
     class Meta:
         model = Game
@@ -119,9 +123,10 @@ class GameInputForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        
+
         if self.instance and self.instance.pk:
             self.fields['scr_score'].label = f'Game {self.instance.game_number}'
+
 
 class RosterEntryScoreForm(forms.ModelForm):
     class Meta:

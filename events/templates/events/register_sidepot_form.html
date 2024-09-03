@@ -1,20 +1,15 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+
 {% load static %}
 
 {% block content %}
     <form method="POST"
-      {% if sidepot %}
-        action="{% url 'edit_sidepot' event.slug sidepot.slug %}"
-      {% else %}
-        action="{% url 'register_sidepot' event.slug %}"
-      {% endif %}>
+          {% if sidepot %} action="{% url 'edit_sidepot' event.slug sidepot.slug %}" {% else %} action="{% url 'register_sidepot' event.slug %}" {% endif %}>
         {% csrf_token %}
         {% for field in form %}
             <div {% if field.label == 'Games used' or field.label == 'Is reverse' %}class="sidepot__conditional-toggle"{% endif %}>
                 {{ field.label.title }} {{ field }}
-                {% if field.errors %}
-                    <div class="form-field__errors">{{ field.errors }}</div>
-                {% endif %}
+                {% if field.errors %}<div class="form-field__errors">{{ field.errors }}</div>{% endif %}
             </div>
         {% endfor %}
 

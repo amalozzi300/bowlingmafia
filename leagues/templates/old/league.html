@@ -1,44 +1,51 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+
 {% load static %}
 
+{% block css %}
+    <style>
+    .roster-link {
+        color: black
+    }
+    </style>
+{% endblock css %}
 {% block content %}
     <h1>League Information</h1>
     <p>Name: {{ league.name }}</p>
     <p>Owner: {{ league.owner }}</p>
     <p>
-        Admins: 
+        Admins:
         {% for admin in league.admins.all %}
-            {% if admin != league.owner %}
-                {{ admin }},
-            {% endif %}
+            {% if admin != league.owner %}{{ admin }},{% endif %}
         {% endfor %}
+
     </p>
     <p>Number of Games: {{ league.num_games }}</p>
     <p>
-        Bowling Centers: 
-        {% for bc in league.bowling_centers.all %}
-            {{ bc }},
-        {% endfor %}
+        Bowling Centers:
+        {% for bc in league.bowling_centers.all %}{{ bc }},{% endfor %}
+
     </p>
     <p>Start Date: {{ league.start_date }}</p>
-
     <a href="{% url 'edit_league' league.id %}" class="btn">Edit League</a>
     <a href="{% url 'invite_admin' league.id %}" class="btn">Invite Admin</a>
-    
     <br>
     <h1>Rosters</h1>
     {% for roster in league.rosters.all %}
-        <a href="{% url 'league_roster' league.id roster.id %}" style="color: black">{{ roster }}</a>
+        <a class="roster-link"
+           href="{% url 'league_roster' league.id roster.id %}">{{ roster }}</a>
         <br>
     {% endfor %}
+
     <a href="{% url 'create_league_roster' league.id %}" class="btn">Create Roster</a>
-    
     <br>
     <h1>Sidepots</h1>
     {% for sidepot in league.sidepots.all %}
         <p>Type: {{ sidepot.name }}</p>
-        <a href="{% url 'edit_league_sidepot' league.id sidepot.id %}" class="btn">Edit Sidepot</a>
+        <a href="{% url 'edit_league_sidepot' league.id sidepot.id %}"
+           class="btn">Edit Sidepot</a>
     {% endfor %}
+
     <br>
     <a href="{% url 'register_league_sidepot' league.id %}" class="btn">Register Sidepot</a>
 {% endblock content %}
