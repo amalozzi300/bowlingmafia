@@ -49,7 +49,12 @@ class Event(PolymorphicModel):
         super().save(*args, **kwargs)
 
 
-class Sidepot(models.Model):
+class EventBowler:
+    profile = models.ForeignKey(Profile, on_delete=models.PROTECT)
+    handicap = models.PositiveIntegerField(default=0, blank=True)
+
+
+class EventSidepot(models.Model):
     SIDEPOTS = {
         'HG': 'High Game',
         'HS': 'High Series',
@@ -102,7 +107,13 @@ class Sidepot(models.Model):
         super().save(*args, **kwargs)
 
 
-class Roster(models.Model):
+class SidepotRoster:
+    event_sidepot = models.ForeignKey(EventSidepot, on_delete=models.PROTECT)
+    # results
+    # roster list (multiple roster entries, or multiple containers of roster entries -- ie brackets, mystery doubles pairs)
+
+
+class EventRoster(models.Model):
     slug = models.SlugField(unique=True)
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='rosters')
     date = models.DateField()
@@ -127,35 +138,47 @@ class Roster(models.Model):
         super().save(*args, **kwargs)
 
 
-class RosterEntry(models.Model):
-    id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
-    roster = models.ForeignKey(Roster, on_delete=models.CASCADE, related_name='roster_entries')
-    bowler = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='roster_entries')
-    sidepots = models.ManyToManyField(Sidepot, through='BowlerSidepotEntry')
-    handicap = models.PositiveIntegerField(default=0, blank=True)
-
-    class Meta:
-        unique_together = ('roster', 'bowler')
-
-    def __str__(self):
-        return f'{self.roster.event.name} -- {self.roster.date.strftime("%m/%d/%y")} -- {self.bowler}'
+# class RosterEntry(models.Model):
+#     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
+#     roster = models.ForeignKey(Roster, on_delete=models.CASCADE, related_name='roster_entries')
+#     bowler = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='roster_entries')
+#     sidepots = models.ManyToManyField(Sidepot, through='BowlerSidepotEntry')
+#    handicap = models.PositiveIntegerField(default=0, blank=True)
 
 
-class BowlerSidepotEntry(models.Model):
-    roster_entry = models.ForeignKey(RosterEntry, on_delete=models.CASCADE, related_name='bowler_sidepot_entries')
-    sidepot = models.ForeignKey(Sidepot, on_delete=models.CASCADE)
+#     class Meta:
+#         unique_together = ('roster', 'bowler')
+
+#     def __str__(self):
+#         return f'{self.roster.event.name} -- {self.roster.date.strftime("%m/%d/%y")} -- {self.bowler}'
+
+
+# class BowlerSidepotEntry(models.Model):
+#     roster_entry = models.ForeignKey(RosterEntry, on_delete=models.CASCADE, related_name='bowler_sidepot_entries')
+#     sidepot = models.ForeignKey(Sidepot, on_delete=models.CASCADE)
+#     entry_count = models.PositiveIntegerField(default=0)
+
+#     def clean(self):
+#         if not self.sidepot.allow_multiple_entries and self.entry_count > 1:
+#             raise ValidationError(f'Multiple entries are not allowed for {self.sidepot.type}')
+
+#     def __str__(self):
+#         return f'{self.roster_entry.bowler.username} -- {self.sidepot.type} x {self.entry_count}'
+
+
+class RosterEntry:
+    roster = models.ForeignKey(EventRoster, on_delete=models.PROTECT)
+    bowler = models.ForeignKey(EventBowler, on_delete=models.PROTECT)
+    sidepot = models.ForeignKey(SidepotRoster, on_delete=models.PROTECT)
     entry_count = models.PositiveIntegerField(default=0)
 
     def clean(self):
-        if not self.sidepot.allow_multiple_entries and self.entry_count > 1:
-            raise ValidationError(f'Multiple entries are not allowed for {self.sidepot.type}')
-
-    def __str__(self):
-        return f'{self.roster_entry.bowler.username} -- {self.sidepot.type} x {self.entry_count}'
+        if not self.sidepot.event_sidepot.allow_multiple_entries and self.entry_count > 1:
+            raise ValidationError(f'Multiple entries are not allowed for {self.sidepot.type}')    
 
 
 class Game(models.Model):
-    bowler = models.ForeignKey(RosterEntry, on_delete=models.CASCADE, related_name='game_scores')
+    bowler = models.ForeignKey(EventBowler, on_delete=models.CASCADE, related_name='game_scores')
     game_number = models.PositiveIntegerField()
     scr_score = models.PositiveIntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(300)])
 
