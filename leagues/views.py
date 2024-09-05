@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import LeagueForm
@@ -38,8 +39,7 @@ def edit_league(request, league_slug):
     form = LeagueForm(instance=league)
 
     if request.user.profile not in league.admins.all():
-        # raise 403 permission denied
-        pass
+        raise PermissionDenied
 
     if request.method == 'POST':
         form = LeagueForm(request.POST, instance=league)

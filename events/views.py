@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, redirect, render
 
 from leagues.models import League
@@ -25,8 +26,7 @@ def event_homepage(request, event_slug):
     form = CreateRosterForm()
 
     if request.user.profile not in event.admins.all():
-        # raise 403 permission denied
-        pass
+        raise PermissionDenied
 
     if request.method == 'POST':
         form = CreateRosterForm(request.POST)
@@ -58,8 +58,7 @@ def register_sidepot(request, event_slug):
     form = RegisterSidepotForm(event)
 
     if request.user.profile not in event.admins.all():
-        # raise 403 permission denied
-        pass
+        raise PermissionDenied
 
     if request.method == 'POST':
         form = RegisterSidepotForm(event, request.POST)
@@ -85,8 +84,7 @@ def edit_sidepot(request, event_slug, sidepot_slug):
     form = RegisterSidepotForm(event, instance=sidepot)
 
     if request.user.profile not in event.admins.all():
-        # raise 403 permission denied
-        pass
+        raise PermissionDenied
 
     if request.method == 'POST':
         form = RegisterSidepotForm(event, request.POST, instance=sidepot)
@@ -123,8 +121,7 @@ def handle_close_registration(request, event_slug, roster_slug):
     roster = get_object_or_404(Roster, event=event, slug=roster_slug)
 
     if request.user.profile not in event.admins.all():
-        # raise 403 permission denied
-        pass
+        raise PermissionDenied
 
     if roster.is_registration_open:
         roster.is_registration_open = False
@@ -224,8 +221,7 @@ def score_verification(request, event_slug, roster_slug):
     event = get_object_or_404(Event, slug=event_slug)
 
     if request.user.profile not in event.admins.all():
-        # raise 403 permission denied
-        pass
+        raise PermissionDenied
 
     roster = get_object_or_404(Roster, event=event, slug=roster_slug)
     roster_entry_formset = ScoreVerificationFormSet(instance=roster, prefix='roster_entry')
