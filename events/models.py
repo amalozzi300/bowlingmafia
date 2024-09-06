@@ -1,5 +1,3 @@
-import uuid
-
 from django.contrib.postgres.fields import ArrayField
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -64,7 +62,7 @@ class EventSidepot(models.Model):
         'BR': 'Brackets',
     }
 
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField()
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='sidepots')
     type = models.CharField(max_length=64, choices=SIDEPOTS)
     entry_fee = models.DecimalField(max_digits=6, decimal_places=2)
@@ -96,14 +94,8 @@ class EventSidepot(models.Model):
         return f'{self.event.name} - {self.name}'
 
     def save(self, *args, **kwargs):
-        if not self.pk:
-            # object does not exist in the database, so does not have a pk value
-            # pk value is needed for slug creation, so we temporarily save the object to create a pk value
-            self.slug = slugify(f'{self.event.name} {self.type} {self.is_handicap}')
-            super().save(*args, **kwargs)
-
         hdcp = 'hdcp' if self.is_handicap else 'scr'
-        self.slug = slugify(f'{hdcp}-{self.get_type_display()}_{self.pk}')
+        self.slug = slugify(f'{hdcp}-{self.get_type_display()}')
         super().save(*args, **kwargs)
 
 
@@ -114,7 +106,7 @@ class SidepotRoster:
 
 
 class EventRoster(models.Model):
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField()
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='rosters')
     date = models.DateField()
     is_registration_open = models.BooleanField(default=True)
@@ -126,15 +118,7 @@ class EventRoster(models.Model):
         return f'{self.event.name} -- {self.date.strftime("%m/%d/%y")}'
 
     def save(self, *args, **kwargs):
-        date = self.date.strftime('%m-%d-%y')
-
-        if not self.pk:
-            # object does not exist in the database, so does not have a pk value
-            # pk value is needed for slug creation, so we temporarily save the object to create a pk value
-            self.slug = slugify(f'{self.event} {date}')
-            super().save(*args, **kwargs)
-
-        self.slug = slugify(f'{date}_{self.pk}')
+        self.slug = slugify(self.date.strftime('%m-%d-%y'))
         super().save(*args, **kwargs)
 
 
@@ -174,7 +158,7 @@ class RosterEntry:
 
     def clean(self):
         if not self.sidepot.event_sidepot.allow_multiple_entries and self.entry_count > 1:
-            raise ValidationError(f'Multiple entries are not allowed for {self.sidepot.type}')    
+            raise ValidationError(f'Multiple entries are not allowed for {self.sidepot.type}')
 
 
 class Game(models.Model):
