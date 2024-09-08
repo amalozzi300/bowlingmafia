@@ -1,7 +1,7 @@
 from collections import Counter
 from random import randint
 
-from events.models import BowlerSidepotEntry, RosterEntry
+from events.models import RosterEntry
 
 
 class BracketNode:
@@ -58,7 +58,7 @@ def create_brackets(roster):
     """
     Upon the closing of sidepot registration, this creates the brackets for the passed in Roster
     """
-    bracket_entrants = BowlerSidepotEntry.objects.filter(
+    bracket_entrants = RosterEntry.objects.filter(
         roster_entry__roster=roster,
         sidepot__type='BR',
     )

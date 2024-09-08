@@ -1,17 +1,17 @@
 from django.contrib import admin
 
 from .models import (
-    BowlerSidepotEntry,
     BowlingCenter,
+    EventBowler,
+    EventRoster,
+    EventSidepot,
     Game,
-    Roster,
     RosterEntry,
-    Sidepot,
 )
 
 admin.site.register(BowlingCenter)
-admin.site.register(Sidepot)
-admin.site.register(Roster)
+admin.site.register(EventSidepot)
+admin.site.register(EventRoster)
 admin.site.register(RosterEntry)
-admin.site.register(BowlerSidepotEntry)
+admin.site.register(EventBowler)
 admin.site.register(Game)
