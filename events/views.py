@@ -5,31 +5,30 @@ from django.shortcuts import get_object_or_404, redirect, render
 from leagues.models import League
 
 from .forms import (
-    CreateRosterForm,
-    RegisterSidepotForm,
+    CreateEventRosterForm,
+    RegisterEventSidepotForm,
     RosterEntryForm,
     RosterEntryScoreForm,
 )
 from .formsets import GameInputFormSet, ScoreVerificationFormSet
 from .models import (
-    BowlerSidepotEntry,
     Event,
+    EventRoster,
+    EventSidepot,
     Game,
-    Roster,
     RosterEntry,
-    Sidepot,
 )
 
 
 def event_homepage(request, event_slug):
     event = get_object_or_404(Event, slug=event_slug)
-    form = CreateRosterForm()
+    form = CreateEventRosterForm()
 
     if request.user.profile not in event.admins.all():
         raise PermissionDenied
 
     if request.method == 'POST':
-        form = CreateRosterForm(request.POST)
+        form = CreateEventRosterForm(request.POST)
 
         if form.is_valid():
             roster = form.save(commit=False)
@@ -55,13 +54,13 @@ def invite_admin(request, event_slug):
 @login_required(login_url='login')
 def register_sidepot(request, event_slug):
     event = get_object_or_404(Event, slug=event_slug)
-    form = RegisterSidepotForm(event)
+    form = RegisterEventSidepotForm(event)
 
     if request.user.profile not in event.admins.all():
         raise PermissionDenied
 
     if request.method == 'POST':
-        form = RegisterSidepotForm(event, request.POST)
+        form = RegisterEventSidepotForm(event, request.POST)
 
         if form.is_valid():
             sidepot = form.save(commit=False)
@@ -80,14 +79,14 @@ def register_sidepot(request, event_slug):
 @login_required(login_url='login')
 def edit_sidepot(request, event_slug, sidepot_slug):
     event = get_object_or_404(Event, slug=event_slug)
-    sidepot = get_object_or_404(Sidepot, event=event, slug=sidepot_slug)
-    form = RegisterSidepotForm(event, instance=sidepot)
+    sidepot = get_object_or_404(EventSidepot, event=event, slug=sidepot_slug)
+    form = RegisterEventSidepotForm(event, instance=sidepot)
 
     if request.user.profile not in event.admins.all():
         raise PermissionDenied
 
     if request.method == 'POST':
-        form = RegisterSidepotForm(event, request.POST, instance=sidepot)
+        form = RegisterEventSidepotForm(event, request.POST, instance=sidepot)
 
         if form.is_valid():
             form.save()
@@ -104,7 +103,7 @@ def edit_sidepot(request, event_slug, sidepot_slug):
 
 def roster_homepage(request, event_slug, roster_slug):
     event = get_object_or_404(Event, slug=event_slug)
-    roster = get_object_or_404(Roster, event=event, slug=roster_slug)
+    roster = get_object_or_404(EventRoster, event=event, slug=roster_slug)
     signed_up_users = roster.roster_entries.all().values_list('bowler', flat=True)
 
     context = {
@@ -118,7 +117,7 @@ def roster_homepage(request, event_slug, roster_slug):
 @login_required(login_url='login')
 def handle_close_registration(request, event_slug, roster_slug):
     event = get_object_or_404(Event, slug=event_slug)
-    roster = get_object_or_404(Roster, event=event, slug=roster_slug)
+    roster = get_object_or_404(EventRoster, event=event, slug=roster_slug)
 
     if request.user.profile not in event.admins.all():
         raise PermissionDenied
@@ -141,7 +140,7 @@ def handle_close_registration(request, event_slug, roster_slug):
 @login_required(login_url='login')
 def create_roster_entry(request, event_slug, roster_slug):
     event = get_object_or_404(Event, slug=event_slug)
-    roster = get_object_or_404(Roster, event=event, slug=roster_slug)
+    roster = get_object_or_404(EventRoster, event=event, slug=roster_slug)
     form = RosterEntryForm(event)
 
     if request.user.profile in roster.roster_entries.all().values_list('bowler'):
@@ -168,7 +167,7 @@ def create_roster_entry(request, event_slug, roster_slug):
                 roster_entry = RosterEntry.objects.create(roster=roster, bowler=request.user.profile)
 
                 for sidepot, entry_count in all_entry_counts.items():
-                    BowlerSidepotEntry.objects.create(
+                    RosterEntry.objects.create(
                         roster_entry=roster_entry,
                         sidepot=sidepot,
                         entry_count=entry_count,
@@ -187,7 +186,7 @@ def create_roster_entry(request, event_slug, roster_slug):
 @login_required(login_url='login')
 def user_game_score_input(request, event_slug, roster_slug):
     event = get_object_or_404(Event, slug=event_slug)
-    roster = get_object_or_404(Roster, event=event, slug=roster_slug)
+    roster = get_object_or_404(EventRoster, event=event, slug=roster_slug)
 
     if roster.is_registration_open:
         return redirect('roster_home', event_slug, roster_slug)
@@ -223,7 +222,7 @@ def score_verification(request, event_slug, roster_slug):
     if request.user.profile not in event.admins.all():
         raise PermissionDenied
 
-    roster = get_object_or_404(Roster, event=event, slug=roster_slug)
+    roster = get_object_or_404(EventRoster, event=event, slug=roster_slug)
     roster_entry_formset = ScoreVerificationFormSet(instance=roster, prefix='roster_entry')
     game_formsets = [
         GameInputFormSet(instance=form.instance, prefix=f'game-{index}')

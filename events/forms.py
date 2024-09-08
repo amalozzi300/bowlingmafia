@@ -2,16 +2,16 @@ from django import forms
 from django.forms.widgets import CheckboxSelectMultiple
 
 from .models import (
+    EventRoster,
+    EventSidepot,
     Game,
-    Roster,
     RosterEntry,
-    Sidepot,
 )
 
 
-class RegisterSidepotForm(forms.ModelForm):
+class RegisterEventSidepotForm(forms.ModelForm):
     class Meta:
-        model = Sidepot
+        model = EventSidepot
         fields = [
             'type',
             'is_handicap',
@@ -70,9 +70,9 @@ class RegisterSidepotForm(forms.ModelForm):
         return instance
 
 
-class CreateRosterForm(forms.ModelForm):
+class CreateEventRosterForm(forms.ModelForm):
     class Meta:
-        model = Roster
+        model = EventRoster
         fields = ['date']
 
     def __init__(self, *args, **kwargs):

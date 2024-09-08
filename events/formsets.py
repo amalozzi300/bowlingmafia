@@ -1,7 +1,7 @@
 from django.forms import inlineformset_factory
 
 from .forms import GameInputForm, RosterEntryScoreForm
-from .models import Game, Roster, RosterEntry
+from .models import EventRoster, Game, RosterEntry
 
 GameInputFormSet = inlineformset_factory(
     RosterEntry,
@@ -12,7 +12,7 @@ GameInputFormSet = inlineformset_factory(
 )
 
 ScoreVerificationFormSet = inlineformset_factory(
-    Roster,
+    EventRoster,
     RosterEntry,
     form=RosterEntryScoreForm,
     extra=0,
