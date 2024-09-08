@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import League
+from leagues.models import League
 
 
 class LeagueForm(forms.ModelForm):

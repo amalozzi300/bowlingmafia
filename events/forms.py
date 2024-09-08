@@ -1,7 +1,7 @@
 from django import forms
 from django.forms.widgets import CheckboxSelectMultiple
 
-from .models import (
+from events.models import (
     EventRoster,
     EventSidepot,
     Game,

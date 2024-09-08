@@ -5,9 +5,8 @@ from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, redirect, render
 
 from leagues.models import League
-
-from .forms import CustomUserCreationForm, MessageForm, ProfileForm
-from .models import Message, Profile
+from profiles.forms import CustomUserCreationForm, MessageForm, ProfileForm
+from profiles.models import Message, Profile
 
 
 # Create your views here.
