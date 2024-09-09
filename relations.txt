@@ -4,50 +4,52 @@ qm() = query method (returns one or more objects)
 sqm() = query method (returns one object)
 
 
-From Event (and children -- League, Tournament):
-owner               obj.owner                       --> tgt.username
-bowling_centers     obj.bowling_centers.qm()        --> tgt.city
-Sidepot(s)          obj.sidepots.qm()               --> tgt.type
-Roster(s)           obj.rosters.qm()                --> tgt.date
-
-
-From League
-admins              obj.admins.qm()                 --> tgt.username
-
-
-From Tournament
-directors           obj.directors.qm()              --> tgt.username
+From Profile
+owned Event(s)      obj.owned_events.qm()           --> tgt.is_archived
+                    (returns ALL events, League or Tournament)
+admined Event(s)    obj.admined_events.qm()         --> tgt.is_archived
+EventBowler(s)      obj.eventbowler_set.qm()        --> tgt.handicap
 
 
 From BowlingCenter
-Event(s) (or child) obj.events.qm()                 --> tgt.owner.username
-                    (returns ALL events, Tournament or League)
-RosterEntry(ies)    obj.roster_entries.qm()         --> tgt.handicap
+Event(s)            obj.events.qm()                 --> tgt.is_archived
 
 
-From Profile
-owned Event(s)      obj.owned_events.qm()           --> tgt.is_archived
-                    (returns ALL events, Tournament or League)
-admined Event(s)    obj.admined_events.qm()         --> tgt.is_archived
-                    (returns ALL events, Tournament or League)
+From Event
+owner               obj.owner                       --> tgt.username
+admins              obj.admins.qm()                 --> tgt.username
+BowlingCenter(s)    obj.bowling_centers.qm()        --> tgt.city
+EventSidepot(s)     obj.event_sidepots.qm()         --> tgt.type
+EventRoster(s)      obj.event_rosters.qm()          --> tgt.date
 
 
-From Sidepot
-event               obj.event                       --> tgt.owner.username
+From EventBowler
+Profile             obj.profile                     --> tgt.username
+RosterEntry(ies)    obj.roster_entries.qm()         --> tgt.entry_count
+Game                obj.games.qm()                  --> tgt.scr_score
 
 
-From Roster
-event               obj.event                       --> tgt.owner.username
-roster_entry(ies)   obj.roster_entries.qm()         --> tgt.handicap
+From EventSidepot
+Event               obj.event                       --> tgt.is_archived
+SidepotRoster(s)    obj.sidepot_rosters.qm()        --> tgt.TBD
+
+
+From SidepotRoster
+EventSidepot        obj.event_sidepot               --> tgt.type
+RosterEntry(ies)    obj.roster_entries              --> tgt.entry_count
+
+
+From EventRoster
+Event               obj.event                       --> tgt.is_archived
+RosterEntry(ies)    obj.roster_entries.qm()         --> tgt.entry_count
 
 
 From RosterEntry
-roster              obj.roster                      --> tgt.date
-bowler              obj.bowler                      --> tgt.username
-sidepots            obj.sidepots.qm()               --> tgt.type
-sp entry_count      obj.bowler_sidepot_entries.sqm().entry_count
-Game(s)             obj.game_scores.qm()            --> tgt.hdcp_score
+EventRoster         obj.roster                      --> tgt.date
+EventBowler         obj.bowler                      --> tgt.handicap
+SidepotRoster       obj.sidepot                     --> tgt.TBD
+bowler games        obj.bowler.games.qm()           --> tgt.scr_score
 
 
 From Game
-bowler [Rost.Ent.]  obj.bowler                      --> tgt.username
+EventBowler         obj.bowler                      --> tgt.handicap

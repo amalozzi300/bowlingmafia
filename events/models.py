@@ -63,7 +63,7 @@ class EventSidepot(models.Model):
     }
 
     slug = models.SlugField()
-    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='sidepots')
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='event_sidepots')
     type = models.CharField(max_length=64, choices=SIDEPOTS)
     entry_fee = models.DecimalField(max_digits=6, decimal_places=2)
     payout_ratio = models.PositiveSmallIntegerField(default=6, validators=[MinValueValidator(2)])
@@ -100,14 +100,14 @@ class EventSidepot(models.Model):
 
 
 class SidepotRoster:
-    event_sidepot = models.ForeignKey(EventSidepot, on_delete=models.PROTECT)
+    event_sidepot = models.ForeignKey(EventSidepot, on_delete=models.PROTECT, related_name='sidepot_rosters')
     # results
     # roster list (multiple roster entries, or multiple containers of roster entries -- ie brackets, mystery doubles pairs)
 
 
 class EventRoster(models.Model):
     slug = models.SlugField()
-    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='rosters')
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='event_rosters')
     date = models.DateField()
     is_registration_open = models.BooleanField(default=True)
 
@@ -151,9 +151,9 @@ class EventRoster(models.Model):
 
 
 class RosterEntry:
-    roster = models.ForeignKey(EventRoster, on_delete=models.PROTECT)
-    bowler = models.ForeignKey(EventBowler, on_delete=models.PROTECT)
-    sidepot = models.ForeignKey(SidepotRoster, on_delete=models.PROTECT)
+    roster = models.ForeignKey(EventRoster, on_delete=models.PROTECT, related_name='roster_entries')
+    bowler = models.ForeignKey(EventBowler, on_delete=models.PROTECT, related_name='roster_entries')
+    sidepot = models.ForeignKey(SidepotRoster, on_delete=models.PROTECT, related_name='roster_entries')
     entry_count = models.PositiveIntegerField(default=0)
 
     def clean(self):
@@ -162,7 +162,7 @@ class RosterEntry:
 
 
 class Game(models.Model):
-    bowler = models.ForeignKey(EventBowler, on_delete=models.CASCADE, related_name='game_scores')
+    bowler = models.ForeignKey(EventBowler, on_delete=models.CASCADE, related_name='games')
     game_number = models.PositiveIntegerField()
     scr_score = models.PositiveIntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(300)])
 
