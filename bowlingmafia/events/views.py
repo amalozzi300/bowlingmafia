@@ -2,21 +2,21 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, redirect, render
 
-from events.forms import (
+from bowlingmafia.events.forms import (
     CreateEventRosterForm,
     RegisterEventSidepotForm,
     RosterEntryForm,
     RosterEntryScoreForm,
 )
-from events.formsets import GameInputFormSet, ScoreVerificationFormSet
-from events.models import (
+from bowlingmafia.events.formsets import GameInputFormSet, ScoreVerificationFormSet
+from bowlingmafia.events.models import (
     Event,
     EventRoster,
     EventSidepot,
     Game,
     RosterEntry,
 )
-from leagues.models import League
+from bowlingmafia.leagues.models import League
 
 
 def event_homepage(request, event_slug):

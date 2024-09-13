@@ -1,7 +1,7 @@
 from collections import Counter
 from random import randint
 
-from events.models import RosterEntry
+from bowlingmafia.events.models import RosterEntry
 
 
 class BracketNode:

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from events.models import (
+from bowlingmafia.events.models import (
     BowlingCenter,
     EventBowler,
     EventRoster,

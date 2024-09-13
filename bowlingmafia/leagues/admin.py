@@ -1,5 +1,5 @@
 from django.contrib import admin
 
-from leagues.models import League
+from bowlingmafia.leagues.models import League
 
 admin.site.register(League)

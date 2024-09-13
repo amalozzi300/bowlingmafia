@@ -1,6 +1,6 @@
 from django import forms
 
-from leagues.models import League
+from bowlingmafia.leagues.models import League
 
 
 class LeagueForm(forms.ModelForm):

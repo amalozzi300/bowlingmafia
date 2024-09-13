@@ -2,7 +2,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.forms import ModelForm
 
-from profiles.models import Message, Profile
+from bowlingmafia.profiles.models import Message, Profile
 
 
 class CustomUserCreationForm(UserCreationForm):

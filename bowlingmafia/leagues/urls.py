@@ -1,6 +1,6 @@
 from django.urls import path
 
-from leagues import views
+from bowlingmafia.leagues import views
 
 urlpatterns = [
     path(

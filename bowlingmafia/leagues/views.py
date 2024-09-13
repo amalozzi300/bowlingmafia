@@ -2,8 +2,8 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, redirect, render
 
-from leagues.forms import LeagueForm
-from leagues.models import League
+from bowlingmafia.leagues.forms import LeagueForm
+from bowlingmafia.leagues.models import League
 
 
 @login_required(login_url='login')

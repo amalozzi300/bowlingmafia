@@ -4,9 +4,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, redirect, render
 
-from leagues.models import League
-from profiles.forms import CustomUserCreationForm, MessageForm, ProfileForm
-from profiles.models import Message, Profile
+from bowlingmafia.leagues.models import League
+from bowlingmafia.profiles.forms import CustomUserCreationForm, MessageForm, ProfileForm
+from bowlingmafia.profiles.models import Message, Profile
 
 
 # Create your views here.

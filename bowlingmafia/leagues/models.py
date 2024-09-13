@@ -1,6 +1,6 @@
 from django.db import models
 
-from events.models import Event
+from bowlingmafia.events.models import Event
 
 
 class League(Event):
