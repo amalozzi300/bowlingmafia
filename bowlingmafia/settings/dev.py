@@ -49,10 +49,10 @@ INSTALLED_APPS = [
     'phonenumber_field',
     # custom apps
     'bowlingmafia',
-    'events.apps.EventsConfig',
-    'leagues.apps.LeaguesConfig',
-    'profiles.apps.ProfilesConfig',
-    'tournaments.apps.TournamentsConfig',
+    'bowlingmafia.events.apps.EventsConfig',
+    'bowlingmafia.leagues.apps.LeaguesConfig',
+    'bowlingmafia.profiles.apps.ProfilesConfig',
+    'bowlingmafia.tournaments.apps.TournamentsConfig',
 ]
 
 MIDDLEWARE = [

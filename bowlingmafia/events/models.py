@@ -7,7 +7,6 @@ from django.utils.text import slugify
 from localflavor.us.models import USStateField, USZipCodeField
 from phonenumber_field.modelfields import PhoneNumberField
 from polymorphic.models import PolymorphicModel
-
 from profiles.models import Profile
 
 
